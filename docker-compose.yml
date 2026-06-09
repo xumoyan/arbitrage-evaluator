@@ -1,0 +1,16 @@
+services:
+  focused-monitor:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    volumes:
+      - ..:/workspace
+    environment:
+      TRON_FULL_RPC: "http://10.8.6.153:2633"
+      TRON_SOLIDITY_RPC: "http://10.8.6.153:2634"
+      TRON_READ_OWNER: "TDbinJzEN8R8snUF9yxCmpAk6TJfBkRyUu"
+    command: >
+      sh -lc "npm run build-watch-plan -- --out-dir reports/focused_watch_plan
+      && npm run monitor-focused -- --watch-plan reports/focused_watch_plan/watch-plan.json
+      --out-dir reports/focused_monitor_live --duration-sec 86400 --poll-ms 9000
+      --fresh --rpc-retries 2 --concurrency 12 --exact-top-n 50
+      --exact-success-target 10 --exact-max-attempts 120"

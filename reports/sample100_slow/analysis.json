@@ -1,0 +1,4666 @@
+{
+  "generatedAt": "2026-06-08T09:30:26.845Z",
+  "input": "/Users/zhangguanqing/Documents/work/parser/transaction-parser/reports/sample100_slow.json",
+  "router": "TQqgNg13s2DjvXhW1ky4v6TsR8wZGvb7Y4",
+  "source": {
+    "totals": {
+      "csvRows": 10000,
+      "uniqueHashes": 10000,
+      "selectedHashes": 100,
+      "resolved": 97,
+      "errors": 0
+    },
+    "categorySummary": [
+      {
+        "key": "swap_other",
+        "label": "Swap Other",
+        "count": 97
+      },
+      {
+        "key": "unparsed",
+        "label": "Unparsed",
+        "count": 2
+      },
+      {
+        "key": "transfer_trx",
+        "label": "TRX Transfer",
+        "count": 1
+      }
+    ],
+    "generatedAt": "2026-06-08T09:24:50.254Z",
+    "fullnode": "https://api.trongrid.io"
+  },
+  "assumptions": {
+    "energyPriceSun": 100,
+    "bandwidthPriceSun": 1000,
+    "nativeProfitMethod": "returned TRX in internal_transactions to tx.from minus top-level call_value",
+    "callerCostMethod": "uses receipt.energy_usage for caller Energy; origin_energy_usage is reported separately"
+  },
+  "summary": {
+    "routerAttempts": 97,
+    "successful": 32,
+    "failed": 65,
+    "nativeCycles": 32,
+    "profitableNativeCycles": 32,
+    "grossProfitSun": "22570594",
+    "grossProfitTRX": 22.570594,
+    "avgProfitPerProfitableCycleSun": "705331",
+    "medianProfitPerProfitableCycleSun": "535625",
+    "minProfitSun": "155890",
+    "maxProfitSun": "2453144",
+    "p90ProfitSun": "1045034",
+    "grossProfitPerRouterAttemptSun": "232686",
+    "successRate": 0.32989690721649484,
+    "profitableCycleRate": 0.32989690721649484
+  },
+  "resources": {
+    "callerEnergy": "396390",
+    "originEnergy": "39237258",
+    "totalEnergy": "39633648",
+    "bandwidth": "241040",
+    "avgCallerEnergyPerAttempt": 4086.494845360825,
+    "avgTotalEnergyPerAttempt": 408594.3092783505,
+    "avgBandwidthPerAttempt": 2484.9484536082473,
+    "callerEnergyCostSun": "39639000",
+    "bandwidthCostSun": "241040000",
+    "netAtConfiguredEnergyOnlySun": "-17068406",
+    "netAtConfiguredCostsSun": "-258108406",
+    "breakEvenCallerEnergySun": 56.940371856000404
+  },
+  "byOperations": [
+    {
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "attempts": 16,
+      "successes": 12,
+      "profitableNativeCycles": 12,
+      "grossProfitSun": "9609807"
+    },
+    {
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>V1_SWAP_EXACT_IN>SWEEP",
+      "attempts": 7,
+      "successes": 4,
+      "profitableNativeCycles": 4,
+      "grossProfitSun": "4569198"
+    },
+    {
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "attempts": 10,
+      "successes": 3,
+      "profitableNativeCycles": 3,
+      "grossProfitSun": "2836313"
+    },
+    {
+      "operationsKey": "swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "attempts": 2,
+      "successes": 2,
+      "profitableNativeCycles": 2,
+      "grossProfitSun": "1036945"
+    },
+    {
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "attempts": 8,
+      "successes": 1,
+      "profitableNativeCycles": 1,
+      "grossProfitSun": "974136"
+    },
+    {
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "attempts": 15,
+      "successes": 3,
+      "profitableNativeCycles": 3,
+      "grossProfitSun": "810546"
+    },
+    {
+      "operationsKey": "V1_SWAP_EXACT_IN>swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "attempts": 4,
+      "successes": 2,
+      "profitableNativeCycles": 2,
+      "grossProfitSun": "730694"
+    },
+    {
+      "operationsKey": "V1_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "attempts": 8,
+      "successes": 2,
+      "profitableNativeCycles": 2,
+      "grossProfitSun": "703985"
+    },
+    {
+      "operationsKey": "swapExactInSingle>V2_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "attempts": 1,
+      "successes": 1,
+      "profitableNativeCycles": 1,
+      "grossProfitSun": "672407"
+    },
+    {
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "attempts": 1,
+      "successes": 1,
+      "profitableNativeCycles": 1,
+      "grossProfitSun": "321772"
+    },
+    {
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "attempts": 3,
+      "successes": 1,
+      "profitableNativeCycles": 1,
+      "grossProfitSun": "304791"
+    },
+    {
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "attempts": 3,
+      "successes": 0,
+      "profitableNativeCycles": 0,
+      "grossProfitSun": "0"
+    },
+    {
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>V1_SWAP_EXACT_IN>SWEEP",
+      "attempts": 1,
+      "successes": 0,
+      "profitableNativeCycles": 0,
+      "grossProfitSun": "0"
+    },
+    {
+      "operationsKey": "V1_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "attempts": 6,
+      "successes": 0,
+      "profitableNativeCycles": 0,
+      "grossProfitSun": "0"
+    },
+    {
+      "operationsKey": "swapExactInSingle>V3_SWAP_EXACT_IN>SWEEP",
+      "attempts": 1,
+      "successes": 0,
+      "profitableNativeCycles": 0,
+      "grossProfitSun": "0"
+    },
+    {
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "attempts": 2,
+      "successes": 0,
+      "profitableNativeCycles": 0,
+      "grossProfitSun": "0"
+    },
+    {
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>V1_SWAP_EXACT_IN>SWEEP",
+      "attempts": 1,
+      "successes": 0,
+      "profitableNativeCycles": 0,
+      "grossProfitSun": "0"
+    },
+    {
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "attempts": 1,
+      "successes": 0,
+      "profitableNativeCycles": 0,
+      "grossProfitSun": "0"
+    },
+    {
+      "operationsKey": "swapExactInSingle>V1_SWAP_EXACT_IN>SWEEP",
+      "attempts": 1,
+      "successes": 0,
+      "profitableNativeCycles": 0,
+      "grossProfitSun": "0"
+    },
+    {
+      "operationsKey": "V1_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "attempts": 1,
+      "successes": 0,
+      "profitableNativeCycles": 0,
+      "grossProfitSun": "0"
+    },
+    {
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>V1_SWAP_EXACT_IN>SWEEP",
+      "attempts": 2,
+      "successes": 0,
+      "profitableNativeCycles": 0,
+      "grossProfitSun": "0"
+    },
+    {
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>SWEEP",
+      "attempts": 2,
+      "successes": 0,
+      "profitableNativeCycles": 0,
+      "grossProfitSun": "0"
+    },
+    {
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "attempts": 1,
+      "successes": 0,
+      "profitableNativeCycles": 0,
+      "grossProfitSun": "0"
+    }
+  ],
+  "rows": [
+    {
+      "hash": "b6c04d1194a4bcb8c8a63fd2b814be2f923bd34ef3bde021d4ad71cca700c026",
+      "timeUTC": "2026-06-02 07:42:51",
+      "status": "REVERT",
+      "initialSun": "6699999999",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "6699999999",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "6699999999"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "3746",
+      "originEnergy": "370854",
+      "totalEnergy": "374600",
+      "bandwidth": "2209",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3746,
+        "origin_energy_usage": 370854,
+        "energy_usage_total": 374600,
+        "net_usage": 2209,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "3e759a943581887cd4bd72c1b141e3f075183cf61716437cd755a05b1d4b6222",
+      "timeUTC": "2026-06-02 07:42:45",
+      "status": "SUCCESS",
+      "initialSun": "6699999999",
+      "returnedSun": "6700434182",
+      "grossProfitSun": "434183",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "6699999999",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "6699999999"
+        }
+      ],
+      "pools": [
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "4014",
+      "originEnergy": "397295",
+      "totalEnergy": "401309",
+      "bandwidth": "2209",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4014,
+        "origin_energy_usage": 397295,
+        "energy_usage_total": 401309,
+        "net_usage": 2209,
+        "result": "SUCCESS",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "f8e203c06d480d3ce77a1873f3f7bd7c840f681ba0ef94b8668cae961c2f09bf",
+      "timeUTC": "2026-06-02 07:42:36",
+      "status": "SUCCESS",
+      "initialSun": "6699999999",
+      "returnedSun": "6700535624",
+      "grossProfitSun": "535625",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "6699999999",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "6699999999"
+        }
+      ],
+      "pools": [
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "4388",
+      "originEnergy": "434366",
+      "totalEnergy": "438754",
+      "bandwidth": "2209",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4388,
+        "origin_energy_usage": 434366,
+        "energy_usage_total": 438754,
+        "net_usage": 2209,
+        "result": "SUCCESS",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "129f9d0901dc0f6f0c0bf26692cdc378ab148910df75efe0855d7b3099668862",
+      "timeUTC": "2026-06-02 07:42:30",
+      "status": "SUCCESS",
+      "initialSun": "6699999999",
+      "returnedSun": "6700637115",
+      "grossProfitSun": "637116",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "6699999999",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "6699999999"
+        }
+      ],
+      "pools": [
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "4013",
+      "originEnergy": "397286",
+      "totalEnergy": "401299",
+      "bandwidth": "2209",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4013,
+        "origin_energy_usage": 397286,
+        "energy_usage_total": 401299,
+        "net_usage": 2209,
+        "result": "SUCCESS",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "083e3abac6e5de4649c1e88a2f2ada5c0fddec588389db33915fb5edf582fdf4",
+      "timeUTC": "2026-06-02 07:42:21",
+      "status": "SUCCESS",
+      "initialSun": "6699999999",
+      "returnedSun": "6700738613",
+      "grossProfitSun": "738614",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "6699999999",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "6699999999"
+        }
+      ],
+      "pools": [
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "4014",
+      "originEnergy": "397292",
+      "totalEnergy": "401306",
+      "bandwidth": "2209",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4014,
+        "origin_energy_usage": 397292,
+        "energy_usage_total": 401306,
+        "net_usage": 2209,
+        "result": "SUCCESS",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "6521f952190d73b3dfde559566c5c37a80d399c1b7a482bcd96972522925f1da",
+      "timeUTC": "2026-06-02 07:42:12",
+      "status": "SUCCESS",
+      "initialSun": "6699999999",
+      "returnedSun": "6700840110",
+      "grossProfitSun": "840111",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "6699999999",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "6699999999"
+        }
+      ],
+      "pools": [
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "4014",
+      "originEnergy": "397289",
+      "totalEnergy": "401303",
+      "bandwidth": "2209",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4014,
+        "origin_energy_usage": 397289,
+        "energy_usage_total": 401303,
+        "net_usage": 2209,
+        "result": "SUCCESS",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "f799a050ff3ca5944564ec2ac9a4ac0462bf8411f3a50cce0fa7b159495b301e",
+      "timeUTC": "2026-06-02 07:42:03",
+      "status": "SUCCESS",
+      "initialSun": "6699999999",
+      "returnedSun": "6700941612",
+      "grossProfitSun": "941613",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "6699999999",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "6699999999"
+        }
+      ],
+      "pools": [
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "4014",
+      "originEnergy": "397289",
+      "totalEnergy": "401303",
+      "bandwidth": "2209",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4014,
+        "origin_energy_usage": 397289,
+        "energy_usage_total": 401303,
+        "net_usage": 2209,
+        "result": "SUCCESS",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "9a1b00b2e80f6ed8588387db02bc46e0ef2bd763316a07c773c985b0a2046433",
+      "timeUTC": "2026-06-02 07:41:54",
+      "status": "SUCCESS",
+      "initialSun": "6699999999",
+      "returnedSun": "6701045033",
+      "grossProfitSun": "1045034",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "6699999999",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "6699999999"
+        }
+      ],
+      "pools": [
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "4014",
+      "originEnergy": "397289",
+      "totalEnergy": "401303",
+      "bandwidth": "2209",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4014,
+        "origin_energy_usage": 397289,
+        "energy_usage_total": 401303,
+        "net_usage": 2209,
+        "result": "SUCCESS",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "fc2f0dec576566e9ab49fed96a6ac8885aacabc5bf8905acacc3522e96f40a84",
+      "timeUTC": "2026-06-02 07:41:45",
+      "status": "SUCCESS",
+      "initialSun": "6699999999",
+      "returnedSun": "6701146752",
+      "grossProfitSun": "1146753",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "6699999999",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "6699999999"
+        }
+      ],
+      "pools": [
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "4014",
+      "originEnergy": "397289",
+      "totalEnergy": "401303",
+      "bandwidth": "2209",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4014,
+        "origin_energy_usage": 397289,
+        "energy_usage_total": 401303,
+        "net_usage": 2209,
+        "result": "SUCCESS",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "15d4a5cbf93e350b9af65892c361976d377799b73e2ab6cc74cd0fe23414c7df",
+      "timeUTC": "2026-06-02 07:41:39",
+      "status": "SUCCESS",
+      "initialSun": "6699999999",
+      "returnedSun": "6702059509",
+      "grossProfitSun": "2059510",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "6699999999",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "6699999999"
+        }
+      ],
+      "pools": [
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "4006",
+      "originEnergy": "396496",
+      "totalEnergy": "400502",
+      "bandwidth": "2209",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4006,
+        "origin_energy_usage": 396496,
+        "energy_usage_total": 400502,
+        "net_usage": 2209,
+        "result": "SUCCESS",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "ebf8a1fea7ab4c9bef65fd06d28155abd4c6e84a6483d1af957acf26a1cffc32",
+      "timeUTC": "2026-06-02 07:41:27",
+      "status": "REVERT",
+      "initialSun": "6699999999",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "6699999999",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "6699999999"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "3757",
+      "originEnergy": "371890",
+      "totalEnergy": "375647",
+      "bandwidth": "2209",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3757,
+        "origin_energy_usage": 371890,
+        "energy_usage_total": 375647,
+        "net_usage": 2209,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "6f0a49ac0dab744feed3b0b4ff8a7ab7411bc100a60f97d11400f306ec982f06",
+      "timeUTC": "2026-06-02 07:38:15",
+      "status": "REVERT",
+      "initialSun": "1021621175",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1021621175",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "1021621175"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "6742",
+      "originEnergy": "667448",
+      "totalEnergy": "674190",
+      "bandwidth": "3361",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 6742,
+        "origin_energy_usage": 667448,
+        "energy_usage_total": 674190,
+        "net_usage": 3361,
+        "result": "REVERT",
+        "energy_penalty_total": 265175
+      }
+    },
+    {
+      "hash": "a45c9c3c257738895d60e72ab0869d5f91e2e0e36d8cc16e2e627f561d012a13",
+      "timeUTC": "2026-06-02 07:36:30",
+      "status": "REVERT",
+      "initialSun": "1685704324",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1685704324",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "1685704324"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4596",
+      "originEnergy": "454965",
+      "totalEnergy": "459561",
+      "bandwidth": "3329",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4596,
+        "origin_energy_usage": 454965,
+        "energy_usage_total": 459561,
+        "net_usage": 3329,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "9f4c8ba74d3eac1bd47c31a4106eae29bb590f91b8515b787ddc44a22cf5b61c",
+      "timeUTC": "2026-06-02 07:24:15",
+      "status": "REVERT",
+      "initialSun": "1508885313",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1508885313",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "6",
+      "originEnergy": "532",
+      "totalEnergy": "538",
+      "bandwidth": "2657",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 6,
+        "origin_energy_usage": 532,
+        "energy_usage_total": 538,
+        "net_usage": 2657,
+        "result": "REVERT"
+      }
+    },
+    {
+      "hash": "715e2afa8783155958ba1916216fdd00315e1f5b6e139441e867d0230d5f9bcd",
+      "timeUTC": "2026-06-02 07:24:15",
+      "status": "REVERT",
+      "initialSun": "1508885313",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1508885313",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "6",
+      "originEnergy": "532",
+      "totalEnergy": "538",
+      "bandwidth": "2657",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 6,
+        "origin_energy_usage": 532,
+        "energy_usage_total": 538,
+        "net_usage": 2657,
+        "result": "REVERT"
+      }
+    },
+    {
+      "hash": "f21693ec0463296218575229e3f1b54f6760c05519257e40d6d6515053e7000a",
+      "timeUTC": "2026-06-02 07:24:06",
+      "status": "REVERT",
+      "initialSun": "1508885313",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1508885313",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "6",
+      "originEnergy": "532",
+      "totalEnergy": "538",
+      "bandwidth": "2657",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 6,
+        "origin_energy_usage": 532,
+        "energy_usage_total": 538,
+        "net_usage": 2657,
+        "result": "REVERT"
+      }
+    },
+    {
+      "hash": "644b452a402d7b2cb96e53a8262a0134a25f4ce54412e84093029f95f681f6e8",
+      "timeUTC": "2026-06-02 07:23:45",
+      "status": "REVERT",
+      "initialSun": "1509369037",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1509369037",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "6",
+      "originEnergy": "532",
+      "totalEnergy": "538",
+      "bandwidth": "2657",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 6,
+        "origin_energy_usage": 532,
+        "energy_usage_total": 538,
+        "net_usage": 2657,
+        "result": "REVERT"
+      }
+    },
+    {
+      "hash": "3bcd746fc7b1f7d5474f3b14231b69f661ccb21cbd4c34fcca09ce2b060bbb42",
+      "timeUTC": "2026-06-02 07:23:21",
+      "status": "SUCCESS",
+      "initialSun": "748236096",
+      "returnedSun": "748708483",
+      "grossProfitSun": "472387",
+      "isNativeCycle": true,
+      "operationsKey": "V1_SWAP_EXACT_IN>swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "748236096",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx"
+      ],
+      "callerEnergy": "4752",
+      "originEnergy": "470398",
+      "totalEnergy": "475150",
+      "bandwidth": "2529",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4752,
+        "origin_energy_usage": 470398,
+        "energy_usage_total": 475150,
+        "net_usage": 2529,
+        "result": "SUCCESS",
+        "energy_penalty_total": 165905
+      }
+    },
+    {
+      "hash": "ce433c486b7f2ae764ee165ca611b1587683c6cf2e3ae090fd9f4cd3ccdbb600",
+      "timeUTC": "2026-06-02 07:23:12",
+      "status": "REVERT",
+      "initialSun": "1626499937",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1626499937",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4879",
+      "originEnergy": "482970",
+      "totalEnergy": "487849",
+      "bandwidth": "2657",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4879,
+        "origin_energy_usage": 482970,
+        "energy_usage_total": 487849,
+        "net_usage": 2657,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "9f7d0f8f132201a5cac73591ba3da7f94ffb2b96fc2d987e2b0247fb9f6fac04",
+      "timeUTC": "2026-06-02 07:16:15",
+      "status": "SUCCESS",
+      "initialSun": "3920256795",
+      "returnedSun": "3922144219",
+      "grossProfitSun": "1887424",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "3920256795",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx"
+      ],
+      "callerEnergy": "5250",
+      "originEnergy": "519674",
+      "totalEnergy": "524924",
+      "bandwidth": "2657",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 5250,
+        "origin_energy_usage": 519674,
+        "energy_usage_total": 524924,
+        "net_usage": 2657,
+        "result": "SUCCESS",
+        "energy_penalty_total": 165905
+      }
+    },
+    {
+      "hash": "d39c21dcf9a38e77be553100312ef41d31714f7d11d2d7dffbf36a3222501f6b",
+      "timeUTC": "2026-06-02 07:16:09",
+      "status": "REVERT",
+      "initialSun": "643280227",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "643280227",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4471",
+      "originEnergy": "442575",
+      "totalEnergy": "447046",
+      "bandwidth": "2529",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4471,
+        "origin_energy_usage": 442575,
+        "energy_usage_total": 447046,
+        "net_usage": 2529,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "eeb618f2cdeb86f7c9fafbfae3ab95b8c2036a8576110fe1bc58a318585ab2f7",
+      "timeUTC": "2026-06-02 07:13:24",
+      "status": "SUCCESS",
+      "initialSun": "1494214455",
+      "returnedSun": "1494797095",
+      "grossProfitSun": "582640",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1494214455",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx"
+      ],
+      "callerEnergy": "5250",
+      "originEnergy": "519738",
+      "totalEnergy": "524988",
+      "bandwidth": "2657",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 5250,
+        "origin_energy_usage": 519738,
+        "energy_usage_total": 524988,
+        "net_usage": 2657,
+        "result": "SUCCESS",
+        "energy_penalty_total": 165905
+      }
+    },
+    {
+      "hash": "4ffb4257f70ed20cbc59dd3d480cab47feb948d39d1ffe7a165a36fbd8398bb6",
+      "timeUTC": "2026-06-02 07:10:00",
+      "status": "REVERT",
+      "initialSun": "586215155",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "586215155",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "586215155"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4051",
+      "originEnergy": "401009",
+      "totalEnergy": "405060",
+      "bandwidth": "3201",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4051,
+        "origin_energy_usage": 401009,
+        "energy_usage_total": 405060,
+        "net_usage": 3201,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "27396b4bef5ee02277c2700cecdc24f6aa30acdda3e55e57d5d6dc76749083de",
+      "timeUTC": "2026-06-02 07:01:39",
+      "status": "REVERT",
+      "initialSun": "332981392",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "amountIn": "332981392",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "1644",
+      "originEnergy": "162676",
+      "totalEnergy": "164320",
+      "bandwidth": "1409",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 1644,
+        "origin_energy_usage": 162676,
+        "energy_usage_total": 164320,
+        "net_usage": 1409,
+        "result": "REVERT"
+      }
+    },
+    {
+      "hash": "3350a982d819fa296685dbe8f57ed56c86e9cea5b9b8720873684f2be482a90b",
+      "timeUTC": "2026-06-02 06:42:33",
+      "status": "REVERT",
+      "initialSun": "91882202",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TFf1aBoNFqxN32V2NQdvNrXVyYCy9qY8p1",
+          "amountIn": "91882202",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TFf1aBoNFqxN32V2NQdvNrXVyYCy9qY8p1",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "91882202"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4658",
+      "originEnergy": "461129",
+      "totalEnergy": "465787",
+      "bandwidth": "2528",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4658,
+        "origin_energy_usage": 461129,
+        "energy_usage_total": 465787,
+        "net_usage": 2528,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "fe976389884f2e90b6eb3b297048ef43b6c1a330331ad77468b020536c449189",
+      "timeUTC": "2026-06-02 06:36:03",
+      "status": "SUCCESS",
+      "initialSun": "552887065",
+      "returnedSun": "553145372",
+      "grossProfitSun": "258307",
+      "isNativeCycle": true,
+      "operationsKey": "V1_SWAP_EXACT_IN>swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "552887065",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx"
+      ],
+      "callerEnergy": "4742",
+      "originEnergy": "469440",
+      "totalEnergy": "474182",
+      "bandwidth": "2529",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4742,
+        "origin_energy_usage": 469440,
+        "energy_usage_total": 474182,
+        "net_usage": 2529,
+        "result": "SUCCESS",
+        "energy_penalty_total": 165905
+      }
+    },
+    {
+      "hash": "da42bcbe4b26b9ab2a82ad09dad3586dc219308234d218358aa90185dcc150d2",
+      "timeUTC": "2026-06-02 06:34:39",
+      "status": "REVERT",
+      "initialSun": "481416046",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "amountIn": "481416046",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "1644",
+      "originEnergy": "162676",
+      "totalEnergy": "164320",
+      "bandwidth": "1409",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 1644,
+        "origin_energy_usage": 162676,
+        "energy_usage_total": 164320,
+        "net_usage": 1409,
+        "result": "REVERT"
+      }
+    },
+    {
+      "hash": "8250efe3ad22256272ddf59b5f79092941b06538b88b741ecc0aac7a44f79306",
+      "timeUTC": "2026-06-02 06:29:27",
+      "status": "REVERT",
+      "initialSun": "48343703",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>V1_SWAP_EXACT_IN>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TRX",
+          "amountIn": "48343703",
+          "amountOut": "48343703"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "amountIn": "48343703",
+          "amountOut": "0"
+        },
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "48343703"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "5413",
+      "originEnergy": "535819",
+      "totalEnergy": "541232",
+      "bandwidth": "1760",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 5413,
+        "origin_energy_usage": 535819,
+        "energy_usage_total": 541232,
+        "net_usage": 1760,
+        "result": "REVERT",
+        "energy_penalty_total": 156524
+      }
+    },
+    {
+      "hash": "cf04ce8d61b9657f3010ebfe57838a533159064f124f759544de1b948f8dc71d",
+      "timeUTC": "2026-06-02 06:28:09",
+      "status": "REVERT",
+      "initialSun": "375130727",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn",
+          "amountIn": "375130727",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "375130727"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "3949",
+      "originEnergy": "390925",
+      "totalEnergy": "394874",
+      "bandwidth": "2401",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3949,
+        "origin_energy_usage": 390925,
+        "energy_usage_total": 394874,
+        "net_usage": 2401,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "b40378e257613f882fec4429c205f2f6177a9c9e4dc13a90894656ee19517ed1",
+      "timeUTC": "2026-06-02 06:28:00",
+      "status": "SUCCESS",
+      "initialSun": "234857893",
+      "returnedSun": "235162684",
+      "grossProfitSun": "304791",
+      "isNativeCycle": true,
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TRcjyxJpGRsaQtWNecG1QLNwRzyqoce4UB",
+          "amountIn": "234857893",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRcjyxJpGRsaQtWNecG1QLNwRzyqoce4UB",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "234857893"
+        }
+      ],
+      "pools": [
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "4312",
+      "originEnergy": "426858",
+      "totalEnergy": "431170",
+      "bandwidth": "2400",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4312,
+        "origin_energy_usage": 426858,
+        "energy_usage_total": 431170,
+        "net_usage": 2400,
+        "result": "SUCCESS",
+        "energy_penalty_total": 178413
+      }
+    },
+    {
+      "hash": "fac4510537ad63814493ed3467f1c77a6a1bcbbe7ef075aa68aa268a651d4d2a",
+      "timeUTC": "2026-06-02 06:27:51",
+      "status": "REVERT",
+      "initialSun": "754526408",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "754526408",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "754526408"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "6760",
+      "originEnergy": "669142",
+      "totalEnergy": "675902",
+      "bandwidth": "3649",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 6760,
+        "origin_energy_usage": 669142,
+        "energy_usage_total": 675902,
+        "net_usage": 3649,
+        "result": "REVERT",
+        "energy_penalty_total": 277683
+      }
+    },
+    {
+      "hash": "048137acf4dea1098c1a0fd6b6a4918c63c08c1304b98a996d4f58136836e824",
+      "timeUTC": "2026-06-02 06:27:42",
+      "status": "REVERT",
+      "initialSun": "1085185072",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "amountIn": "1085185072",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "1085185072"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "3929",
+      "originEnergy": "388885",
+      "totalEnergy": "392814",
+      "bandwidth": "2401",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3929,
+        "origin_energy_usage": 388885,
+        "energy_usage_total": 392814,
+        "net_usage": 2401,
+        "result": "REVERT",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "3652a2a02dde2673d7e4f99053d0469af7b92c16787f9233249f9dff6b64fdab",
+      "timeUTC": "2026-06-02 06:27:33",
+      "status": "SUCCESS",
+      "initialSun": "2406893316",
+      "returnedSun": "2407049206",
+      "grossProfitSun": "155890",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "2406893316",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "2406893316"
+        }
+      ],
+      "pools": [
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "4903",
+      "originEnergy": "485350",
+      "totalEnergy": "490253",
+      "bandwidth": "3329",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4903,
+        "origin_energy_usage": 485350,
+        "energy_usage_total": 490253,
+        "net_usage": 3329,
+        "result": "SUCCESS",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "62707aaa370bd040a90ce97fa5699c8ee87ceeabd9cdee0a9312c8f330905319",
+      "timeUTC": "2026-06-02 06:27:27",
+      "status": "REVERT",
+      "initialSun": "798680173",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "798680173",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "798680173"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4060",
+      "originEnergy": "401904",
+      "totalEnergy": "405964",
+      "bandwidth": "3201",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4060,
+        "origin_energy_usage": 401904,
+        "energy_usage_total": 405964,
+        "net_usage": 3201,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "39ca99f089de048e36d9013f357bbc455009aafc5dc8d8233d0224f5d7a0b9ca",
+      "timeUTC": "2026-06-02 06:27:18",
+      "status": "SUCCESS",
+      "initialSun": "749556684",
+      "returnedSun": "750060170",
+      "grossProfitSun": "503486",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "749556684",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "749556684"
+        }
+      ],
+      "pools": [
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+        "TY1Nzu3P89TorQd41icdqWUSYDWkQAKVRb",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "7320",
+      "originEnergy": "724680",
+      "totalEnergy": "732000",
+      "bandwidth": "3361",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 7320,
+        "origin_energy_usage": 724680,
+        "energy_usage_total": 732000,
+        "net_usage": 3361,
+        "result": "SUCCESS",
+        "energy_penalty_total": 277683
+      }
+    },
+    {
+      "hash": "601e2cab3f670462bb3b9459a81b426e25906986c973ff8d7c56ded509f3172e",
+      "timeUTC": "2026-06-02 06:26:54",
+      "status": "REVERT",
+      "initialSun": "121043355",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "swapExactInSingle>V3_SWAP_EXACT_IN>SWEEP",
+      "swaps": [
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "121043355",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "121043355"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "6409",
+      "originEnergy": "634412",
+      "totalEnergy": "640821",
+      "bandwidth": "4320",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 6409,
+        "origin_energy_usage": 634412,
+        "energy_usage_total": 640821,
+        "net_usage": 4320,
+        "result": "REVERT",
+        "energy_penalty_total": 268302
+      }
+    },
+    {
+      "hash": "56679e781b288b3d0001de22dc2ee5bce6d32b91fc2b8627a4c8776a5fd31001",
+      "timeUTC": "2026-06-02 06:25:03",
+      "status": "REVERT",
+      "initialSun": "921832784",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "amountIn": "921832784",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4354",
+      "originEnergy": "430992",
+      "totalEnergy": "435346",
+      "bandwidth": "1729",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4354,
+        "origin_energy_usage": 430992,
+        "energy_usage_total": 435346,
+        "net_usage": 1729,
+        "result": "REVERT",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "e70945ab201fc256b42dceffc17165e782fad740d138e684549e8fedc8750a63",
+      "timeUTC": "2026-06-02 06:17:33",
+      "status": "REVERT",
+      "initialSun": "361587865",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn",
+          "amountIn": "361587865",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "361587865"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "3939",
+      "originEnergy": "389927",
+      "totalEnergy": "393866",
+      "bandwidth": "2401",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3939,
+        "origin_energy_usage": 389927,
+        "energy_usage_total": 393866,
+        "net_usage": 2401,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "f4d19b162ae26dc285a95ecb39b7bfff9cc1ea61d1e406e30ee9b3c66f2f7192",
+      "timeUTC": "2026-06-02 06:17:27",
+      "status": "REVERT",
+      "initialSun": "402598334",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq",
+          "amountIn": "402598334",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "402598334"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "3990",
+      "originEnergy": "394996",
+      "totalEnergy": "398986",
+      "bandwidth": "2401",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3990,
+        "origin_energy_usage": 394996,
+        "energy_usage_total": 398986,
+        "net_usage": 2401,
+        "result": "REVERT",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "7024be911d4a7591f690d36bd4ebf5c9905099d9cd12f8d0eda45654085b3e5d",
+      "timeUTC": "2026-06-02 06:17:09",
+      "status": "REVERT",
+      "initialSun": "216328003",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TRcjyxJpGRsaQtWNecG1QLNwRzyqoce4UB",
+          "amountIn": "216328003",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRcjyxJpGRsaQtWNecG1QLNwRzyqoce4UB",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4361",
+      "originEnergy": "431669",
+      "totalEnergy": "436030",
+      "bandwidth": "1728",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4361,
+        "origin_energy_usage": 431669,
+        "energy_usage_total": 436030,
+        "net_usage": 1728,
+        "result": "REVERT",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "a2555092e03bf020a5c4014bde736debefdb1ed6cc8960c84dd0ac1fc144d498",
+      "timeUTC": "2026-06-02 06:02:54",
+      "status": "SUCCESS",
+      "initialSun": "409889952",
+      "returnedSun": "410307745",
+      "grossProfitSun": "417793",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>V1_SWAP_EXACT_IN>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "amountIn": "409889952",
+          "amountOut": "0"
+        },
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "409889952"
+        }
+      ],
+      "pools": [
+        "TT4QTpAT5qc4QLGGTn1TcYuegoBBRW6gFt",
+        "TPg8Cj21TGD7ThU9YXdojJF8STdbAs29u2"
+      ],
+      "callerEnergy": "3846",
+      "originEnergy": "380752",
+      "totalEnergy": "384598",
+      "bandwidth": "1441",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3846,
+        "origin_energy_usage": 380752,
+        "energy_usage_total": 384598,
+        "net_usage": 1441,
+        "result": "SUCCESS"
+      }
+    },
+    {
+      "hash": "a8b4bff792cccb9093d7dafa95a7440e0812d279eee6926039d0d093c81090f9",
+      "timeUTC": "2026-06-02 06:02:42",
+      "status": "REVERT",
+      "initialSun": "421351599",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>V1_SWAP_EXACT_IN>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "amountIn": "421351599",
+          "amountOut": "0"
+        },
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "421351599"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "3270",
+      "originEnergy": "323697",
+      "totalEnergy": "326967",
+      "bandwidth": "1441",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3270,
+        "origin_energy_usage": 323697,
+        "energy_usage_total": 326967,
+        "net_usage": 1441,
+        "result": "REVERT"
+      }
+    },
+    {
+      "hash": "a3680d64660e4152c0aa107eef85692108aa5530fbab5bc6d5f319334053601b",
+      "timeUTC": "2026-06-02 06:02:30",
+      "status": "REVERT",
+      "initialSun": "416884932",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>V1_SWAP_EXACT_IN>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "amountIn": "416884932",
+          "amountOut": "0"
+        },
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "416884932"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "3270",
+      "originEnergy": "323672",
+      "totalEnergy": "326942",
+      "bandwidth": "1441",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3270,
+        "origin_energy_usage": 323672,
+        "energy_usage_total": 326942,
+        "net_usage": 1441,
+        "result": "REVERT"
+      }
+    },
+    {
+      "hash": "aa075d8dd57756feaf7fdf96b8fd6ce2ba71f676672e4024b14757188964c7d9",
+      "timeUTC": "2026-06-02 06:02:21",
+      "status": "SUCCESS",
+      "initialSun": "209371117",
+      "returnedSun": "210108119",
+      "grossProfitSun": "737002",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>V1_SWAP_EXACT_IN>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "amountIn": "209371117",
+          "amountOut": "0"
+        },
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "209371117"
+        }
+      ],
+      "pools": [
+        "TT4QTpAT5qc4QLGGTn1TcYuegoBBRW6gFt",
+        "TPg8Cj21TGD7ThU9YXdojJF8STdbAs29u2"
+      ],
+      "callerEnergy": "3847",
+      "originEnergy": "380811",
+      "totalEnergy": "384658",
+      "bandwidth": "1440",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3847,
+        "origin_energy_usage": 380811,
+        "energy_usage_total": 384658,
+        "net_usage": 1440,
+        "result": "SUCCESS"
+      }
+    },
+    {
+      "hash": "2b90505c7c8b4fc7ecd753ee3a9f525db58464e025373e619bed8e51715acb78",
+      "timeUTC": "2026-06-02 06:02:12",
+      "status": "REVERT",
+      "initialSun": "76489998",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>V1_SWAP_EXACT_IN>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TFf1aBoNFqxN32V2NQdvNrXVyYCy9qY8p1",
+          "amountIn": "76489998",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TFf1aBoNFqxN32V2NQdvNrXVyYCy9qY8p1",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "76489998"
+        },
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TRX",
+          "amountIn": "76489998",
+          "amountOut": "76489998"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "5358",
+      "originEnergy": "530399",
+      "totalEnergy": "535757",
+      "bandwidth": "1760",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 5358,
+        "origin_energy_usage": 530399,
+        "energy_usage_total": 535757,
+        "net_usage": 1760,
+        "result": "REVERT",
+        "energy_penalty_total": 156524
+      }
+    },
+    {
+      "hash": "97b65180786626804135d645fb348539f46febcae1275d501ead8c1882db235e",
+      "timeUTC": "2026-06-02 06:02:03",
+      "status": "SUCCESS",
+      "initialSun": "380854684",
+      "returnedSun": "383307828",
+      "grossProfitSun": "2453144",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>V1_SWAP_EXACT_IN>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "amountIn": "380854684",
+          "amountOut": "0"
+        },
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "380854684"
+        }
+      ],
+      "pools": [
+        "TT4QTpAT5qc4QLGGTn1TcYuegoBBRW6gFt",
+        "TPg8Cj21TGD7ThU9YXdojJF8STdbAs29u2"
+      ],
+      "callerEnergy": "3847",
+      "originEnergy": "380801",
+      "totalEnergy": "384648",
+      "bandwidth": "1441",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3847,
+        "origin_energy_usage": 380801,
+        "energy_usage_total": 384648,
+        "net_usage": 1441,
+        "result": "SUCCESS"
+      }
+    },
+    {
+      "hash": "969605c65e6000bcf38ddf0eb9114ea653db826062c0460b000de3352a860c3f",
+      "timeUTC": "2026-06-02 06:01:33",
+      "status": "SUCCESS",
+      "initialSun": "238037148",
+      "returnedSun": "238998407",
+      "grossProfitSun": "961259",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>V1_SWAP_EXACT_IN>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "amountIn": "238037148",
+          "amountOut": "0"
+        },
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "238037148"
+        }
+      ],
+      "pools": [
+        "TT4QTpAT5qc4QLGGTn1TcYuegoBBRW6gFt",
+        "TPg8Cj21TGD7ThU9YXdojJF8STdbAs29u2"
+      ],
+      "callerEnergy": "3847",
+      "originEnergy": "380831",
+      "totalEnergy": "384678",
+      "bandwidth": "1440",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3847,
+        "origin_energy_usage": 380831,
+        "energy_usage_total": 384678,
+        "net_usage": 1440,
+        "result": "SUCCESS"
+      }
+    },
+    {
+      "hash": "d4d2f9fca6bd404aeb6e0c7c28cf2c68ce8f153da5b99c3dd2d21e792c235eef",
+      "timeUTC": "2026-06-02 06:00:39",
+      "status": "REVERT",
+      "initialSun": "248014821",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TFf1aBoNFqxN32V2NQdvNrXVyYCy9qY8p1",
+          "amountIn": "248014821",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TFf1aBoNFqxN32V2NQdvNrXVyYCy9qY8p1",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4850",
+      "originEnergy": "480146",
+      "totalEnergy": "484996",
+      "bandwidth": "1568",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4850,
+        "origin_energy_usage": 480146,
+        "energy_usage_total": 484996,
+        "net_usage": 1568,
+        "result": "REVERT",
+        "energy_penalty_total": 156524
+      }
+    },
+    {
+      "hash": "063d963e10e7d6b61539663a1fbd73606b3b06d27129fddeec4e4cd2f33ac8b4",
+      "timeUTC": "2026-06-02 06:00:30",
+      "status": "REVERT",
+      "initialSun": "2062837845",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>V1_SWAP_EXACT_IN>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "amountIn": "2062837845",
+          "amountOut": "0"
+        },
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "2062837845"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "3270",
+      "originEnergy": "323687",
+      "totalEnergy": "326957",
+      "bandwidth": "1441",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3270,
+        "origin_energy_usage": 323687,
+        "energy_usage_total": 326957,
+        "net_usage": 1441,
+        "result": "REVERT"
+      }
+    },
+    {
+      "hash": "8f419316c3b4e232c228e9c0e959687e4fdd6b1e8340e18098d2cdda0d5eeef7",
+      "timeUTC": "2026-06-02 05:38:03",
+      "status": "REVERT",
+      "initialSun": "544594483",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "swapExactInSingle>V1_SWAP_EXACT_IN>SWEEP",
+      "swaps": [
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "544594483",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "544594483"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4312",
+      "originEnergy": "426807",
+      "totalEnergy": "431119",
+      "bandwidth": "3201",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4312,
+        "origin_energy_usage": 426807,
+        "energy_usage_total": 431119,
+        "net_usage": 3201,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "2a95dd48e6b67ba1be3178b4757c7067bc151726b5334fdf6c3c9d461d1fe0e2",
+      "timeUTC": "2026-06-02 05:37:21",
+      "status": "SUCCESS",
+      "initialSun": "2334642510",
+      "returnedSun": "2335314917",
+      "grossProfitSun": "672407",
+      "isNativeCycle": true,
+      "operationsKey": "swapExactInSingle>V2_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "2334642510",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "5016",
+      "originEnergy": "496529",
+      "totalEnergy": "501545",
+      "bandwidth": "3329",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 5016,
+        "origin_energy_usage": 496529,
+        "energy_usage_total": 501545,
+        "net_usage": 3329,
+        "result": "SUCCESS",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "f25f54dc1f1e9141edd75c9fb0e9df3a261c4709f3d1949bbfc6a9b9ae2161f5",
+      "timeUTC": "2026-06-02 05:37:12",
+      "status": "REVERT",
+      "initialSun": "1171073423",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "1171073423",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "1171073423"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "6842",
+      "originEnergy": "677332",
+      "totalEnergy": "684174",
+      "bandwidth": "3649",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 6842,
+        "origin_energy_usage": 677332,
+        "energy_usage_total": 684174,
+        "net_usage": 3649,
+        "result": "REVERT",
+        "energy_penalty_total": 268302
+      }
+    },
+    {
+      "hash": "19eaeae17ebf443d0587ac64f19ababfe9844d1de53ad93ba2553b1b67b1bc5e",
+      "timeUTC": "2026-06-02 04:44:09",
+      "status": "SUCCESS",
+      "initialSun": "1507661360",
+      "returnedSun": "1507940820",
+      "grossProfitSun": "279460",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1507661360",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "1507661360"
+        }
+      ],
+      "pools": [
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "5009",
+      "originEnergy": "495873",
+      "totalEnergy": "500882",
+      "bandwidth": "3329",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 5009,
+        "origin_energy_usage": 495873,
+        "energy_usage_total": 500882,
+        "net_usage": 3329,
+        "result": "SUCCESS",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "b5d80fe58b206049491c981f37e69581a38a1702017820ea90d355c2394721a3",
+      "timeUTC": "2026-06-02 04:43:18",
+      "status": "REVERT",
+      "initialSun": "1534225725",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1534225725",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "1534225725"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4596",
+      "originEnergy": "454929",
+      "totalEnergy": "459525",
+      "bandwidth": "3329",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4596,
+        "origin_energy_usage": 454929,
+        "energy_usage_total": 459525,
+        "net_usage": 3329,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "b37f6c182f21672211c475b837688a9ec15fb0a95613fa305acee15b420e3dd6",
+      "timeUTC": "2026-06-02 04:43:09",
+      "status": "SUCCESS",
+      "initialSun": "640301439",
+      "returnedSun": "640648199",
+      "grossProfitSun": "346760",
+      "isNativeCycle": true,
+      "operationsKey": "V1_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "640301439",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "640301439"
+        }
+      ],
+      "pools": [
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "4353",
+      "originEnergy": "430883",
+      "totalEnergy": "435236",
+      "bandwidth": "3201",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4353,
+        "origin_energy_usage": 430883,
+        "energy_usage_total": 435236,
+        "net_usage": 3201,
+        "result": "SUCCESS",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "a515f323328ee2e08b683eb749bd8037e694950f14465e3014118bb938813148",
+      "timeUTC": "2026-06-02 04:43:00",
+      "status": "REVERT",
+      "initialSun": "1552284335",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1552284335",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "1552284335"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4596",
+      "originEnergy": "454933",
+      "totalEnergy": "459529",
+      "bandwidth": "3329",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4596,
+        "origin_energy_usage": 454933,
+        "energy_usage_total": 459529,
+        "net_usage": 3329,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "9e3cbc2b6846b931f0065511d513c6f18e55b2eaafb55fc04c5cf378a0613a1d",
+      "timeUTC": "2026-06-02 04:42:54",
+      "status": "REVERT",
+      "initialSun": "2058258904",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "2058258904",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "2058258904"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4596",
+      "originEnergy": "455004",
+      "totalEnergy": "459600",
+      "bandwidth": "3329",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4596,
+        "origin_energy_usage": 455004,
+        "energy_usage_total": 459600,
+        "net_usage": 3329,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "ef056139fdf9a10a7b93fdba6d633a327d2d22dd99bcd7a6ad15430bbcb21666",
+      "timeUTC": "2026-06-02 04:38:33",
+      "status": "REVERT",
+      "initialSun": "1802677659",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1802677659",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "1802677659"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4596",
+      "originEnergy": "454961",
+      "totalEnergy": "459557",
+      "bandwidth": "3329",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4596,
+        "origin_energy_usage": 454961,
+        "energy_usage_total": 459557,
+        "net_usage": 3329,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "34f31384a539c4c5bd22f348382b6f30039c5162f51438afdbaecec650a55621",
+      "timeUTC": "2026-06-02 04:38:24",
+      "status": "REVERT",
+      "initialSun": "887213933",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "887213933",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "887213933"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4061",
+      "originEnergy": "401952",
+      "totalEnergy": "406013",
+      "bandwidth": "3201",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4061,
+        "origin_energy_usage": 401952,
+        "energy_usage_total": 406013,
+        "net_usage": 3201,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "985b296b2dd9a090bc59e7901b9b84b20507ac899c0b9f7c11fe40ddb910b180",
+      "timeUTC": "2026-06-02 04:38:18",
+      "status": "SUCCESS",
+      "initialSun": "1864671380",
+      "returnedSun": "1865046576",
+      "grossProfitSun": "375196",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1864671380",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "1864671380"
+        }
+      ],
+      "pools": [
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "4903",
+      "originEnergy": "485357",
+      "totalEnergy": "490260",
+      "bandwidth": "3329",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4903,
+        "origin_energy_usage": 485357,
+        "energy_usage_total": 490260,
+        "net_usage": 3329,
+        "result": "SUCCESS",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "a5849f286bed7218b6328e7fef6b1f4d95b61dea8a5f2bd230a92e55d9e8f7ba",
+      "timeUTC": "2026-06-02 04:38:00",
+      "status": "REVERT",
+      "initialSun": "2143952152",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "2143952152",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "2143952152"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4597",
+      "originEnergy": "455028",
+      "totalEnergy": "459625",
+      "bandwidth": "3329",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4597,
+        "origin_energy_usage": 455028,
+        "energy_usage_total": 459625,
+        "net_usage": 3329,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "b417a1a4b7ed408a4563c1a643097a5ec25f6844993c5aaa80934cbdfdebb720",
+      "timeUTC": "2026-06-02 04:37:51",
+      "status": "REVERT",
+      "initialSun": "809378019",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "809378019",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "809378019"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4138",
+      "originEnergy": "409639",
+      "totalEnergy": "413777",
+      "bandwidth": "2401",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4138,
+        "origin_energy_usage": 409639,
+        "energy_usage_total": 413777,
+        "net_usage": 2401,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "a074aa90a2888afc4f862fe5a169975a762e650bf8cc1b20c5f2e578bef38d4f",
+      "timeUTC": "2026-06-02 04:35:48",
+      "status": "REVERT",
+      "initialSun": "1780470064",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1780470064",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "1780470064"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4596",
+      "originEnergy": "454905",
+      "totalEnergy": "459501",
+      "bandwidth": "3329",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4596,
+        "origin_energy_usage": 454905,
+        "energy_usage_total": 459501,
+        "net_usage": 3329,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "acb869f069bfd0a5e6e2a20cff29cc50615201613d07e47c04f69a5162a22da1",
+      "timeUTC": "2026-06-02 04:35:42",
+      "status": "REVERT",
+      "initialSun": "581135900",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "581135900",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "581135900"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4052",
+      "originEnergy": "401069",
+      "totalEnergy": "405121",
+      "bandwidth": "3201",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4052,
+        "origin_energy_usage": 401069,
+        "energy_usage_total": 405121,
+        "net_usage": 3201,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "c2e743bc20459c5767bd3833cb6d66978a22315b70a0a19452992846ef7dec73",
+      "timeUTC": "2026-06-02 04:35:36",
+      "status": "SUCCESS",
+      "initialSun": "756571962",
+      "returnedSun": "756979061",
+      "grossProfitSun": "407099",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "756571962",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "756571962"
+        }
+      ],
+      "pools": [
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+        "TY1Nzu3P89TorQd41icdqWUSYDWkQAKVRb",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "7320",
+      "originEnergy": "724671",
+      "totalEnergy": "731991",
+      "bandwidth": "3361",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 7320,
+        "origin_energy_usage": 724671,
+        "energy_usage_total": 731991,
+        "net_usage": 3361,
+        "result": "SUCCESS",
+        "energy_penalty_total": 277683
+      }
+    },
+    {
+      "hash": "ecbee5a010780dd14eef0aa2833e84cfd37ee72f7fbd08ff45e1ea1360bef08b",
+      "timeUTC": "2026-06-02 04:35:27",
+      "status": "REVERT",
+      "initialSun": "2116394261",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "2116394261",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "2116394261"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4596",
+      "originEnergy": "454912",
+      "totalEnergy": "459508",
+      "bandwidth": "3329",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4596,
+        "origin_energy_usage": 454912,
+        "energy_usage_total": 459508,
+        "net_usage": 3329,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "1f8f5273b464715788d7784d50a6f2eef083b7d7a19ba917090c44a39db3923a",
+      "timeUTC": "2026-06-02 04:34:39",
+      "status": "REVERT",
+      "initialSun": "2170542254",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "2170542254",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "2170542254"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4596",
+      "originEnergy": "454908",
+      "totalEnergy": "459504",
+      "bandwidth": "3329",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4596,
+        "origin_energy_usage": 454908,
+        "energy_usage_total": 459504,
+        "net_usage": 3329,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "201a404f00a23068cbf5ded9e6d195727702e48d50bee3a0c0b62c428ffbab13",
+      "timeUTC": "2026-06-02 04:34:33",
+      "status": "REVERT",
+      "initialSun": "619577467",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "619577467",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "619577467"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4060",
+      "originEnergy": "401904",
+      "totalEnergy": "405964",
+      "bandwidth": "3201",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4060,
+        "origin_energy_usage": 401904,
+        "energy_usage_total": 405964,
+        "net_usage": 3201,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "852cf5f672997c6e07217daf95acafc3de09377ee27df1e2188c7387b77d70dc",
+      "timeUTC": "2026-06-02 04:33:48",
+      "status": "SUCCESS",
+      "initialSun": "671315651",
+      "returnedSun": "671636314",
+      "grossProfitSun": "320663",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "671315651",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "671315651"
+        }
+      ],
+      "pools": [
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+        "TY1Nzu3P89TorQd41icdqWUSYDWkQAKVRb",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "7321",
+      "originEnergy": "724691",
+      "totalEnergy": "732012",
+      "bandwidth": "3361",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 7321,
+        "origin_energy_usage": 724691,
+        "energy_usage_total": 732012,
+        "net_usage": 3361,
+        "result": "SUCCESS",
+        "energy_penalty_total": 277683
+      }
+    },
+    {
+      "hash": "ccac19c7b65b7efbeb206f53791ec00842bf599dc43371a19a96e39b4fc8d2c5",
+      "timeUTC": "2026-06-02 04:33:39",
+      "status": "REVERT",
+      "initialSun": "1719505561",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1719505561",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "1719505561"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4595",
+      "originEnergy": "454902",
+      "totalEnergy": "459497",
+      "bandwidth": "3329",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4595,
+        "origin_energy_usage": 454902,
+        "energy_usage_total": 459497,
+        "net_usage": 3329,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "33ed604cbc7b9791730f141444b75536431ded0ab6f7ae6465a87a6611589023",
+      "timeUTC": "2026-06-02 04:21:42",
+      "status": "REVERT",
+      "initialSun": "61669278",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "amountIn": "61669278",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "1938",
+      "originEnergy": "191841",
+      "totalEnergy": "193779",
+      "bandwidth": "1408",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 1938,
+        "origin_energy_usage": 191841,
+        "energy_usage_total": 193779,
+        "net_usage": 1408,
+        "result": "REVERT"
+      }
+    },
+    {
+      "hash": "d08a3c6745c4f781bf95eca1d4e7782c39330080e4918c542d4574b9759cba10",
+      "timeUTC": "2026-06-02 04:21:36",
+      "status": "REVERT",
+      "initialSun": "764427436",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "amountIn": "764427436",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "1644",
+      "originEnergy": "162676",
+      "totalEnergy": "164320",
+      "bandwidth": "1409",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 1644,
+        "origin_energy_usage": 162676,
+        "energy_usage_total": 164320,
+        "net_usage": 1409,
+        "result": "REVERT"
+      }
+    },
+    {
+      "hash": "e940aad3d39d3a773f42fae92aacd5b1c29f4b5e9ab9b95add81403047023c83",
+      "timeUTC": "2026-06-02 04:17:24",
+      "status": "SUCCESS",
+      "initialSun": "648975472",
+      "returnedSun": "649332697",
+      "grossProfitSun": "357225",
+      "isNativeCycle": true,
+      "operationsKey": "V1_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "648975472",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "648975472"
+        }
+      ],
+      "pools": [
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br"
+      ],
+      "callerEnergy": "4344",
+      "originEnergy": "430032",
+      "totalEnergy": "434376",
+      "bandwidth": "3201",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4344,
+        "origin_energy_usage": 430032,
+        "energy_usage_total": 434376,
+        "net_usage": 3201,
+        "result": "SUCCESS",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "1ce360150a69e692c3136ffaed505e1a4f15a215a26ebe5f2e541decfaf07d52",
+      "timeUTC": "2026-06-02 04:17:12",
+      "status": "REVERT",
+      "initialSun": "578501269",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "578501269",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "578501269"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4052",
+      "originEnergy": "401069",
+      "totalEnergy": "405121",
+      "bandwidth": "3201",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4052,
+        "origin_energy_usage": 401069,
+        "energy_usage_total": 405121,
+        "net_usage": 3201,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "8553152b7f1560011fec5f59ec2978f34cd7b86238fcc5f0b94da720195b1c36",
+      "timeUTC": "2026-06-02 04:15:00",
+      "status": "REVERT",
+      "initialSun": "596589861",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "596589861",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "596589861"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "6758",
+      "originEnergy": "669020",
+      "totalEnergy": "675778",
+      "bandwidth": "3649",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 6758,
+        "origin_energy_usage": 669020,
+        "energy_usage_total": 675778,
+        "net_usage": 3649,
+        "result": "REVERT",
+        "energy_penalty_total": 277683
+      }
+    },
+    {
+      "hash": "11e2918c7bd356387c90ff9d999a2cbb3031ec399f382d8a725bd73e7f26a42e",
+      "timeUTC": "2026-06-02 04:14:51",
+      "status": "REVERT",
+      "initialSun": "1627943703",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1627943703",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4878",
+      "originEnergy": "482884",
+      "totalEnergy": "487762",
+      "bandwidth": "2657",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4878,
+        "origin_energy_usage": 482884,
+        "energy_usage_total": 487762,
+        "net_usage": 2657,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "224e7b492898d42be6c1dc715221cd09619ee1030f980eda35fd7ed00eddcedd",
+      "timeUTC": "2026-06-02 04:14:33",
+      "status": "REVERT",
+      "initialSun": "1833848356",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1833848356",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4879",
+      "originEnergy": "482922",
+      "totalEnergy": "487801",
+      "bandwidth": "2657",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4879,
+        "origin_energy_usage": 482922,
+        "energy_usage_total": 487801,
+        "net_usage": 2657,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "2d71f6b8e37fdc341bab0c2fef6518433b6e1dba8efbbd7dfd2e7cf34c14b613",
+      "timeUTC": "2026-06-02 04:14:21",
+      "status": "REVERT",
+      "initialSun": "607960626",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "607960626",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4482",
+      "originEnergy": "443660",
+      "totalEnergy": "448142",
+      "bandwidth": "2529",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4482,
+        "origin_energy_usage": 443660,
+        "energy_usage_total": 448142,
+        "net_usage": 2529,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "e53b0f5ab8724fd060a0f0f83b0349ed6d58817fdf8f5d1ac70f63fd11117be6",
+      "timeUTC": "2026-06-02 04:12:06",
+      "status": "SUCCESS",
+      "initialSun": "1721569804",
+      "returnedSun": "1721936053",
+      "grossProfitSun": "366249",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1721569804",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx"
+      ],
+      "callerEnergy": "5261",
+      "originEnergy": "520748",
+      "totalEnergy": "526009",
+      "bandwidth": "2657",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 5261,
+        "origin_energy_usage": 520748,
+        "energy_usage_total": 526009,
+        "net_usage": 2657,
+        "result": "SUCCESS",
+        "energy_penalty_total": 165905
+      }
+    },
+    {
+      "hash": "e5cdeb4cb84fc3ab9cdb64f47585a582b3cf4bfe58107990535259ce161f6b29",
+      "timeUTC": "2026-06-02 04:09:51",
+      "status": "REVERT",
+      "initialSun": "1937100203",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "amountIn": "1937100203",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "0",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "1937100203"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4596",
+      "originEnergy": "455004",
+      "totalEnergy": "459600",
+      "bandwidth": "3329",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4596,
+        "origin_energy_usage": 455004,
+        "energy_usage_total": 459600,
+        "net_usage": 3329,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "12bca152e88e7c316844fa23807a19d9a1bdd17ffbcc9ec96e2fd214a952df23",
+      "timeUTC": "2026-06-02 04:06:30",
+      "status": "REVERT",
+      "initialSun": "94463408",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8",
+          "amountIn": "94463408",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "1698",
+      "originEnergy": "168013",
+      "totalEnergy": "169711",
+      "bandwidth": "1408",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 1698,
+        "origin_energy_usage": 168013,
+        "energy_usage_total": 169711,
+        "net_usage": 1408,
+        "result": "REVERT"
+      }
+    },
+    {
+      "hash": "f38a0fc999a7be60728037e775694617b04357ad2674d798a924017960fff507",
+      "timeUTC": "2026-06-02 04:03:51",
+      "status": "REVERT",
+      "initialSun": "339326853",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "amountIn": "339326853",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "1644",
+      "originEnergy": "162676",
+      "totalEnergy": "164320",
+      "bandwidth": "1409",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 1644,
+        "origin_energy_usage": 162676,
+        "energy_usage_total": 164320,
+        "net_usage": 1409,
+        "result": "REVERT"
+      }
+    },
+    {
+      "hash": "8166dab91783bbbb7c25c0c1a97d9894c95c92f86027ca9113e83b08680f9742",
+      "timeUTC": "2026-06-02 04:03:27",
+      "status": "REVERT",
+      "initialSun": "77677871",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>V1_SWAP_EXACT_IN>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TD74cpU4JfMKhuWVs6uKYXKUy8nvC6EQ95",
+          "amountIn": "77677871",
+          "amountOut": "0"
+        },
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TD74cpU4JfMKhuWVs6uKYXKUy8nvC6EQ95",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "77677871"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "3390",
+      "originEnergy": "335553",
+      "totalEnergy": "338943",
+      "bandwidth": "1472",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3390,
+        "origin_energy_usage": 335553,
+        "energy_usage_total": 338943,
+        "net_usage": 1472,
+        "result": "REVERT",
+        "energy_penalty_total": 59016
+      }
+    },
+    {
+      "hash": "76c99d28413305a8cbc9193fab634830a23b1a121f113f1a52b10a3225d4c452",
+      "timeUTC": "2026-06-02 04:03:12",
+      "status": "SUCCESS",
+      "initialSun": "521626220",
+      "returnedSun": "522600356",
+      "grossProfitSun": "974136",
+      "isNativeCycle": true,
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "amountIn": "521626220",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "1890",
+      "originEnergy": "187077",
+      "totalEnergy": "188967",
+      "bandwidth": "1409",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 1890,
+        "origin_energy_usage": 187077,
+        "energy_usage_total": 188967,
+        "net_usage": 1409,
+        "result": "SUCCESS"
+      }
+    },
+    {
+      "hash": "43f2a65d3d2ba19afeb8dbf1a0d0de94431fbf452f136c763cd0bf231840a6ad",
+      "timeUTC": "2026-06-02 03:59:51",
+      "status": "REVERT",
+      "initialSun": "168546534",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TRcjyxJpGRsaQtWNecG1QLNwRzyqoce4UB",
+          "amountIn": "168546534",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRcjyxJpGRsaQtWNecG1QLNwRzyqoce4UB",
+          "tokenOut": "TD74cpU4JfMKhuWVs6uKYXKUy8nvC6EQ95",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TD74cpU4JfMKhuWVs6uKYXKUy8nvC6EQ95",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "168546534"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "3324",
+      "originEnergy": "328995",
+      "totalEnergy": "332319",
+      "bandwidth": "1632",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3324,
+        "origin_energy_usage": 328995,
+        "energy_usage_total": 332319,
+        "net_usage": 1632,
+        "result": "REVERT",
+        "energy_penalty_total": 59016
+      }
+    },
+    {
+      "hash": "42fe2ddf509529966512c3997805c697b8a1c95e096456d9f9011d6214ba1cdb",
+      "timeUTC": "2026-06-02 03:55:09",
+      "status": "REVERT",
+      "initialSun": "80670292",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TRcjyxJpGRsaQtWNecG1QLNwRzyqoce4UB",
+          "amountIn": "80670292",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRcjyxJpGRsaQtWNecG1QLNwRzyqoce4UB",
+          "tokenOut": "TD74cpU4JfMKhuWVs6uKYXKUy8nvC6EQ95",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TD74cpU4JfMKhuWVs6uKYXKUy8nvC6EQ95",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "80670292"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "3217",
+      "originEnergy": "318430",
+      "totalEnergy": "321647",
+      "bandwidth": "1632",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3217,
+        "origin_energy_usage": 318430,
+        "energy_usage_total": 321647,
+        "net_usage": 1632,
+        "result": "REVERT",
+        "energy_penalty_total": 59016
+      }
+    },
+    {
+      "hash": "042b6eceec111460694df775f7ed54b7b7dc431d5481b6457fbfba27cadbf154",
+      "timeUTC": "2026-06-02 03:37:30",
+      "status": "REVERT",
+      "initialSun": "88715899",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "88715899",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "88715899"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4562",
+      "originEnergy": "451561",
+      "totalEnergy": "456123",
+      "bandwidth": "2272",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4562,
+        "origin_energy_usage": 451561,
+        "energy_usage_total": 456123,
+        "net_usage": 2272,
+        "result": "REVERT",
+        "energy_penalty_total": 169032
+      }
+    },
+    {
+      "hash": "eb79cafa9851b520c002a2264603995f619d7e0acbd0f3b1ed49aa9aaa3feeab",
+      "timeUTC": "2026-06-02 03:37:21",
+      "status": "REVERT",
+      "initialSun": "413583040",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn",
+          "amountIn": "413583040",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "413583040"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "3938",
+      "originEnergy": "389796",
+      "totalEnergy": "393734",
+      "bandwidth": "2401",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3938,
+        "origin_energy_usage": 389796,
+        "energy_usage_total": 393734,
+        "net_usage": 2401,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "f40f48c2f5099292bd07d48fb2a42c88d0dc155bed3aad432be4f49a7337016e",
+      "timeUTC": "2026-06-02 03:35:39",
+      "status": "REVERT",
+      "initialSun": "720151976",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "amountIn": "720151976",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "1644",
+      "originEnergy": "162676",
+      "totalEnergy": "164320",
+      "bandwidth": "1409",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 1644,
+        "origin_energy_usage": 162676,
+        "energy_usage_total": 164320,
+        "net_usage": 1409,
+        "result": "REVERT"
+      }
+    },
+    {
+      "hash": "246d42636bae0d989a622ee5a402febfe0dac382d57eb5329fefca51647bfcd2",
+      "timeUTC": "2026-06-02 03:29:42",
+      "status": "REVERT",
+      "initialSun": "440476547",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "amountIn": "440476547",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "1644",
+      "originEnergy": "162676",
+      "totalEnergy": "164320",
+      "bandwidth": "1409",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 1644,
+        "origin_energy_usage": 162676,
+        "energy_usage_total": 164320,
+        "net_usage": 1409,
+        "result": "REVERT"
+      }
+    },
+    {
+      "hash": "2d888e70682399405d0438190a4cdbcdc17bd07c008eb2060e18938cc8c54a0f",
+      "timeUTC": "2026-06-02 03:26:24",
+      "status": "SUCCESS",
+      "initialSun": "6699999999",
+      "returnedSun": "6700462337",
+      "grossProfitSun": "462338",
+      "isNativeCycle": true,
+      "operationsKey": "swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "6699999999",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx"
+      ],
+      "callerEnergy": "3974",
+      "originEnergy": "393375",
+      "totalEnergy": "397349",
+      "bandwidth": "2209",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3974,
+        "origin_energy_usage": 393375,
+        "energy_usage_total": 397349,
+        "net_usage": 2209,
+        "result": "SUCCESS",
+        "energy_penalty_total": 165905
+      }
+    },
+    {
+      "hash": "7efbe733e013c6e59abb33d7c68951568e2d83e2bf9ecda29dce9cc54bafd7c0",
+      "timeUTC": "2026-06-02 03:26:15",
+      "status": "SUCCESS",
+      "initialSun": "6699999999",
+      "returnedSun": "6700574606",
+      "grossProfitSun": "574607",
+      "isNativeCycle": true,
+      "operationsKey": "swapExactInSingle>V3_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TRX",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "6699999999",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [
+        "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx"
+      ],
+      "callerEnergy": "3974",
+      "originEnergy": "393375",
+      "totalEnergy": "397349",
+      "bandwidth": "2209",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 3974,
+        "origin_energy_usage": 393375,
+        "energy_usage_total": 397349,
+        "net_usage": 2209,
+        "result": "SUCCESS",
+        "energy_penalty_total": 165905
+      }
+    },
+    {
+      "hash": "7d3d36847d77764e86c99df6d0ec96033c0f9ae45e8ccf8b3c2c7af13f96381f",
+      "timeUTC": "2026-06-02 03:20:15",
+      "status": "REVERT",
+      "initialSun": "172688526",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "amountIn": "172688526",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "172688526"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "5212",
+      "originEnergy": "515896",
+      "totalEnergy": "521108",
+      "bandwidth": "2432",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 5212,
+        "origin_energy_usage": 515896,
+        "energy_usage_total": 521108,
+        "net_usage": 2432,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "66b32ce9403053139c179e15c8a324dbf05b599caea7b2732df6eec1dc81ae14",
+      "timeUTC": "2026-06-02 03:20:09",
+      "status": "REVERT",
+      "initialSun": "453988938",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9",
+          "amountIn": "453988938",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9",
+          "tokenOut": "TFf1aBoNFqxN32V2NQdvNrXVyYCy9qY8p1",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TFf1aBoNFqxN32V2NQdvNrXVyYCy9qY8p1",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "453988938"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "4970",
+      "originEnergy": "491937",
+      "totalEnergy": "496907",
+      "bandwidth": "2721",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 4970,
+        "origin_energy_usage": 491937,
+        "energy_usage_total": 496907,
+        "net_usage": 2721,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "8b9dda8bbf863a26ae528e58021b3313e2573fa243a9cf2cfc9e386e307503a3",
+      "timeUTC": "2026-06-02 03:11:09",
+      "status": "REVERT",
+      "initialSun": "287503969",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "V1_SWAP_EXACT_IN>V3_SWAP_EXACT_IN>swapExactInSingle>SWEEP",
+      "swaps": [
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "amountIn": "287503969",
+          "amountOut": "0"
+        },
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        },
+        {
+          "method": "swapExactInSingle",
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TRX",
+          "amountIn": "0",
+          "amountOut": "287503969"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "5213",
+      "originEnergy": "515999",
+      "totalEnergy": "521212",
+      "bandwidth": "2433",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 5213,
+        "origin_energy_usage": 515999,
+        "energy_usage_total": 521212,
+        "net_usage": 2433,
+        "result": "REVERT",
+        "energy_penalty_total": 159651
+      }
+    },
+    {
+      "hash": "744fc806869b7b614315c8941b9210277457bc9ac2fa973969f533bb9d75f08a",
+      "timeUTC": "2026-06-02 02:49:39",
+      "status": "SUCCESS",
+      "initialSun": "53117605",
+      "returnedSun": "53439377",
+      "grossProfitSun": "321772",
+      "isNativeCycle": true,
+      "operationsKey": "WRAP_ETH>V3_SWAP_EXACT_IN>V2_SWAP_EXACT_IN>UNWRAP_WETH>SWEEP",
+      "swaps": [
+        {
+          "method": "V3_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "amountIn": "53117605",
+          "amountOut": "0"
+        },
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "0"
+        }
+      ],
+      "pools": [
+        "TH2ZK1sca1V27cCPN5feKZ9ZfEFG4vg7HU"
+      ],
+      "callerEnergy": "2790",
+      "originEnergy": "276141",
+      "totalEnergy": "278931",
+      "bandwidth": "1536",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 2790,
+        "origin_energy_usage": 276141,
+        "energy_usage_total": 278931,
+        "net_usage": 1536,
+        "result": "SUCCESS"
+      }
+    },
+    {
+      "hash": "80b18d3b87a0d2e7111d1f7c576cbb442ad3fa17179c2736ca65c01e4933dea9",
+      "timeUTC": "2026-06-02 02:49:21",
+      "status": "REVERT",
+      "initialSun": "408219948",
+      "returnedSun": "0",
+      "grossProfitSun": "0",
+      "isNativeCycle": false,
+      "operationsKey": "WRAP_ETH>V2_SWAP_EXACT_IN>V1_SWAP_EXACT_IN>SWEEP",
+      "swaps": [
+        {
+          "method": "V2_SWAP_EXACT_IN",
+          "tokenIn": "TRX",
+          "tokenOut": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "amountIn": "408219948",
+          "amountOut": "0"
+        },
+        {
+          "method": "V1_SWAP_EXACT_IN",
+          "tokenIn": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+          "tokenOut": "TRX",
+          "amountIn": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+          "amountOut": "408219948"
+        }
+      ],
+      "pools": [],
+      "callerEnergy": "1922",
+      "originEnergy": "190221",
+      "totalEnergy": "192143",
+      "bandwidth": "1409",
+      "feeLimitSun": "100000000",
+      "receipt": {
+        "energy_usage": 1922,
+        "origin_energy_usage": 190221,
+        "energy_usage_total": 192143,
+        "net_usage": 1409,
+        "result": "REVERT"
+      }
+    }
+  ]
+}

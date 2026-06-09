@@ -1,0 +1,17 @@
+{
+  "name": "arbitrage-evaluator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Evaluate SunSwap/TRON arbitrage transactions resolved by transaction-parser.",
+  "type": "commonjs",
+  "scripts": {
+    "analyze": "node bin/analyze-resolved.js",
+    "usdt-state": "node bin/usdt-cycle-state.js",
+    "simulate-all": "node bin/simulate-all-pools.js",
+    "build-watch-plan": "node bin/build-watch-plan.js",
+    "monitor-focused": "node bin/monitor-focused-pools.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

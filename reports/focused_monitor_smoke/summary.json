@@ -1,0 +1,108 @@
+{
+  "generatedAt": "2026-06-09T01:17:05.367Z",
+  "outDir": "/Users/zhangguanqing/Documents/work/parser/arbitrage-evaluator/reports/focused_monitor_smoke",
+  "watchPlan": "/Users/zhangguanqing/Documents/work/parser/arbitrage-evaluator/reports/focused_watch_plan/watch-plan.json",
+  "config": {
+    "fullnode": "http://10.8.6.153:2633",
+    "solidity": "http://10.8.6.153:2634",
+    "owner": "TDbinJzEN8R8snUF9yxCmpAk6TJfBkRyUu",
+    "durationSec": 25,
+    "pollMs": 9000,
+    "sampleIntervalBlocks": 1,
+    "amountsTrx": [
+      67.797362,
+      199.451132,
+      238.037148,
+      552.887065,
+      789.681101,
+      1507.66136,
+      2483.393933,
+      5870.143305,
+      6699.999999
+    ],
+    "maxHops": 4,
+    "maxRoutesPerSnapshot": 200000,
+    "noExactQuote": false,
+    "exactTopN": 10,
+    "exactSuccessTarget": 3,
+    "exactMaxAttempts": 20,
+    "subtractResourceCosts": false
+  },
+  "selectedPools": {
+    "count": 27,
+    "byProtocol": {
+      "v2": 9,
+      "v3": 7,
+      "v4": 11
+    }
+  },
+  "resourceModel": {
+    "source": "historical-average-from-analysis",
+    "note": "Recorded for accounting only; monitor does not subtract these costs from gross simulated profit.",
+    "callerEnergy": 4086,
+    "totalEnergy": 408594,
+    "bandwidth": 2485,
+    "energyPriceSun": 100,
+    "bandwidthPriceSun": 1000,
+    "callerEnergyCostSun": "408600",
+    "bandwidthCostSun": "2485000",
+    "totalEnergyCostIfCallerPaysSun": "40859400"
+  },
+  "snapshots": 4,
+  "candidates": 3368,
+  "exactAttempted": 48,
+  "exactSucceeded": 32,
+  "exactFailed": 16,
+  "profitableConstructedTrades": 0,
+  "totalGrossProfitSun": "0",
+  "totalGrossProfitTRX": 0,
+  "bestGrossProfitSun": "0",
+  "bestGrossProfitTRX": 0,
+  "latestSnapshot": {
+    "generatedAt": "2026-06-09T01:17:04.551Z",
+    "block": {
+      "number": 83432879,
+      "timestamp": 1780967823000,
+      "isoTime": "2026-06-09T01:17:03.000Z"
+    },
+    "poolSummary": {
+      "v2": {
+        "catalogCount": 9,
+        "stateCount": 9,
+        "active": 9,
+        "errors": 0
+      },
+      "v3": {
+        "catalogCount": 7,
+        "stateCount": 7,
+        "active": 7,
+        "errors": 0
+      },
+      "v4": {
+        "catalogCount": 11,
+        "stateCount": 11,
+        "active": 11,
+        "errors": 0
+      }
+    },
+    "stateErrors": {
+      "total": 0,
+      "byProtocol": {},
+      "topMessages": []
+    },
+    "simulation": {
+      "edges": 54,
+      "routesScanned": 6039,
+      "routeCapHit": false,
+      "spotCandidateCount": 842,
+      "exactAttempted": 12,
+      "exactSucceeded": 8,
+      "exactFailed": 4,
+      "exactProfitableCount": 0,
+      "bestExactGrossProfitSun": "-5870139068",
+      "bestSpotGrossProfitSun": "896287043"
+    }
+  },
+  "topRoutes": [],
+  "topOpportunities": []
+}

@@ -1,0 +1,4465 @@
+{
+  "generatedAt": "2026-06-08T14:25:34.309Z",
+  "outDir": "/Users/zhangguanqing/Documents/work/parser/arbitrage-evaluator/reports/all_pools_quote_smoke",
+  "config": {
+    "fullnode": "http://10.8.6.153:2633",
+    "solidity": "http://10.8.6.153:2634",
+    "owner": "TDbinJzEN8R8snUF9yxCmpAk6TJfBkRyUu",
+    "v2Factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+    "v3Factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+    "v3Quoter": "TLhZ48yfHygMLM2uZr87zJJusHjGen97gh",
+    "v4PoolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+    "v4Quoter": "TSupQTJWWoVpUqA7KGVYb8dB97n3civwiJ",
+    "amountsTrx": [
+      100
+    ],
+    "maxHops": 3,
+    "maxPools": 20,
+    "noExactQuote": false,
+    "exactTopN": 3
+  },
+  "contractValidation": {
+    "v2Factory": {
+      "ok": true,
+      "value": {
+        "allPairsLength": 5047
+      }
+    },
+    "v3Factory": {
+      "ok": true,
+      "value": {
+        "allPoolsLength": 467
+      }
+    },
+    "v4PoolManager": {
+      "ok": true,
+      "value": {
+        "poolCount": 117
+      }
+    },
+    "v3Quoter": {
+      "ok": true,
+      "value": {
+        "callable": true
+      }
+    },
+    "v4Quoter": {
+      "ok": true,
+      "value": {
+        "callable": true
+      }
+    }
+  },
+  "catalog": {
+    "generatedAt": "2026-06-08T14:24:56.925Z",
+    "source": {
+      "method": "factory-index",
+      "v2Factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "v3Factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "v4PoolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "maxPools": 20
+    },
+    "pools": [
+      {
+        "protocol": "v2",
+        "index": 0,
+        "address": "TFGDbUyP8xez44C76fin3bn3Ss6jugoUwJ",
+        "addressEvm": "0x3a10321a4e97a64d9376af42ec07d5fa50294b35",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 1,
+        "address": "TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG",
+        "addressEvm": "0xc1befb9cf01691c9e96755e070120cdf98ecf59c",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 2,
+        "address": "TLKyq7eJ4YKbs3TGEvoBJWkAXWYQKWo2Nn",
+        "addressEvm": "0x719eff8174cf078495a3b20514f087d1a549a0c3",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 3,
+        "address": "TAQFKDQJuEHanjVyM8NtpvwXmZWUiECS48",
+        "addressEvm": "0x04bc5471efd978c0e40abab8371828c38c74af9b",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 4,
+        "address": "TRmxcvJmYKxnoeepUvuotFgtFDLcVB7Ga7",
+        "addressEvm": "0xad616e84dda17c4486bac3ca8ef25d820f4f430b",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 5,
+        "address": "TFd1LsK2UGANPSEH1bhGpLv3P27KmfKX91",
+        "addressEvm": "0x3dfeb416d69f813e96683b4b7f702be6d6d44a3a",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 6,
+        "address": "TTRHkXR6cmrB5EUwHphJjs5kgNBntrHqYz",
+        "addressEvm": "0xbf68eafe700b0e1c4b7ab9447acdd1de20ca69a5",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 7,
+        "address": "TS6USKLXpe5sSdrX4GUhMjVMYV3Ty9f2yi",
+        "addressEvm": "0xb0e1cf2569e02cb8d3e5b4f087c7ccb9f9816a50",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 8,
+        "address": "TLwNDUBMpwC5kd9j4zjLURyv5ygd3dVyQb",
+        "addressEvm": "0x78503e3e188cf64f30f9662604b42c2871b41411",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 9,
+        "address": "TKQwXdpyonaeGsmNNuF4G23tSLMyZXXAwK",
+        "addressEvm": "0x679707effb38582e8c1f4f70eb07d9fc65c87913",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 10,
+        "address": "TQtNRSmM4SY5NFRkpYLL3Qv6sE1AF5eEqz",
+        "addressEvm": "0xa39fabb5c658eece05f06573b5e1169f92d767e4",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 11,
+        "address": "THQwT85ZSYV4mRZKjm5dMcgvGE1cLDhE8L",
+        "addressEvm": "0x51a6b6e8972855e282ae065a1df3a2599b18c9bc",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 12,
+        "address": "TCBJJqwUYFvuXrtg9FMF75MzvLKr9eP88p",
+        "addressEvm": "0x1839ac4198014cd56ea497cd0cab313cdac1d640",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 13,
+        "address": "TQJaW7gSaasSfoqcZtYT8bzq1B6wRkjG73",
+        "addressEvm": "0x9d3b9cc3d718c0c8016b21caf64449672f24105a",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 14,
+        "address": "TASuMjAfgarfNYoXHcmGtRUxn4pbmiZW1M",
+        "addressEvm": "0x053ceb33e1a01de461c35e2120203972308a5e56",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 15,
+        "address": "TH3gMyxouPgQfQygGE4dnrfwb4WyQvBqNE",
+        "addressEvm": "0x4da1624a20f723ac1d791d202e30936769551854",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 16,
+        "address": "TSsidjqQ2otaKTT3FMCNNQe4ZgTCD5DzFB",
+        "addressEvm": "0xb97060e236bdd0ceb87a0ef7250571ee4a3c9283",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 17,
+        "address": "TYtVkfCdjsnaDufhrhPWYN59NThMVSgiJs",
+        "addressEvm": "0xfb66cbfefbb18364a5ca00ad7b915e7278c0211d",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 18,
+        "address": "TWNKR2YkNw3XgNGSzptEtMHJY6tnouhWsJ",
+        "addressEvm": "0xdfc16fb1e41206fdbfceb1d50089b37587b1f208",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v2",
+        "index": 19,
+        "address": "THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6",
+        "addressEvm": "0x56f9ab0f9b499e152bffee3f4930dc8645bb6a38",
+        "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+        "feePpm": 3000,
+        "exactness": "reserve"
+      },
+      {
+        "protocol": "v3",
+        "index": 0,
+        "address": "TDifVPS6buGVpgQNSVMWACGk7uEwMvN6LC",
+        "addressEvm": "0x29206008969153863478f12cc841d710f3bdfce6",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 1,
+        "address": "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+        "addressEvm": "0xb50b027637ab9a7f2ba5b70a24f778f8438bb279",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 2,
+        "address": "TMxxHG5PRVakKwNCvTWDb73gPwXvkZAhpm",
+        "addressEvm": "0x839538a1b5e9b57c639035a453e07c9a4309f9d9",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 3,
+        "address": "TW7pbp4pD38qv6kSaw44i4uVzthz2bBpYc",
+        "addressEvm": "0xdd038f617a057cd1ad6fa795f026265bed391a67",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 4,
+        "address": "TPdkK5smyNZRdWzbEEv5TKHUH78X9AtbJa",
+        "addressEvm": "0x95e39423a97e7e09c4ac5bcedf2dcd873b5075f6",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 5,
+        "address": "TY9SHr1oMRqxQDmPkCyHGKuvU5wuHmCUWL",
+        "addressEvm": "0xf342053389fcbda1be9aa7f45f0c57d74f3718ea",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 6,
+        "address": "TLVDozYEBgeaJXH7oKBsougzEJKNrogFun",
+        "addressEvm": "0x735e6984b7094aa12a4ab991af2c81bfaead17d8",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 7,
+        "address": "TLST8wBZDtPRXwQ55TyqyDS8t8f23ytLCu",
+        "addressEvm": "0x72d849ecf27889537db8642ec51a3c97c679f5b9",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 8,
+        "address": "TCnEBKUJsJz3avdFfetVRahX32ndHbxFVN",
+        "addressEvm": "0x1ed4c8c14b7a32a9ff218f80a69cfe6d9f900c5f",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 9,
+        "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+        "addressEvm": "0xeb445a91199c5cda052770d0b2855791c3fb6a20",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 10,
+        "address": "TP9AvK2kECpfaLYXB7qFEJJv5h9cHeUo13",
+        "addressEvm": "0x907c0e95509ae158690eda213e1f01521dd0de88",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 11,
+        "address": "TQnDCJg9kE7rj69FEJhvenDNEHQnGYBh94",
+        "addressEvm": "0xa2757919430c94e2842919aaa1d3124b7a4de957",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 12,
+        "address": "TC9QmgR8MUwRCYe3kCLwH8MW2WtxiLd6AV",
+        "addressEvm": "0x17de3c58e08f09b3b1d0f3d5fb163fbeb3d826cd",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 13,
+        "address": "TLfJFtMTx1BK13gNk1356XMsVhsTnq9GCb",
+        "addressEvm": "0x75464893530b7a6e0e63e51dc6525e3a0c3630de",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 14,
+        "address": "TSkAX8y4NrmBaHgfT568b6dZAWiMWomnib",
+        "addressEvm": "0xb802a8d23b83a34c325c9eba3f206c0a7d95431d",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 15,
+        "address": "TY9cRnranaVLaqVM3s24Km9oJTRUUkyXvB",
+        "addressEvm": "0xf34a7b74e59cb3215345c8f9ade12331c5f7ec6c",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 16,
+        "address": "TUCcs5MZTz6W5cppAm5dXoZn4ufqzsPDLb",
+        "addressEvm": "0xc7fb9745a567825a68a7dde0b7c631cbbc12b58c",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 17,
+        "address": "TL4oTkiQSxezseomXkvj8V3p1TsWWMh31B",
+        "addressEvm": "0x6ec01a87721987f605745cf9fae222d91e77e5bd",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 18,
+        "address": "TRagfZ7qEaAAaDug3PViF6Ht2CkcxfbrXP",
+        "addressEvm": "0xab3f89b59756293bb834766836381ee3946fc509",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v3",
+        "index": 19,
+        "address": "TKh3bP6vfXqM3ZFVB2n6gDBe9PWSrHwPD1",
+        "addressEvm": "0x6aa2bfb520c35c05b7ba4a8524306ae0916cd359",
+        "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 0,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0x5d998d14c22d3962d44013c8c28433779fdd4b4242c62296ea1cd8d456b145a6",
+        "poolKey": {
+          "currency0": "0x0000000000000000000000000000000000000000",
+          "currency1": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+          "hooks": "0x0000000000000000000000000000000000000000",
+          "fee": 3000,
+          "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+        },
+        "tickSpacing": 60,
+        "hookFlags": 0,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 1,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0xdd123ccd452476874a0d49607cb38b8da3c56e6f072c39b0795ce2aba9aec5ac",
+        "poolKey": {
+          "currency0": "0x18fd0626daf3af02389aef3ed87db9c33f638ffa",
+          "currency1": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+          "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+          "fee": 8388608,
+          "parameters": "0x00000000000000000000000000000000000000000000000000000000006400c2"
+        },
+        "tickSpacing": 100,
+        "hookFlags": 194,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 2,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0x780ff1ce730b2f2182278f2249600d9f8001e16a87fa0419f9e127f85dd71b8c",
+        "poolKey": {
+          "currency0": "0x0000000000000000000000000000000000000000",
+          "currency1": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+          "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+          "fee": 8388608,
+          "parameters": "0x00000000000000000000000000000000000000000000000000000000003c00c2"
+        },
+        "tickSpacing": 60,
+        "hookFlags": 194,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 3,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0x96d895d181b0dee5a3435f827777bc380e56551ae23790289a847d786332253d",
+        "poolKey": {
+          "currency0": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382",
+          "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+          "hooks": "0x0000000000000000000000000000000000000000",
+          "fee": 60000,
+          "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+        },
+        "tickSpacing": 1,
+        "hookFlags": 0,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 4,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0x347a83575825b1d562317f75322ac85c6259363e2b35c536c17c742b643df26e",
+        "poolKey": {
+          "currency0": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382",
+          "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+          "hooks": "0x0000000000000000000000000000000000000000",
+          "fee": 3000,
+          "parameters": "0x0000000000000000000000000000000000000000000000000000000000640000"
+        },
+        "tickSpacing": 100,
+        "hookFlags": 0,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 5,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0x6a425eff1e4c929332905d099d84ba8f7363c606dc37321c80767e7a991e2142",
+        "poolKey": {
+          "currency0": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382",
+          "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+          "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+          "fee": 8388608,
+          "parameters": "0x00000000000000000000000000000000000000000000000000000000000100c2"
+        },
+        "tickSpacing": 1,
+        "hookFlags": 194,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 6,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0xf1c047ab26851480c375de788b924a86fc730d3493cbb2946796594acc445e88",
+        "poolKey": {
+          "currency0": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382",
+          "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+          "hooks": "0x0000000000000000000000000000000000000000",
+          "fee": 500,
+          "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+        },
+        "tickSpacing": 1,
+        "hookFlags": 0,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 7,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0x83c4713f9cacea99664ed904062f955865835e97411701cbf760db490afd4968",
+        "poolKey": {
+          "currency0": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382",
+          "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+          "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+          "fee": 8388608,
+          "parameters": "0x00000000000000000000000000000000000000000000000000000000025800c2"
+        },
+        "tickSpacing": 600,
+        "hookFlags": 194,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 8,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0x45a1eaf9617b754c14c21d9afa6c6bbf555ef71afcd5fda0f4ee0df8e25893be",
+        "poolKey": {
+          "currency0": "0x0000000000000000000000000000000000000000",
+          "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+          "hooks": "0x0000000000000000000000000000000000000000",
+          "fee": 500,
+          "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+        },
+        "tickSpacing": 60,
+        "hookFlags": 0,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 9,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+        "poolKey": {
+          "currency0": "0x0000000000000000000000000000000000000000",
+          "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+          "hooks": "0x0000000000000000000000000000000000000000",
+          "fee": 3000,
+          "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+        },
+        "tickSpacing": 1,
+        "hookFlags": 0,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 10,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c",
+        "poolKey": {
+          "currency0": "0x0000000000000000000000000000000000000000",
+          "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+          "hooks": "0x0000000000000000000000000000000000000000",
+          "fee": 3000,
+          "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+        },
+        "tickSpacing": 60,
+        "hookFlags": 0,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 11,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0xaa9dd874ed373cf93a9a39f2e79476f996ff3f2de0332fdd851453964978e599",
+        "poolKey": {
+          "currency0": "0x0000000000000000000000000000000000000000",
+          "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+          "hooks": "0x0000000000000000000000000000000000000000",
+          "fee": 3000,
+          "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+        },
+        "tickSpacing": 1,
+        "hookFlags": 0,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 12,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0x9d4d21a1d77648ec7fc5c23123311f941e921c1cbc093d1852d52e4a36f2bc27",
+        "poolKey": {
+          "currency0": "0x0000000000000000000000000000000000000000",
+          "currency1": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+          "hooks": "0x0000000000000000000000000000000000000000",
+          "fee": 10000,
+          "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+        },
+        "tickSpacing": 60,
+        "hookFlags": 0,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 13,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0xd9bfc59afd3f5accf9b209d7b1892cab77fd8d2d056f152a482d1c5c30624dcf",
+        "poolKey": {
+          "currency0": "0x0000000000000000000000000000000000000000",
+          "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+          "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+          "fee": 8388608,
+          "parameters": "0x00000000000000000000000000000000000000000000000000000000003c00c2"
+        },
+        "tickSpacing": 60,
+        "hookFlags": 194,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 14,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0x9e82c15a1c6c8ce017b5405d6c5b0b4b94fbaca6c3bef4c0643510063c69e3e4",
+        "poolKey": {
+          "currency0": "0x0000000000000000000000000000000000000000",
+          "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+          "hooks": "0x0000000000000000000000000000000000000000",
+          "fee": 500,
+          "parameters": "0x00000000000000000000000000000000000000000000000000000000000a0000"
+        },
+        "tickSpacing": 10,
+        "hookFlags": 0,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 15,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0xa37c3f201b6bb0f32c8331f255886ca7c59c194321dee5b8b4be756af92c46c4",
+        "poolKey": {
+          "currency0": "0x0000000000000000000000000000000000000000",
+          "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+          "hooks": "0x0000000000000000000000000000000000000000",
+          "fee": 3000,
+          "parameters": "0x00000000000000000000000000000000000000000000000000000000000a0000"
+        },
+        "tickSpacing": 10,
+        "hookFlags": 0,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 16,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f",
+        "poolKey": {
+          "currency0": "0x0000000000000000000000000000000000000000",
+          "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+          "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+          "fee": 8388608,
+          "parameters": "0x00000000000000000000000000000000000000000000000000000000000100c2"
+        },
+        "tickSpacing": 1,
+        "hookFlags": 194,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 17,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0x9da2f9922835a19bd5c99923c92195344118ac7008b233e92c814df01a6f71fa",
+        "poolKey": {
+          "currency0": "0x0000000000000000000000000000000000000000",
+          "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+          "hooks": "0x0000000000000000000000000000000000000000",
+          "fee": 10000,
+          "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+        },
+        "tickSpacing": 1,
+        "hookFlags": 0,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 18,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0xa27d385ca262bf3cfe34813ae40aebc52c210e27ca5ab9a57ae5156d459a0b1e",
+        "poolKey": {
+          "currency0": "0x0000000000000000000000000000000000000000",
+          "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+          "hooks": "0x0000000000000000000000000000000000000000",
+          "fee": 3000,
+          "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+        },
+        "tickSpacing": 1,
+        "hookFlags": 0,
+        "exactness": "slot0-liquidity"
+      },
+      {
+        "protocol": "v4",
+        "index": 19,
+        "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+        "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+        "poolId": "0xcaa2322e7f78151bc623185f5020629a48124e2d17e359fbd192a77e01c2ddf6",
+        "poolKey": {
+          "currency0": "0x0000000000000000000000000000000000000000",
+          "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+          "hooks": "0x0000000000000000000000000000000000000000",
+          "fee": 10000,
+          "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+        },
+        "tickSpacing": 1,
+        "hookFlags": 0,
+        "exactness": "slot0-liquidity"
+      }
+    ]
+  },
+  "poolSummary": {
+    "v2": {
+      "catalogCount": 20,
+      "stateCount": 20,
+      "active": 20,
+      "errors": 0
+    },
+    "v3": {
+      "catalogCount": 20,
+      "stateCount": 20,
+      "active": 8,
+      "errors": 0
+    },
+    "v4": {
+      "catalogCount": 20,
+      "stateCount": 20,
+      "active": 19,
+      "errors": 0
+    }
+  },
+  "latestSnapshot": {
+    "generatedAt": "2026-06-08T14:25:34.291Z",
+    "block": {
+      "number": 83419845,
+      "timestamp": 1780928709000,
+      "isoTime": "2026-06-08T14:25:09.000Z"
+    },
+    "poolSummary": {
+      "v2": {
+        "catalogCount": 20,
+        "stateCount": 20,
+        "active": 20,
+        "errors": 0
+      },
+      "v3": {
+        "catalogCount": 20,
+        "stateCount": 20,
+        "active": 8,
+        "errors": 0
+      },
+      "v4": {
+        "catalogCount": 20,
+        "stateCount": 20,
+        "active": 19,
+        "errors": 0
+      }
+    },
+    "simulation": {
+      "edges": 94,
+      "routesScanned": 412,
+      "spotProfitableCount": 35,
+      "exactQuoted": 3,
+      "exactProfitableCount": 0,
+      "bestSpotNetProfitSun": "1894376494"
+    }
+  },
+  "opportunitySummary": {
+    "snapshots": 1,
+    "spotProfitableCount": 35,
+    "exactProfitableCount": 0,
+    "bestSpotNetProfitSun": "1894376494",
+    "bestSpotNetProfitTRX": 1894.376494,
+    "bestExactNetProfitSun": "0",
+    "bestExactNetProfitTRX": 0
+  },
+  "resourceModel": {
+    "callerEnergy": 4000,
+    "callerBandwidth": 2500,
+    "energyPriceSun": 100,
+    "bandwidthPriceSun": 1000,
+    "costSun": "2900000",
+    "costTRX": 2.9
+  },
+  "topOpportunities": [
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0x45a1eaf9617b754c14c21d9afa6c6bbf555ef71afcd5fda0f4ee0df8e25893be:0>v4:0xa27d385ca262bf3cfe34813ae40aebc52c210e27ca5ab9a57ae5156d459a0b1e:1",
+      "protocols": [
+        "v4",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x45a1eaf9617b754c14c21d9afa6c6bbf555ef71afcd5fda0f4ee0df8e25893be",
+          "index": 8,
+          "feePpm": 500,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 500,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+          }
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xa27d385ca262bf3cfe34813ae40aebc52c210e27ca5ab9a57ae5156d459a0b1e",
+          "index": 18,
+          "feePpm": 3000,
+          "tokenIn": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "1997276494",
+        "grossProfitSun": "1897276494",
+        "netProfitSun": "1894376494",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 1997.276494,
+        "grossProfitTRX": 1897.276494,
+        "netProfitTRX": 1894.376494,
+        "exactness": "spot-screen"
+      },
+      "exact": {
+        "error": "REVERT opcode executed",
+        "steps": []
+      }
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0x45a1eaf9617b754c14c21d9afa6c6bbf555ef71afcd5fda0f4ee0df8e25893be:0>v4:0xcaa2322e7f78151bc623185f5020629a48124e2d17e359fbd192a77e01c2ddf6:1",
+      "protocols": [
+        "v4",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x45a1eaf9617b754c14c21d9afa6c6bbf555ef71afcd5fda0f4ee0df8e25893be",
+          "index": 8,
+          "feePpm": 500,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 500,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+          }
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xcaa2322e7f78151bc623185f5020629a48124e2d17e359fbd192a77e01c2ddf6",
+          "index": 19,
+          "feePpm": 10000,
+          "tokenIn": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 10000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "1983253490",
+        "grossProfitSun": "1883253490",
+        "netProfitSun": "1880353490",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 1983.25349,
+        "grossProfitTRX": 1883.25349,
+        "netProfitTRX": 1880.35349,
+        "exactness": "spot-screen"
+      },
+      "exact": {
+        "error": "REVERT opcode executed",
+        "steps": []
+      }
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0x45a1eaf9617b754c14c21d9afa6c6bbf555ef71afcd5fda0f4ee0df8e25893be:0>v4:0xa37c3f201b6bb0f32c8331f255886ca7c59c194321dee5b8b4be756af92c46c4:1",
+      "protocols": [
+        "v4",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x45a1eaf9617b754c14c21d9afa6c6bbf555ef71afcd5fda0f4ee0df8e25893be",
+          "index": 8,
+          "feePpm": 500,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 500,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+          }
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xa37c3f201b6bb0f32c8331f255886ca7c59c194321dee5b8b4be756af92c46c4",
+          "index": 15,
+          "feePpm": 3000,
+          "tokenIn": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000000a0000"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "1196201180",
+        "grossProfitSun": "1096201180",
+        "netProfitSun": "1093301180",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 1196.20118,
+        "grossProfitTRX": 1096.20118,
+        "netProfitTRX": 1093.30118,
+        "exactness": "spot-screen"
+      },
+      "exact": {
+        "error": "REVERT opcode executed",
+        "steps": []
+      }
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xa37c3f201b6bb0f32c8331f255886ca7c59c194321dee5b8b4be756af92c46c4:0>v4:0xa27d385ca262bf3cfe34813ae40aebc52c210e27ca5ab9a57ae5156d459a0b1e:1",
+      "protocols": [
+        "v4",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xa37c3f201b6bb0f32c8331f255886ca7c59c194321dee5b8b4be756af92c46c4",
+          "index": 15,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000000a0000"
+          }
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xa27d385ca262bf3cfe34813ae40aebc52c210e27ca5ab9a57ae5156d459a0b1e",
+          "index": 18,
+          "feePpm": 3000,
+          "tokenIn": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "165967969",
+        "grossProfitSun": "65967969",
+        "netProfitSun": "63067969",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 165.967969,
+        "grossProfitTRX": 65.967969,
+        "netProfitTRX": 63.067969,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xa37c3f201b6bb0f32c8331f255886ca7c59c194321dee5b8b4be756af92c46c4:0>v4:0xcaa2322e7f78151bc623185f5020629a48124e2d17e359fbd192a77e01c2ddf6:1",
+      "protocols": [
+        "v4",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xa37c3f201b6bb0f32c8331f255886ca7c59c194321dee5b8b4be756af92c46c4",
+          "index": 15,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000000a0000"
+          }
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xcaa2322e7f78151bc623185f5020629a48124e2d17e359fbd192a77e01c2ddf6",
+          "index": 19,
+          "feePpm": 10000,
+          "tokenIn": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 10000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "164802698",
+        "grossProfitSun": "64802698",
+        "netProfitSun": "61902698",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 164.802698,
+        "grossProfitTRX": 64.802698,
+        "netProfitTRX": 61.902698,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c:0>v3:TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW:0>v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:1",
+      "protocols": [
+        "v4",
+        "v3",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c",
+          "index": 10,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+          }
+        },
+        {
+          "protocol": "v3",
+          "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+          "poolId": "",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "124627034",
+        "grossProfitSun": "24627034",
+        "netProfitSun": "21727034",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 124.627034,
+        "grossProfitTRX": 24.627034,
+        "netProfitTRX": 21.727034,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0x9da2f9922835a19bd5c99923c92195344118ac7008b233e92c814df01a6f71fa:0>v3:TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW:0>v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:1",
+      "protocols": [
+        "v4",
+        "v3",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x9da2f9922835a19bd5c99923c92195344118ac7008b233e92c814df01a6f71fa",
+          "index": 17,
+          "feePpm": 10000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 10000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        },
+        {
+          "protocol": "v3",
+          "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+          "poolId": "",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "124219185",
+        "grossProfitSun": "24219185",
+        "netProfitSun": "21319185",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 124.219185,
+        "grossProfitTRX": 24.219185,
+        "netProfitTRX": 21.319185,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v3:TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx:0>v3:TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW:0>v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:1",
+      "protocols": [
+        "v3",
+        "v3",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v3",
+          "address": "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+          "poolId": "",
+          "index": 1,
+          "feePpm": 500,
+          "tokenIn": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v3",
+          "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+          "poolId": "",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "121306600",
+        "grossProfitSun": "21306600",
+        "netProfitSun": "18406600",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 121.3066,
+        "grossProfitTRX": 21.3066,
+        "netProfitTRX": 18.4066,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xaa9dd874ed373cf93a9a39f2e79476f996ff3f2de0332fdd851453964978e599:0>v3:TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW:0>v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:1",
+      "protocols": [
+        "v4",
+        "v3",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xaa9dd874ed373cf93a9a39f2e79476f996ff3f2de0332fdd851453964978e599",
+          "index": 11,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        },
+        {
+          "protocol": "v3",
+          "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+          "poolId": "",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "121252261",
+        "grossProfitSun": "21252261",
+        "netProfitSun": "18352261",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 121.252261,
+        "grossProfitTRX": 21.252261,
+        "netProfitTRX": 18.352261,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v3:TC9QmgR8MUwRCYe3kCLwH8MW2WtxiLd6AV:0>v3:TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW:0>v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:1",
+      "protocols": [
+        "v3",
+        "v3",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v3",
+          "address": "TC9QmgR8MUwRCYe3kCLwH8MW2WtxiLd6AV",
+          "poolId": "",
+          "index": 12,
+          "feePpm": 3000,
+          "tokenIn": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v3",
+          "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+          "poolId": "",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "121233471",
+        "grossProfitSun": "21233471",
+        "netProfitSun": "18333471",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 121.233471,
+        "grossProfitTRX": 21.233471,
+        "netProfitTRX": 18.333471,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v2:TFGDbUyP8xez44C76fin3bn3Ss6jugoUwJ:0>v3:TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW:0>v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:1",
+      "protocols": [
+        "v2",
+        "v3",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v2",
+          "address": "TFGDbUyP8xez44C76fin3bn3Ss6jugoUwJ",
+          "poolId": "",
+          "index": 0,
+          "feePpm": 3000,
+          "tokenIn": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "reserve0": "141526921675415",
+          "reserve1": "46303042432975",
+          "reserveIn": "141526921675415",
+          "reserveOut": "46303042432975"
+        },
+        {
+          "protocol": "v3",
+          "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+          "poolId": "",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "121169697",
+        "grossProfitSun": "21169697",
+        "netProfitSun": "18269697",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 121.169697,
+        "grossProfitTRX": 21.169697,
+        "netProfitTRX": 18.269697,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c:0>v3:TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW:0>v2:THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6:1",
+      "protocols": [
+        "v4",
+        "v3",
+        "v2"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c",
+          "index": 10,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+          }
+        },
+        {
+          "protocol": "v3",
+          "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+          "poolId": "",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v2",
+          "address": "THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6",
+          "poolId": "",
+          "index": 19,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "zeroForOne": false,
+          "reserve0": "25502173349236",
+          "reserve1": "474145299003842789487998674",
+          "reserveIn": "474145299003842789487998674",
+          "reserveOut": "25502173349236"
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "120481294",
+        "grossProfitSun": "20481294",
+        "netProfitSun": "17581294",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 120.481294,
+        "grossProfitTRX": 20.481294,
+        "netProfitTRX": 17.581294,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xd9bfc59afd3f5accf9b209d7b1892cab77fd8d2d056f152a482d1c5c30624dcf:0>v3:TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW:0>v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:1",
+      "protocols": [
+        "v4",
+        "v3",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xd9bfc59afd3f5accf9b209d7b1892cab77fd8d2d056f152a482d1c5c30624dcf",
+          "index": 13,
+          "feePpm": 500,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c00c2"
+          }
+        },
+        {
+          "protocol": "v3",
+          "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+          "poolId": "",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "120428970",
+        "grossProfitSun": "20428970",
+        "netProfitSun": "17528970",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 120.42897,
+        "grossProfitTRX": 20.42897,
+        "netProfitTRX": 17.52897,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0x9da2f9922835a19bd5c99923c92195344118ac7008b233e92c814df01a6f71fa:0>v3:TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW:0>v2:THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6:1",
+      "protocols": [
+        "v4",
+        "v3",
+        "v2"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x9da2f9922835a19bd5c99923c92195344118ac7008b233e92c814df01a6f71fa",
+          "index": 17,
+          "feePpm": 10000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 10000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        },
+        {
+          "protocol": "v3",
+          "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+          "poolId": "",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v2",
+          "address": "THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6",
+          "poolId": "",
+          "index": 19,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "zeroForOne": false,
+          "reserve0": "25502173349236",
+          "reserve1": "474145299003842789487998674",
+          "reserveIn": "474145299003842789487998674",
+          "reserveOut": "25502173349236"
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "120087014",
+        "grossProfitSun": "20087014",
+        "netProfitSun": "17187014",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 120.087014,
+        "grossProfitTRX": 20.087014,
+        "netProfitTRX": 17.187014,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v3:TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx:0>v3:TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW:0>v2:THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6:1",
+      "protocols": [
+        "v3",
+        "v3",
+        "v2"
+      ],
+      "pools": [
+        {
+          "protocol": "v3",
+          "address": "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+          "poolId": "",
+          "index": 1,
+          "feePpm": 500,
+          "tokenIn": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v3",
+          "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+          "poolId": "",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v2",
+          "address": "THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6",
+          "poolId": "",
+          "index": 19,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "zeroForOne": false,
+          "reserve0": "25502173349236",
+          "reserve1": "474145299003842789487998674",
+          "reserveIn": "474145299003842789487998674",
+          "reserveOut": "25502173349236"
+        }
+      ],
+      "path": [
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "117271330",
+        "grossProfitSun": "17271330",
+        "netProfitSun": "14371330",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 117.27133,
+        "grossProfitTRX": 17.27133,
+        "netProfitTRX": 14.37133,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xaa9dd874ed373cf93a9a39f2e79476f996ff3f2de0332fdd851453964978e599:0>v3:TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW:0>v2:THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6:1",
+      "protocols": [
+        "v4",
+        "v3",
+        "v2"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xaa9dd874ed373cf93a9a39f2e79476f996ff3f2de0332fdd851453964978e599",
+          "index": 11,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        },
+        {
+          "protocol": "v3",
+          "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+          "poolId": "",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v2",
+          "address": "THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6",
+          "poolId": "",
+          "index": 19,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "zeroForOne": false,
+          "reserve0": "25502173349236",
+          "reserve1": "474145299003842789487998674",
+          "reserveIn": "474145299003842789487998674",
+          "reserveOut": "25502173349236"
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "117218798",
+        "grossProfitSun": "17218798",
+        "netProfitSun": "14318798",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 117.218798,
+        "grossProfitTRX": 17.218798,
+        "netProfitTRX": 14.318798,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v3:TC9QmgR8MUwRCYe3kCLwH8MW2WtxiLd6AV:0>v3:TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW:0>v2:THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6:1",
+      "protocols": [
+        "v3",
+        "v3",
+        "v2"
+      ],
+      "pools": [
+        {
+          "protocol": "v3",
+          "address": "TC9QmgR8MUwRCYe3kCLwH8MW2WtxiLd6AV",
+          "poolId": "",
+          "index": 12,
+          "feePpm": 3000,
+          "tokenIn": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v3",
+          "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+          "poolId": "",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v2",
+          "address": "THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6",
+          "poolId": "",
+          "index": 19,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "zeroForOne": false,
+          "reserve0": "25502173349236",
+          "reserve1": "474145299003842789487998674",
+          "reserveIn": "474145299003842789487998674",
+          "reserveOut": "25502173349236"
+        }
+      ],
+      "path": [
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "117200634",
+        "grossProfitSun": "17200634",
+        "netProfitSun": "14300634",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 117.200634,
+        "grossProfitTRX": 17.200634,
+        "netProfitTRX": 14.300634,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v2:TFGDbUyP8xez44C76fin3bn3Ss6jugoUwJ:0>v3:TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW:0>v2:THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6:1",
+      "protocols": [
+        "v2",
+        "v3",
+        "v2"
+      ],
+      "pools": [
+        {
+          "protocol": "v2",
+          "address": "TFGDbUyP8xez44C76fin3bn3Ss6jugoUwJ",
+          "poolId": "",
+          "index": 0,
+          "feePpm": 3000,
+          "tokenIn": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "reserve0": "141526921675415",
+          "reserve1": "46303042432975",
+          "reserveIn": "141526921675415",
+          "reserveOut": "46303042432975"
+        },
+        {
+          "protocol": "v3",
+          "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+          "poolId": "",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v2",
+          "address": "THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6",
+          "poolId": "",
+          "index": 19,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "zeroForOne": false,
+          "reserve0": "25502173349236",
+          "reserve1": "474145299003842789487998674",
+          "reserveIn": "474145299003842789487998674",
+          "reserveOut": "25502173349236"
+        }
+      ],
+      "path": [
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "117138981",
+        "grossProfitSun": "17138981",
+        "netProfitSun": "14238981",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 117.138981,
+        "grossProfitTRX": 17.138981,
+        "netProfitTRX": 14.238981,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xd9bfc59afd3f5accf9b209d7b1892cab77fd8d2d056f152a482d1c5c30624dcf:0>v3:TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW:0>v2:THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6:1",
+      "protocols": [
+        "v4",
+        "v3",
+        "v2"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xd9bfc59afd3f5accf9b209d7b1892cab77fd8d2d056f152a482d1c5c30624dcf",
+          "index": 13,
+          "feePpm": 500,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c00c2"
+          }
+        },
+        {
+          "protocol": "v3",
+          "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+          "poolId": "",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v2",
+          "address": "THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6",
+          "poolId": "",
+          "index": 19,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "zeroForOne": false,
+          "reserve0": "25502173349236",
+          "reserve1": "474145299003842789487998674",
+          "reserveIn": "474145299003842789487998674",
+          "reserveOut": "25502173349236"
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "116422898",
+        "grossProfitSun": "16422898",
+        "netProfitSun": "13522898",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 116.422898,
+        "grossProfitTRX": 16.422898,
+        "netProfitTRX": 13.522898,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c:0>v4:0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f:1",
+      "protocols": [
+        "v4",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c",
+          "index": 10,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+          }
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f",
+          "index": 16,
+          "feePpm": 500,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000000100c2"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "112955422",
+        "grossProfitSun": "12955422",
+        "netProfitSun": "10055422",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 112.955422,
+        "grossProfitTRX": 12.955422,
+        "netProfitTRX": 10.055422,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0x9da2f9922835a19bd5c99923c92195344118ac7008b233e92c814df01a6f71fa:0>v4:0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f:1",
+      "protocols": [
+        "v4",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x9da2f9922835a19bd5c99923c92195344118ac7008b233e92c814df01a6f71fa",
+          "index": 17,
+          "feePpm": 10000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 10000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f",
+          "index": 16,
+          "feePpm": 500,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000000100c2"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "112585769",
+        "grossProfitSun": "12585769",
+        "netProfitSun": "9685769",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 112.585769,
+        "grossProfitTRX": 12.585769,
+        "netProfitTRX": 9.685769,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f:0>v3:TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW:0>v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:1",
+      "protocols": [
+        "v4",
+        "v3",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f",
+          "index": 16,
+          "feePpm": 500,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000000100c2"
+          }
+        },
+        {
+          "protocol": "v3",
+          "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+          "poolId": "",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "110222629",
+        "grossProfitSun": "10222629",
+        "netProfitSun": "7322629",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 110.222629,
+        "grossProfitTRX": 10.222629,
+        "netProfitTRX": 7.322629,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v3:TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx:0>v4:0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f:1",
+      "protocols": [
+        "v3",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v3",
+          "address": "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+          "poolId": "",
+          "index": 1,
+          "feePpm": 500,
+          "tokenIn": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f",
+          "index": 16,
+          "feePpm": 500,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000000100c2"
+          }
+        }
+      ],
+      "path": [
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "109945955",
+        "grossProfitSun": "9945955",
+        "netProfitSun": "7045955",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 109.945955,
+        "grossProfitTRX": 9.945955,
+        "netProfitTRX": 7.045955,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xaa9dd874ed373cf93a9a39f2e79476f996ff3f2de0332fdd851453964978e599:0>v4:0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f:1",
+      "protocols": [
+        "v4",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xaa9dd874ed373cf93a9a39f2e79476f996ff3f2de0332fdd851453964978e599",
+          "index": 11,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f",
+          "index": 16,
+          "feePpm": 500,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000000100c2"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "109896705",
+        "grossProfitSun": "9896705",
+        "netProfitSun": "6996705",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 109.896705,
+        "grossProfitTRX": 9.896705,
+        "netProfitTRX": 6.996705,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v3:TC9QmgR8MUwRCYe3kCLwH8MW2WtxiLd6AV:0>v4:0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f:1",
+      "protocols": [
+        "v3",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v3",
+          "address": "TC9QmgR8MUwRCYe3kCLwH8MW2WtxiLd6AV",
+          "poolId": "",
+          "index": 12,
+          "feePpm": 3000,
+          "tokenIn": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f",
+          "index": 16,
+          "feePpm": 500,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000000100c2"
+          }
+        }
+      ],
+      "path": [
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "109879675",
+        "grossProfitSun": "9879675",
+        "netProfitSun": "6979675",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 109.879675,
+        "grossProfitTRX": 9.879675,
+        "netProfitTRX": 6.979675,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v2:TFGDbUyP8xez44C76fin3bn3Ss6jugoUwJ:0>v4:0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f:1",
+      "protocols": [
+        "v2",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v2",
+          "address": "TFGDbUyP8xez44C76fin3bn3Ss6jugoUwJ",
+          "poolId": "",
+          "index": 0,
+          "feePpm": 3000,
+          "tokenIn": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "reserve0": "141526921675415",
+          "reserve1": "46303042432975",
+          "reserveIn": "141526921675415",
+          "reserveOut": "46303042432975"
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f",
+          "index": 16,
+          "feePpm": 500,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000000100c2"
+          }
+        }
+      ],
+      "path": [
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "109821873",
+        "grossProfitSun": "9821873",
+        "netProfitSun": "6921873",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 109.821873,
+        "grossProfitTRX": 9.821873,
+        "netProfitTRX": 6.921873,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v2:THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6:0>v2:TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG:1>v4:0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f:1",
+      "protocols": [
+        "v2",
+        "v2",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v2",
+          "address": "THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6",
+          "poolId": "",
+          "index": 19,
+          "feePpm": 3000,
+          "tokenIn": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true,
+          "reserve0": "25502173349236",
+          "reserve1": "474145299003842789487998674",
+          "reserveIn": "25502173349236",
+          "reserveOut": "474145299003842789487998674"
+        },
+        {
+          "protocol": "v2",
+          "address": "TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG",
+          "poolId": "",
+          "index": 1,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": false,
+          "reserve0": "2579983557273",
+          "reserve1": "146904591946085205319918556",
+          "reserveIn": "146904591946085205319918556",
+          "reserveOut": "2579983557273"
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f",
+          "index": 16,
+          "feePpm": 500,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000000100c2"
+          }
+        }
+      ],
+      "path": [
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "109275424",
+        "grossProfitSun": "9275424",
+        "netProfitSun": "6375424",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 109.275424,
+        "grossProfitTRX": 9.275424,
+        "netProfitTRX": 6.375424,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xd9bfc59afd3f5accf9b209d7b1892cab77fd8d2d056f152a482d1c5c30624dcf:0>v4:0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f:1",
+      "protocols": [
+        "v4",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xd9bfc59afd3f5accf9b209d7b1892cab77fd8d2d056f152a482d1c5c30624dcf",
+          "index": 13,
+          "feePpm": 500,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c00c2"
+          }
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f",
+          "index": 16,
+          "feePpm": 500,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000000100c2"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "109150517",
+        "grossProfitSun": "9150517",
+        "netProfitSun": "6250517",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 109.150517,
+        "grossProfitTRX": 9.150517,
+        "netProfitTRX": 6.250517,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v2:TYtVkfCdjsnaDufhrhPWYN59NThMVSgiJs:1>v2:TLKyq7eJ4YKbs3TGEvoBJWkAXWYQKWo2Nn:0>v4:0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f:1",
+      "protocols": [
+        "v2",
+        "v2",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v2",
+          "address": "TYtVkfCdjsnaDufhrhPWYN59NThMVSgiJs",
+          "poolId": "",
+          "index": 17,
+          "feePpm": 3000,
+          "tokenIn": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "tokenOut": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+          "zeroForOne": false,
+          "reserve0": "1063206880262706471456953824030",
+          "reserve1": "884765314286",
+          "reserveIn": "884765314286",
+          "reserveOut": "1063206880262706471456953824030"
+        },
+        {
+          "protocol": "v2",
+          "address": "TLKyq7eJ4YKbs3TGEvoBJWkAXWYQKWo2Nn",
+          "poolId": "",
+          "index": 2,
+          "feePpm": 3000,
+          "tokenIn": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "reserve0": "6249722179643814954975581163955",
+          "reserve1": "1695492343495",
+          "reserveIn": "6249722179643814954975581163955",
+          "reserveOut": "1695492343495"
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f",
+          "index": 16,
+          "feePpm": 500,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000000100c2"
+          }
+        }
+      ],
+      "path": [
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "109089116",
+        "grossProfitSun": "9089116",
+        "netProfitSun": "6189116",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 109.089116,
+        "grossProfitTRX": 9.089116,
+        "netProfitTRX": 6.189116,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f:0>v3:TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW:0>v2:THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6:1",
+      "protocols": [
+        "v4",
+        "v3",
+        "v2"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f",
+          "index": 16,
+          "feePpm": 500,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000000100c2"
+          }
+        },
+        {
+          "protocol": "v3",
+          "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+          "poolId": "",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v2",
+          "address": "THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6",
+          "poolId": "",
+          "index": 19,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "zeroForOne": false,
+          "reserve0": "25502173349236",
+          "reserve1": "474145299003842789487998674",
+          "reserveIn": "474145299003842789487998674",
+          "reserveOut": "25502173349236"
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "106556113",
+        "grossProfitSun": "6556113",
+        "netProfitSun": "3656113",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 106.556113,
+        "grossProfitTRX": 6.556113,
+        "netProfitTRX": 3.656113,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c:0>v2:TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG:0>v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:1",
+      "protocols": [
+        "v4",
+        "v2",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c",
+          "index": 10,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+          }
+        },
+        {
+          "protocol": "v2",
+          "address": "TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG",
+          "poolId": "",
+          "index": 1,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true,
+          "reserve0": "2579983557273",
+          "reserve1": "146904591946085205319918556",
+          "reserveIn": "2579983557273",
+          "reserveOut": "146904591946085205319918556"
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "105643553",
+        "grossProfitSun": "5643553",
+        "netProfitSun": "2743553",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 105.643553,
+        "grossProfitTRX": 5.643553,
+        "netProfitTRX": 2.743553,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:0>v2:TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG:1>v4:0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f:1",
+      "protocols": [
+        "v4",
+        "v2",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        },
+        {
+          "protocol": "v2",
+          "address": "TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG",
+          "poolId": "",
+          "index": 1,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": false,
+          "reserve0": "2579983557273",
+          "reserve1": "146904591946085205319918556",
+          "reserveIn": "146904591946085205319918556",
+          "reserveOut": "2579983557273"
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f",
+          "index": 16,
+          "feePpm": 500,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000000100c2"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "105641315",
+        "grossProfitSun": "5641315",
+        "netProfitSun": "2741315",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 105.641315,
+        "grossProfitTRX": 5.641315,
+        "netProfitTRX": 2.741315,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0x9da2f9922835a19bd5c99923c92195344118ac7008b233e92c814df01a6f71fa:0>v2:TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG:0>v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:1",
+      "protocols": [
+        "v4",
+        "v2",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x9da2f9922835a19bd5c99923c92195344118ac7008b233e92c814df01a6f71fa",
+          "index": 17,
+          "feePpm": 10000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 10000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        },
+        {
+          "protocol": "v2",
+          "address": "TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG",
+          "poolId": "",
+          "index": 1,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true,
+          "reserve0": "2579983557273",
+          "reserve1": "146904591946085205319918556",
+          "reserveIn": "2579983557273",
+          "reserveOut": "146904591946085205319918556"
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "105297833",
+        "grossProfitSun": "5297833",
+        "netProfitSun": "2397833",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 105.297833,
+        "grossProfitTRX": 5.297833,
+        "netProfitTRX": 2.397833,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c:0>v4:0xd9bfc59afd3f5accf9b209d7b1892cab77fd8d2d056f152a482d1c5c30624dcf:1",
+      "protocols": [
+        "v4",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c",
+          "index": 10,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+          }
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xd9bfc59afd3f5accf9b209d7b1892cab77fd8d2d056f152a482d1c5c30624dcf",
+          "index": 13,
+          "feePpm": 500,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c00c2"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "103382463",
+        "grossProfitSun": "3382463",
+        "netProfitSun": "482463",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 103.382463,
+        "grossProfitTRX": 3.382463,
+        "netProfitTRX": 0.482463,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0x9da2f9922835a19bd5c99923c92195344118ac7008b233e92c814df01a6f71fa:0>v4:0xd9bfc59afd3f5accf9b209d7b1892cab77fd8d2d056f152a482d1c5c30624dcf:1",
+      "protocols": [
+        "v4",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x9da2f9922835a19bd5c99923c92195344118ac7008b233e92c814df01a6f71fa",
+          "index": 17,
+          "feePpm": 10000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 10000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xd9bfc59afd3f5accf9b209d7b1892cab77fd8d2d056f152a482d1c5c30624dcf",
+          "index": 13,
+          "feePpm": 500,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c00c2"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "103044139",
+        "grossProfitSun": "3044139",
+        "netProfitSun": "144139",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 103.044139,
+        "grossProfitTRX": 3.044139,
+        "netProfitTRX": 0.144139,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v3:TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx:0>v2:TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG:0>v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:1",
+      "protocols": [
+        "v3",
+        "v2",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v3",
+          "address": "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+          "poolId": "",
+          "index": 1,
+          "feePpm": 500,
+          "tokenIn": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v2",
+          "address": "TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG",
+          "poolId": "",
+          "index": 1,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true,
+          "reserve0": "2579983557273",
+          "reserve1": "146904591946085205319918556",
+          "reserveIn": "2579983557273",
+          "reserveOut": "146904591946085205319918556"
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "102828931",
+        "grossProfitSun": "2828931",
+        "netProfitSun": "-71069",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 102.828931,
+        "grossProfitTRX": 2.828931,
+        "netProfitTRX": -0.071069,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v2:THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6:0>v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:1",
+      "protocols": [
+        "v2",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v2",
+          "address": "THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6",
+          "poolId": "",
+          "index": 19,
+          "feePpm": 3000,
+          "tokenIn": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true,
+          "reserve0": "25502173349236",
+          "reserve1": "474145299003842789487998674",
+          "reserveIn": "25502173349236",
+          "reserveOut": "474145299003842789487998674"
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "102820379",
+        "grossProfitSun": "2820379",
+        "netProfitSun": "-79621",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 102.820379,
+        "grossProfitTRX": 2.820379,
+        "netProfitTRX": -0.079621,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xaa9dd874ed373cf93a9a39f2e79476f996ff3f2de0332fdd851453964978e599:0>v2:TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG:0>v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:1",
+      "protocols": [
+        "v4",
+        "v2",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xaa9dd874ed373cf93a9a39f2e79476f996ff3f2de0332fdd851453964978e599",
+          "index": 11,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        },
+        {
+          "protocol": "v2",
+          "address": "TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG",
+          "poolId": "",
+          "index": 1,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true,
+          "reserve0": "2579983557273",
+          "reserve1": "146904591946085205319918556",
+          "reserveIn": "2579983557273",
+          "reserveOut": "146904591946085205319918556"
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "102782870",
+        "grossProfitSun": "2782870",
+        "netProfitSun": "-117130",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 102.78287,
+        "grossProfitTRX": 2.78287,
+        "netProfitTRX": -0.11713,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v3:TC9QmgR8MUwRCYe3kCLwH8MW2WtxiLd6AV:0>v2:TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG:0>v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:1",
+      "protocols": [
+        "v3",
+        "v2",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v3",
+          "address": "TC9QmgR8MUwRCYe3kCLwH8MW2WtxiLd6AV",
+          "poolId": "",
+          "index": 12,
+          "feePpm": 3000,
+          "tokenIn": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true
+        },
+        {
+          "protocol": "v2",
+          "address": "TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG",
+          "poolId": "",
+          "index": 1,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true,
+          "reserve0": "2579983557273",
+          "reserve1": "146904591946085205319918556",
+          "reserveIn": "2579983557273",
+          "reserveOut": "146904591946085205319918556"
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "102766943",
+        "grossProfitSun": "2766943",
+        "netProfitSun": "-133057",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 102.766943,
+        "grossProfitTRX": 2.766943,
+        "netProfitTRX": -0.133057,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v2:TFGDbUyP8xez44C76fin3bn3Ss6jugoUwJ:0>v2:TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG:0>v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:1",
+      "protocols": [
+        "v2",
+        "v2",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v2",
+          "address": "TFGDbUyP8xez44C76fin3bn3Ss6jugoUwJ",
+          "poolId": "",
+          "index": 0,
+          "feePpm": 3000,
+          "tokenIn": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "reserve0": "141526921675415",
+          "reserve1": "46303042432975",
+          "reserveIn": "141526921675415",
+          "reserveOut": "46303042432975"
+        },
+        {
+          "protocol": "v2",
+          "address": "TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG",
+          "poolId": "",
+          "index": 1,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true,
+          "reserve0": "2579983557273",
+          "reserve1": "146904591946085205319918556",
+          "reserveIn": "2579983557273",
+          "reserveOut": "146904591946085205319918556"
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "102712883",
+        "grossProfitSun": "2712883",
+        "netProfitSun": "-187117",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 102.712883,
+        "grossProfitTRX": 2.712883,
+        "netProfitTRX": -0.187117,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c:0>v3:TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx:1",
+      "protocols": [
+        "v4",
+        "v3"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c",
+          "index": 10,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+          }
+        },
+        {
+          "protocol": "v3",
+          "address": "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+          "poolId": "",
+          "index": 1,
+          "feePpm": 500,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "zeroForOne": false
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "102634512",
+        "grossProfitSun": "2634512",
+        "netProfitSun": "-265488",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 102.634512,
+        "grossProfitTRX": 2.634512,
+        "netProfitTRX": -0.265488,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0x9da2f9922835a19bd5c99923c92195344118ac7008b233e92c814df01a6f71fa:0>v3:TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx:1",
+      "protocols": [
+        "v4",
+        "v3"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x9da2f9922835a19bd5c99923c92195344118ac7008b233e92c814df01a6f71fa",
+          "index": 17,
+          "feePpm": 10000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 10000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        },
+        {
+          "protocol": "v3",
+          "address": "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+          "poolId": "",
+          "index": 1,
+          "feePpm": 500,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "zeroForOne": false
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "102298635",
+        "grossProfitSun": "2298635",
+        "netProfitSun": "-601365",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 102.298635,
+        "grossProfitTRX": 2.298635,
+        "netProfitTRX": -0.601365,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c:0>v2:TLKyq7eJ4YKbs3TGEvoBJWkAXWYQKWo2Nn:1>v2:TYtVkfCdjsnaDufhrhPWYN59NThMVSgiJs:0",
+      "protocols": [
+        "v4",
+        "v2",
+        "v2"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c",
+          "index": 10,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+          }
+        },
+        {
+          "protocol": "v2",
+          "address": "TLKyq7eJ4YKbs3TGEvoBJWkAXWYQKWo2Nn",
+          "poolId": "",
+          "index": 2,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+          "zeroForOne": false,
+          "reserve0": "6249722179643814954975581163955",
+          "reserve1": "1695492343495",
+          "reserveIn": "1695492343495",
+          "reserveOut": "6249722179643814954975581163955"
+        },
+        {
+          "protocol": "v2",
+          "address": "TYtVkfCdjsnaDufhrhPWYN59NThMVSgiJs",
+          "poolId": "",
+          "index": 17,
+          "feePpm": 3000,
+          "tokenIn": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+          "tokenOut": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "zeroForOne": true,
+          "reserve0": "1063206880262706471456953824030",
+          "reserve1": "884765314286",
+          "reserveIn": "1063206880262706471456953824030",
+          "reserveOut": "884765314286"
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "102279897",
+        "grossProfitSun": "2279897",
+        "netProfitSun": "-620103",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 102.279897,
+        "grossProfitTRX": 2.279897,
+        "netProfitTRX": -0.620103,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c:0>v2:TFGDbUyP8xez44C76fin3bn3Ss6jugoUwJ:1",
+      "protocols": [
+        "v4",
+        "v2"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c",
+          "index": 10,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+          }
+        },
+        {
+          "protocol": "v2",
+          "address": "TFGDbUyP8xez44C76fin3bn3Ss6jugoUwJ",
+          "poolId": "",
+          "index": 0,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "zeroForOne": false,
+          "reserve0": "141526921675415",
+          "reserve1": "46303042432975",
+          "reserveIn": "46303042432975",
+          "reserveOut": "141526921675415"
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "102236960",
+        "grossProfitSun": "2236960",
+        "netProfitSun": "-663040",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 102.23696,
+        "grossProfitTRX": 2.23696,
+        "netProfitTRX": -0.66304,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c:0>v3:TC9QmgR8MUwRCYe3kCLwH8MW2WtxiLd6AV:1",
+      "protocols": [
+        "v4",
+        "v3"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c",
+          "index": 10,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+          }
+        },
+        {
+          "protocol": "v3",
+          "address": "TC9QmgR8MUwRCYe3kCLwH8MW2WtxiLd6AV",
+          "poolId": "",
+          "index": 12,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "zeroForOne": false
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "102183324",
+        "grossProfitSun": "2183324",
+        "netProfitSun": "-716676",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 102.183324,
+        "grossProfitTRX": 2.183324,
+        "netProfitTRX": -0.716676,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c:0>v4:0xaa9dd874ed373cf93a9a39f2e79476f996ff3f2de0332fdd851453964978e599:1",
+      "protocols": [
+        "v4",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c",
+          "index": 10,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+          }
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xaa9dd874ed373cf93a9a39f2e79476f996ff3f2de0332fdd851453964978e599",
+          "index": 11,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "102167489",
+        "grossProfitSun": "2167489",
+        "netProfitSun": "-732511",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 102.167489,
+        "grossProfitTRX": 2.167489,
+        "netProfitTRX": -0.732511,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c:0>v2:TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG:0>v2:THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6:1",
+      "protocols": [
+        "v4",
+        "v2",
+        "v2"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c",
+          "index": 10,
+          "feePpm": 3000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+          }
+        },
+        {
+          "protocol": "v2",
+          "address": "TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG",
+          "poolId": "",
+          "index": 1,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true,
+          "reserve0": "2579983557273",
+          "reserve1": "146904591946085205319918556",
+          "reserveIn": "2579983557273",
+          "reserveOut": "146904591946085205319918556"
+        },
+        {
+          "protocol": "v2",
+          "address": "THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6",
+          "poolId": "",
+          "index": 19,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "zeroForOne": false,
+          "reserve0": "25502173349236",
+          "reserve1": "474145299003842789487998674",
+          "reserveIn": "474145299003842789487998674",
+          "reserveOut": "25502173349236"
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "102129375",
+        "grossProfitSun": "2129375",
+        "netProfitSun": "-770625",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 102.129375,
+        "grossProfitTRX": 2.129375,
+        "netProfitTRX": -0.770625,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0x780ff1ce730b2f2182278f2249600d9f8001e16a87fa0419f9e127f85dd71b8c:0>v4:0x5d998d14c22d3962d44013c8c28433779fdd4b4242c62296ea1cd8d456b145a6:1",
+      "protocols": [
+        "v4",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x780ff1ce730b2f2182278f2249600d9f8001e16a87fa0419f9e127f85dd71b8c",
+          "index": 2,
+          "feePpm": 500,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c00c2"
+          }
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x5d998d14c22d3962d44013c8c28433779fdd4b4242c62296ea1cd8d456b145a6",
+          "index": 0,
+          "feePpm": 3000,
+          "tokenIn": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "102086773",
+        "grossProfitSun": "2086773",
+        "netProfitSun": "-813227",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 102.086773,
+        "grossProfitTRX": 2.086773,
+        "netProfitTRX": -0.813227,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0xd9bfc59afd3f5accf9b209d7b1892cab77fd8d2d056f152a482d1c5c30624dcf:0>v2:TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG:0>v4:0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d:1",
+      "protocols": [
+        "v4",
+        "v2",
+        "v4"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xd9bfc59afd3f5accf9b209d7b1892cab77fd8d2d056f152a482d1c5c30624dcf",
+          "index": 13,
+          "feePpm": 500,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+            "fee": 8388608,
+            "parameters": "0x00000000000000000000000000000000000000000000000000000000003c00c2"
+          }
+        },
+        {
+          "protocol": "v2",
+          "address": "TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG",
+          "poolId": "",
+          "index": 1,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "zeroForOne": true,
+          "reserve0": "2579983557273",
+          "reserve1": "146904591946085205319918556",
+          "reserveIn": "2579983557273",
+          "reserveOut": "146904591946085205319918556"
+        },
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+          "index": 9,
+          "feePpm": 3000,
+          "tokenIn": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+          "tokenOut": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "zeroForOne": false,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 3000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "102084993",
+        "grossProfitSun": "2084993",
+        "netProfitSun": "-815007",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 102.084993,
+        "grossProfitTRX": 2.084993,
+        "netProfitTRX": -0.815007,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    },
+    {
+      "block": {
+        "number": 83419845,
+        "timestamp": 1780928709000,
+        "isoTime": "2026-06-08T14:25:09.000Z"
+      },
+      "generatedAt": "2026-06-08T14:25:34.291Z",
+      "routeKey": "v4:0x9da2f9922835a19bd5c99923c92195344118ac7008b233e92c814df01a6f71fa:0>v2:TLKyq7eJ4YKbs3TGEvoBJWkAXWYQKWo2Nn:1>v2:TYtVkfCdjsnaDufhrhPWYN59NThMVSgiJs:0",
+      "protocols": [
+        "v4",
+        "v2",
+        "v2"
+      ],
+      "pools": [
+        {
+          "protocol": "v4",
+          "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+          "poolId": "0x9da2f9922835a19bd5c99923c92195344118ac7008b233e92c814df01a6f71fa",
+          "index": 17,
+          "feePpm": 10000,
+          "tokenIn": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+          "tokenOut": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "zeroForOne": true,
+          "poolKey": {
+            "currency0": "0x0000000000000000000000000000000000000000",
+            "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+            "hooks": "0x0000000000000000000000000000000000000000",
+            "fee": 10000,
+            "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+          }
+        },
+        {
+          "protocol": "v2",
+          "address": "TLKyq7eJ4YKbs3TGEvoBJWkAXWYQKWo2Nn",
+          "poolId": "",
+          "index": 2,
+          "feePpm": 3000,
+          "tokenIn": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+          "tokenOut": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+          "zeroForOne": false,
+          "reserve0": "6249722179643814954975581163955",
+          "reserve1": "1695492343495",
+          "reserveIn": "1695492343495",
+          "reserveOut": "6249722179643814954975581163955"
+        },
+        {
+          "protocol": "v2",
+          "address": "TYtVkfCdjsnaDufhrhPWYN59NThMVSgiJs",
+          "poolId": "",
+          "index": 17,
+          "feePpm": 3000,
+          "tokenIn": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+          "tokenOut": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+          "zeroForOne": true,
+          "reserve0": "1063206880262706471456953824030",
+          "reserve1": "884765314286",
+          "reserveIn": "1063206880262706471456953824030",
+          "reserveOut": "884765314286"
+        }
+      ],
+      "path": [
+        "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+        "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR"
+      ],
+      "spot": {
+        "amountInSun": "100000000",
+        "amountOutSun": "101945225",
+        "grossProfitSun": "1945225",
+        "netProfitSun": "-954775",
+        "resourceCostSun": "2900000",
+        "amountInTRX": 100,
+        "amountOutTRX": 101.945225,
+        "grossProfitTRX": 1.945225,
+        "netProfitTRX": -0.954775,
+        "exactness": "spot-screen"
+      },
+      "exact": null
+    }
+  ]
+}

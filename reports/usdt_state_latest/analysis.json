@@ -1,0 +1,200 @@
+{
+  "generatedAt": "2026-06-08T10:18:19.543Z",
+  "fullnode": "https://api.trongrid.io",
+  "block": {
+    "number": 83414903,
+    "timestamp": 1780913877000,
+    "isoTime": "2026-06-08T10:17:57.000Z"
+  },
+  "tokens": {
+    "usdt": {
+      "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+      "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+    },
+    "wtrx": {
+      "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+      "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+    },
+    "trx": {
+      "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+      "evm": "0x0000000000000000000000000000000000000000"
+    }
+  },
+  "resourceModel": {
+    "callerEnergy": 4000,
+    "callerBandwidth": 2500,
+    "energyPriceSun": 100,
+    "bandwidthPriceSun": 1000
+  },
+  "v4": {
+    "kind": "v4",
+    "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+    "poolId": "0xdda1d5819853f19f3e952da5d93aa2d572d95c72a8e6e4c2acab65384fd2557e",
+    "poolKey": {
+      "currency0": "0x0000000000000000000000000000000000000000",
+      "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+      "hooks": "0x0000000000000000000000000000000000000000",
+      "fee": 500,
+      "parameters": "0x00000000000000000000000000000000000000000000000000000000000a0000"
+    },
+    "fee": 500,
+    "tickSpacing": 10,
+    "protocolFee": 0,
+    "lpFee": 500,
+    "feePercent": 0.05,
+    "sqrtPriceX96": "45283001589068476880556356779",
+    "tick": -11189,
+    "usdtPerTrx": 0.3266714989428574
+  },
+  "v3Pools": [
+    {
+      "kind": "v3",
+      "address": "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "symbol": "WTRX"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "symbol": "USDT"
+      },
+      "fee": 500,
+      "feePercent": 0.05,
+      "liquidity": "966837648013251",
+      "sqrtPriceX96": "45275342758286001410376900801",
+      "tick": -11192,
+      "usdtPerTrx": 0.3265610067022445,
+      "isUsdtWtrx": true
+    },
+    {
+      "kind": "v3",
+      "address": "TY1Nzu3P89TorQd41icdqWUSYDWkQAKVRb",
+      "token0": {
+        "evm": "0x18fd0626daf3af02389aef3ed87db9c33f638ffa",
+        "tron": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+        "symbol": ""
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "symbol": "USDT"
+      },
+      "fee": 500,
+      "feePercent": 0.05,
+      "liquidity": "111053815725543",
+      "sqrtPriceX96": "22251084854803061434018",
+      "tick": -301725,
+      "usdtPerTrx": null,
+      "isUsdtWtrx": false
+    },
+    {
+      "kind": "v3",
+      "address": "TT4QTpAT5qc4QLGGTn1TcYuegoBBRW6gFt",
+      "token0": {
+        "evm": "0x3e5fba224c32a32d88aca00a52594c06e4b5eabb",
+        "tron": "TFf1aBoNFqxN32V2NQdvNrXVyYCy9qY8p1",
+        "symbol": ""
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "symbol": "WTRX"
+      },
+      "fee": 10000,
+      "feePercent": 1,
+      "liquidity": "2698778448439179701",
+      "sqrtPriceX96": "20880380123955851267006",
+      "tick": -302996,
+      "usdtPerTrx": null,
+      "isUsdtWtrx": false
+    },
+    {
+      "kind": "v3",
+      "address": "TH2ZK1sca1V27cCPN5feKZ9ZfEFG4vg7HU",
+      "token0": {
+        "evm": "0x2967c318a01cb50eb1f5bb99943b01012ad758f1",
+        "tron": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+        "symbol": ""
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "symbol": "WTRX"
+      },
+      "fee": 3000,
+      "feePercent": 0.3,
+      "liquidity": "669032507666747",
+      "sqrtPriceX96": "1089216177997183679906724",
+      "tick": -223904,
+      "usdtPerTrx": null,
+      "isUsdtWtrx": false
+    }
+  ],
+  "opportunities": [
+    {
+      "v3Pool": "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+      "buyVenue": "v3",
+      "sellVenue": "v4",
+      "buyFeePpm": 500,
+      "sellFeePpm": 500,
+      "usdtPath": "USDT -> WTRX on V3, TRX -> USDT on V4",
+      "lowUsdtPerTrx": 0.3265610067022445,
+      "highUsdtPerTrx": 0.3266714989428574,
+      "ratioBeforeFees": 1.0003383509921429,
+      "ratioAfterFees": 0.9993382627257386,
+      "edgeBpsBeforeFees": 3.3835099214285513,
+      "edgeBpsAfterFees": -6.617372742614425,
+      "resourceCostTrx": 2.9,
+      "resourceCostUsdt": 0.9473473469342865,
+      "breakevenUsdt": null,
+      "estimates": [
+        {
+          "amountUsdt": 100,
+          "grossEdgeUsdt": -0.06617372742614425,
+          "netAfterResourcesUsdt": -1.0135210743604306
+        },
+        {
+          "amountUsdt": 1000,
+          "grossEdgeUsdt": -0.6617372742614425,
+          "netAfterResourcesUsdt": -1.6090846211957288
+        },
+        {
+          "amountUsdt": 10000,
+          "grossEdgeUsdt": -6.617372742614425,
+          "netAfterResourcesUsdt": -7.564720089548711
+        }
+      ]
+    }
+  ],
+  "v4Quotes": [
+    {
+      "direction": "v4-trx-to-usdt",
+      "exactInHuman": 306.06838522865513,
+      "exactInAsset": "TRX",
+      "amountOutRaw": "99933810",
+      "amountOutHuman": 99.93381,
+      "amountOutAsset": "USDT",
+      "gasEstimate": "31675"
+    },
+    {
+      "direction": "v4-trx-to-usdt",
+      "exactInHuman": 3060.683852286551,
+      "exactInAsset": "TRX",
+      "amountOutRaw": "999336743",
+      "amountOutHuman": 999.336743,
+      "amountOutAsset": "USDT",
+      "gasEstimate": "31675"
+    },
+    {
+      "direction": "v4-trx-to-usdt",
+      "exactInHuman": 30606.83852286551,
+      "exactInAsset": "TRX",
+      "amountOutRaw": "9993230706",
+      "amountOutHuman": 9993.230706,
+      "amountOutAsset": "USDT",
+      "gasEstimate": "31675"
+    }
+  ]
+}

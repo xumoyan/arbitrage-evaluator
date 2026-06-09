@@ -1,0 +1,1650 @@
+{
+  "generatedAt": "2026-06-08T14:43:23.441Z",
+  "block": {
+    "number": 83420193,
+    "timestamp": 1780929753000,
+    "isoTime": "2026-06-08T14:42:33.000Z"
+  },
+  "states": [
+    {
+      "protocol": "v2",
+      "index": 0,
+      "address": "TFGDbUyP8xez44C76fin3bn3Ss6jugoUwJ",
+      "addressEvm": "0x3a10321a4e97a64d9376af42ec07d5fa50294b35",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "reserve0": "141526971885728",
+      "reserve1": "46303026055068",
+      "blockTimestampLast": 1780929204,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 1,
+      "address": "TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG",
+      "addressEvm": "0xc1befb9cf01691c9e96755e070120cdf98ecf59c",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "token1": {
+        "evm": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+        "tron": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "key": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1"
+      },
+      "reserve0": "2579983557273",
+      "reserve1": "146904591946085205319918556",
+      "blockTimestampLast": 1780927938,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 2,
+      "address": "TLKyq7eJ4YKbs3TGEvoBJWkAXWYQKWo2Nn",
+      "addressEvm": "0x719eff8174cf078495a3b20514f087d1a549a0c3",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x032017411f4663b317fe77c257d28d5cd1b26e3d",
+        "tron": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+        "key": "0x032017411f4663b317fe77c257d28d5cd1b26e3d"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "reserve0": "6249722179643814954975581163955",
+      "reserve1": "1695492343495",
+      "blockTimestampLast": 1780919019,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 3,
+      "address": "TAQFKDQJuEHanjVyM8NtpvwXmZWUiECS48",
+      "addressEvm": "0x04bc5471efd978c0e40abab8371828c38c74af9b",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xc4e29d067b9544dcde634e0c9b733e9089ab36e0",
+        "tron": "TTvEv2n45FF2aoYf1U7GFR4cMfvX1MwY3y",
+        "key": "0xc4e29d067b9544dcde634e0c9b733e9089ab36e0"
+      },
+      "reserve0": "731600136",
+      "reserve1": "18056777925941",
+      "blockTimestampLast": 1668749880,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 4,
+      "address": "TRmxcvJmYKxnoeepUvuotFgtFDLcVB7Ga7",
+      "addressEvm": "0xad616e84dda17c4486bac3ca8ef25d820f4f430b",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0x8c967b512390cb2b2d5af16805e21b0a2ec0ac7b",
+        "tron": "TNnZsZsVE4iQmaSxigSRkHh4tENPZCADd9",
+        "key": "0x8c967b512390cb2b2d5af16805e21b0a2ec0ac7b"
+      },
+      "reserve0": "11058",
+      "reserve1": "9979",
+      "blockTimestampLast": 1639587021,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 5,
+      "address": "TFd1LsK2UGANPSEH1bhGpLv3P27KmfKX91",
+      "addressEvm": "0x3dfeb416d69f813e96683b4b7f702be6d6d44a3a",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0x930811ec86943a3e6b17a2092867da819a74d2dd",
+        "tron": "TPNdzyMyD9uXxYpTQFYcARAqFSfpViL65T",
+        "key": "0x930811ec86943a3e6b17a2092867da819a74d2dd"
+      },
+      "reserve0": "1050003",
+      "reserve1": "1377248831",
+      "blockTimestampLast": 1639709838,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 6,
+      "address": "TTRHkXR6cmrB5EUwHphJjs5kgNBntrHqYz",
+      "addressEvm": "0xbf68eafe700b0e1c4b7ab9447acdd1de20ca69a5",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x2967c318a01cb50eb1f5bb99943b01012ad758f1",
+        "tron": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+        "key": "0x2967c318a01cb50eb1f5bb99943b01012ad758f1"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "reserve0": "1512132895140977147945",
+      "reserve1": "289316050816",
+      "blockTimestampLast": 1780929750,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 7,
+      "address": "TS6USKLXpe5sSdrX4GUhMjVMYV3Ty9f2yi",
+      "addressEvm": "0xb0e1cf2569e02cb8d3e5b4f087c7ccb9f9816a50",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x3dfe637b2b9ae4190a458b5f3efc1969afe27819",
+        "tron": "TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq",
+        "key": "0x3dfe637b2b9ae4190a458b5f3efc1969afe27819"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "reserve0": "82655281195080605",
+      "reserve1": "67656385697",
+      "blockTimestampLast": 1780910703,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 8,
+      "address": "TLwNDUBMpwC5kd9j4zjLURyv5ygd3dVyQb",
+      "addressEvm": "0x78503e3e188cf64f30f9662604b42c2871b41411",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x7c02eeff9599464b933ee1c0b34f54dec18a1490",
+        "tron": "TMGvJg7csgWXoqwEXfNsr3eZ9RP6GpP1uS",
+        "key": "0x7c02eeff9599464b933ee1c0b34f54dec18a1490"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "reserve0": "5636545",
+      "reserve1": "4563409",
+      "blockTimestampLast": 1653650280,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 9,
+      "address": "TKQwXdpyonaeGsmNNuF4G23tSLMyZXXAwK",
+      "addressEvm": "0x679707effb38582e8c1f4f70eb07d9fc65c87913",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x67be3aff66b76e5adeeee06fcd93426b0edf4452",
+        "tron": "TKRkVG8DpoRhNmiozRmrZFYCr3oYz7UHWV",
+        "key": "0x67be3aff66b76e5adeeee06fcd93426b0edf4452"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "reserve0": "342002131938567528",
+      "reserve1": "510710886",
+      "blockTimestampLast": 1757792622,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 10,
+      "address": "TQtNRSmM4SY5NFRkpYLL3Qv6sE1AF5eEqz",
+      "addressEvm": "0xa39fabb5c658eece05f06573b5e1169f92d767e4",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xec14c6b5b7bdc486ccb1a8fbb677dbb58b60105b",
+        "tron": "TXVVMtRPXPUQF6b9Uip9ppL56kzZfVPvZL",
+        "key": "0xec14c6b5b7bdc486ccb1a8fbb677dbb58b60105b"
+      },
+      "reserve0": "55932446",
+      "reserve1": "2776118795358",
+      "blockTimestampLast": 1733327220,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 11,
+      "address": "THQwT85ZSYV4mRZKjm5dMcgvGE1cLDhE8L",
+      "addressEvm": "0x51a6b6e8972855e282ae065a1df3a2599b18c9bc",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xd8daf311d53e9056e7af40c254c6caf911e8e5c8",
+        "tron": "TVjqFNWdk5YmpiQQC2XuWrP82q3tBQsbzB",
+        "key": "0xd8daf311d53e9056e7af40c254c6caf911e8e5c8"
+      },
+      "reserve0": "3458150",
+      "reserve1": "19396641269",
+      "blockTimestampLast": 1771449597,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 12,
+      "address": "TCBJJqwUYFvuXrtg9FMF75MzvLKr9eP88p",
+      "addressEvm": "0x1839ac4198014cd56ea497cd0cab313cdac1d640",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xe547f54912f423f7a80a580ad194114d660f11a7",
+        "tron": "TWsXwjAe2a4axrc6YpFAF831vQyyDaNguz",
+        "key": "0xe547f54912f423f7a80a580ad194114d660f11a7"
+      },
+      "reserve0": "973",
+      "reserve1": "20000000000",
+      "blockTimestampLast": 1639711554,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 13,
+      "address": "TQJaW7gSaasSfoqcZtYT8bzq1B6wRkjG73",
+      "addressEvm": "0x9d3b9cc3d718c0c8016b21caf64449672f24105a",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x02bf048e953550e0b5961cfb010cbc6bc6c5ad69",
+        "tron": "TADjBbJAPz3tX8xKVZ2d6ZQSWL8m3CMUuo",
+        "key": "0x02bf048e953550e0b5961cfb010cbc6bc6c5ad69"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "reserve0": "1315342",
+      "reserve1": "3890",
+      "blockTimestampLast": 1723837725,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 14,
+      "address": "TASuMjAfgarfNYoXHcmGtRUxn4pbmiZW1M",
+      "addressEvm": "0x053ceb33e1a01de461c35e2120203972308a5e56",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "token1": {
+        "evm": "0xbd68b50cd4f30d29eb4197c7a509a9aafe51039c",
+        "tron": "TTEi9VzMv7rTpFAodXhtZCn6BoLLacpio8",
+        "key": "0xbd68b50cd4f30d29eb4197c7a509a9aafe51039c"
+      },
+      "reserve0": "7619862526",
+      "reserve1": "102857648199254972272809",
+      "blockTimestampLast": 1780929555,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 15,
+      "address": "TH3gMyxouPgQfQygGE4dnrfwb4WyQvBqNE",
+      "addressEvm": "0x4da1624a20f723ac1d791d202e30936769551854",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x06f8a1d6b50722a1a8f7b3e79ab9cfebe5b464c7",
+        "tron": "TAc4uUcTAiQM322N6hVxAdpshsPvcUJPJb",
+        "key": "0x06f8a1d6b50722a1a8f7b3e79ab9cfebe5b464c7"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "reserve0": "13477731482544028609",
+      "reserve1": "32259241",
+      "blockTimestampLast": 1705896534,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 16,
+      "address": "TSsidjqQ2otaKTT3FMCNNQe4ZgTCD5DzFB",
+      "addressEvm": "0xb97060e236bdd0ceb87a0ef7250571ee4a3c9283",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x26e916781eca69ca8a1b730b2e6e45a45d346e2e",
+        "tron": "TDWwua4JSWKSYm6LJ2PT7k9bgWRz5D11EG",
+        "key": "0x26e916781eca69ca8a1b730b2e6e45a45d346e2e"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "reserve0": "9376196194",
+      "reserve1": "268298083",
+      "blockTimestampLast": 1639662762,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 17,
+      "address": "TYtVkfCdjsnaDufhrhPWYN59NThMVSgiJs",
+      "addressEvm": "0xfb66cbfefbb18364a5ca00ad7b915e7278c0211d",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x032017411f4663b317fe77c257d28d5cd1b26e3d",
+        "tron": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+        "key": "0x032017411f4663b317fe77c257d28d5cd1b26e3d"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "reserve0": "1063206880262706471456953824030",
+      "reserve1": "884765314286",
+      "blockTimestampLast": 1780927785,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 18,
+      "address": "TWNKR2YkNw3XgNGSzptEtMHJY6tnouhWsJ",
+      "addressEvm": "0xdfc16fb1e41206fdbfceb1d50089b37587b1f208",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0x902a83060b0aa1e9790a4bb6108da610611b03f3",
+        "tron": "TP7VETLqNky18xhE6PQvTsaxrNnPznScpd",
+        "key": "0x902a83060b0aa1e9790a4bb6108da610611b03f3"
+      },
+      "reserve0": "105778765",
+      "reserve1": "5993031",
+      "blockTimestampLast": 1745184027,
+      "active": true
+    },
+    {
+      "protocol": "v2",
+      "index": 19,
+      "address": "THu6ConqvZ3phYHeNTDyW9aE3pGypwBsP6",
+      "addressEvm": "0x56f9ab0f9b499e152bffee3f4930dc8645bb6a38",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+        "tron": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "key": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1"
+      },
+      "reserve0": "25500414596467",
+      "reserve1": "474178099003842789487998674",
+      "blockTimestampLast": 1780929045,
+      "active": true
+    },
+    {
+      "protocol": "v3",
+      "index": 0,
+      "address": "TDifVPS6buGVpgQNSVMWACGk7uEwMvN6LC",
+      "addressEvm": "0x29206008969153863478f12cc841d710f3bdfce6",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382",
+        "tron": "TF9io9LGyjuK3uTpr73pAaQ5m9scxd9xvr",
+        "key": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382"
+      },
+      "token1": {
+        "evm": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "tron": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+        "key": "0x646dc03a0884cd4b5254297a04a58a56499f242d"
+      },
+      "feePpm": 3000,
+      "tickSpacing": 60,
+      "liquidity": "0",
+      "sqrtPriceX96": "4295128740",
+      "tick": -887272,
+      "active": false
+    },
+    {
+      "protocol": "v3",
+      "index": 1,
+      "address": "TSUUVjysXV8YqHytSNjfkNXnnB49QDvZpx",
+      "addressEvm": "0xb50b027637ab9a7f2ba5b70a24f778f8438bb279",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "feePpm": 500,
+      "tickSpacing": 10,
+      "liquidity": "978781563473002",
+      "sqrtPriceX96": "45289541419724276299245797309",
+      "tick": -11186,
+      "active": true
+    },
+    {
+      "protocol": "v3",
+      "index": 2,
+      "address": "TMxxHG5PRVakKwNCvTWDb73gPwXvkZAhpm",
+      "addressEvm": "0x839538a1b5e9b57c639035a453e07c9a4309f9d9",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x94f24e992ca04b49c6f2a2753076ef8938ed4daa",
+        "tron": "TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn",
+        "key": "0x94f24e992ca04b49c6f2a2753076ef8938ed4daa"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "feePpm": 100,
+      "tickSpacing": 1,
+      "liquidity": "19655943533027550912",
+      "sqrtPriceX96": "79222391857734857147566",
+      "tick": -276326,
+      "active": true
+    },
+    {
+      "protocol": "v3",
+      "index": 3,
+      "address": "TW7pbp4pD38qv6kSaw44i4uVzthz2bBpYc",
+      "addressEvm": "0xdd038f617a057cd1ad6fa795f026265bed391a67",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "token1": {
+        "evm": "0xcebde71077b830b958c8da17bcddeeb85d0bcf25",
+        "tron": "TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4",
+        "key": "0xcebde71077b830b958c8da17bcddeeb85d0bcf25"
+      },
+      "feePpm": 100,
+      "tickSpacing": 1,
+      "liquidity": "183913334576605660868",
+      "sqrtPriceX96": "79294714575557361661536351222533910",
+      "tick": 276340,
+      "active": true
+    },
+    {
+      "protocol": "v3",
+      "index": 4,
+      "address": "TPdkK5smyNZRdWzbEEv5TKHUH78X9AtbJa",
+      "addressEvm": "0x95e39423a97e7e09c4ac5bcedf2dcd873b5075f6",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x61bec568ac7d24bcca0dad90ba2290670cf0e99b",
+        "tron": "TJt35gDSudMAdU6GFghwY8UbMdG85vYg3L",
+        "key": "0x61bec568ac7d24bcca0dad90ba2290670cf0e99b"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "feePpm": 10000,
+      "tickSpacing": 200,
+      "liquidity": "0",
+      "sqrtPriceX96": "4295128740",
+      "tick": -887272,
+      "active": false
+    },
+    {
+      "protocol": "v3",
+      "index": 5,
+      "address": "TY9SHr1oMRqxQDmPkCyHGKuvU5wuHmCUWL",
+      "addressEvm": "0xf342053389fcbda1be9aa7f45f0c57d74f3718ea",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x2c036253e0c053188c621b81b7cd40a99b828400",
+        "tron": "TDyvndWuvX5xTBwHPYJi7J3Yq8pq8yh62h",
+        "key": "0x2c036253e0c053188c621b81b7cd40a99b828400"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "feePpm": 3000,
+      "tickSpacing": 60,
+      "liquidity": "0",
+      "sqrtPriceX96": "130706991770173326577644",
+      "tick": -266311,
+      "active": false
+    },
+    {
+      "protocol": "v3",
+      "index": 6,
+      "address": "TLVDozYEBgeaJXH7oKBsougzEJKNrogFun",
+      "addressEvm": "0x735e6984b7094aa12a4ab991af2c81bfaead17d8",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x61bec568ac7d24bcca0dad90ba2290670cf0e99b",
+        "tron": "TJt35gDSudMAdU6GFghwY8UbMdG85vYg3L",
+        "key": "0x61bec568ac7d24bcca0dad90ba2290670cf0e99b"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "feePpm": 10000,
+      "tickSpacing": 200,
+      "liquidity": "92896890343",
+      "sqrtPriceX96": "12826679864567122274935431300",
+      "tick": -36418,
+      "active": true
+    },
+    {
+      "protocol": "v3",
+      "index": 7,
+      "address": "TLST8wBZDtPRXwQ55TyqyDS8t8f23ytLCu",
+      "addressEvm": "0x72d849ecf27889537db8642ec51a3c97c679f5b9",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x33eae829448d439ec8dafda4436c33723bf63d13",
+        "tron": "TEhisTYcR5zk3Nz4D2H7Q3aguLhX8nqMNV",
+        "key": "0x33eae829448d439ec8dafda4436c33723bf63d13"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "feePpm": 3000,
+      "tickSpacing": 60,
+      "liquidity": "207174371",
+      "sqrtPriceX96": "683617800471092131167605673079",
+      "tick": 43103,
+      "active": true
+    },
+    {
+      "protocol": "v3",
+      "index": 8,
+      "address": "TCnEBKUJsJz3avdFfetVRahX32ndHbxFVN",
+      "addressEvm": "0x1ed4c8c14b7a32a9ff218f80a69cfe6d9f900c5f",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0b2b4503c475b967f81915fa729ce08b3404d258",
+        "tron": "TAzGGbLer1aSCwVHiFCoQW4xQsNsv7gFjh",
+        "key": "0x0b2b4503c475b967f81915fa729ce08b3404d258"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "feePpm": 3000,
+      "tickSpacing": 60,
+      "liquidity": "0",
+      "sqrtPriceX96": "79226441001894717134027",
+      "tick": -276325,
+      "active": false
+    },
+    {
+      "protocol": "v3",
+      "index": 9,
+      "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+      "addressEvm": "0xeb445a91199c5cda052770d0b2855791c3fb6a20",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "token1": {
+        "evm": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+        "tron": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "key": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1"
+      },
+      "feePpm": 3000,
+      "tickSpacing": 60,
+      "liquidity": "305491001655",
+      "sqrtPriceX96": "649337693592989774381630274494310942",
+      "tick": 318398,
+      "active": true
+    },
+    {
+      "protocol": "v3",
+      "index": 10,
+      "address": "TP9AvK2kECpfaLYXB7qFEJJv5h9cHeUo13",
+      "addressEvm": "0x907c0e95509ae158690eda213e1f01521dd0de88",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "feePpm": 10000,
+      "tickSpacing": 200,
+      "liquidity": "0",
+      "sqrtPriceX96": "26754925273337566995857815601",
+      "tick": -21714,
+      "active": false
+    },
+    {
+      "protocol": "v3",
+      "index": 11,
+      "address": "TQnDCJg9kE7rj69FEJhvenDNEHQnGYBh94",
+      "addressEvm": "0xa2757919430c94e2842919aaa1d3124b7a4de957",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xafd2e697211ca14ca015b70bc8edec6dee280637",
+        "tron": "TRzsuGc8YohLkhVhhemrA9CJSYMZvMghe7",
+        "key": "0xafd2e697211ca14ca015b70bc8edec6dee280637"
+      },
+      "feePpm": 10000,
+      "tickSpacing": 200,
+      "liquidity": "5919226567",
+      "sqrtPriceX96": "640479725860628667909523882467",
+      "tick": 41799,
+      "active": true
+    },
+    {
+      "protocol": "v3",
+      "index": 12,
+      "address": "TC9QmgR8MUwRCYe3kCLwH8MW2WtxiLd6AV",
+      "addressEvm": "0x17de3c58e08f09b3b1d0f3d5fb163fbeb3d826cd",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "feePpm": 3000,
+      "tickSpacing": 60,
+      "liquidity": "43111943706",
+      "sqrtPriceX96": "45329290895297190985417373601",
+      "tick": -11169,
+      "active": true
+    },
+    {
+      "protocol": "v3",
+      "index": 13,
+      "address": "TLfJFtMTx1BK13gNk1356XMsVhsTnq9GCb",
+      "addressEvm": "0x75464893530b7a6e0e63e51dc6525e3a0c3630de",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xf3936b42b40cfdbb028b2a39e2b26c3c00345e8f",
+        "tron": "TYB7oXNq4VyuiH5BHb4os8rTh7Ca8pxqSx",
+        "key": "0xf3936b42b40cfdbb028b2a39e2b26c3c00345e8f"
+      },
+      "feePpm": 10000,
+      "tickSpacing": 200,
+      "liquidity": "0",
+      "sqrtPriceX96": "8747261488641676780900304348753819",
+      "tick": 232250,
+      "active": false
+    },
+    {
+      "protocol": "v3",
+      "index": 14,
+      "address": "TSkAX8y4NrmBaHgfT568b6dZAWiMWomnib",
+      "addressEvm": "0xb802a8d23b83a34c325c9eba3f206c0a7d95431d",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "token1": {
+        "evm": "0xb6b613f99cd01ebf71a66260e0f1f3f695e8b87d",
+        "tron": "TSdJ6yX5h9giKGFPH2d8pF7rSjiqTj9WxQ",
+        "key": "0xb6b613f99cd01ebf71a66260e0f1f3f695e8b87d"
+      },
+      "feePpm": 3000,
+      "tickSpacing": 60,
+      "liquidity": "0",
+      "sqrtPriceX96": "249410316515481273564046185101525",
+      "tick": 161098,
+      "active": false
+    },
+    {
+      "protocol": "v3",
+      "index": 15,
+      "address": "TY9cRnranaVLaqVM3s24Km9oJTRUUkyXvB",
+      "addressEvm": "0xf34a7b74e59cb3215345c8f9ade12331c5f7ec6c",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "token1": {
+        "evm": "0xa7a572f6d8b4ca291b9353cf26580abed74f3e31",
+        "tron": "TRFe3hT5oYhjSZ6f3ji5FJ7YCfrkWnHRvh",
+        "key": "0xa7a572f6d8b4ca291b9353cf26580abed74f3e31"
+      },
+      "feePpm": 500,
+      "tickSpacing": 10,
+      "liquidity": "0",
+      "sqrtPriceX96": "4295128740",
+      "tick": -887272,
+      "active": false
+    },
+    {
+      "protocol": "v3",
+      "index": 16,
+      "address": "TUCcs5MZTz6W5cppAm5dXoZn4ufqzsPDLb",
+      "addressEvm": "0xc7fb9745a567825a68a7dde0b7c631cbbc12b58c",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xa933077f1c54d4687c9f57ee942f25079b13c529",
+        "tron": "TRPrL49cpEEbGvjAji8fjZuese2BBYXtkC",
+        "key": "0xa933077f1c54d4687c9f57ee942f25079b13c529"
+      },
+      "feePpm": 3000,
+      "tickSpacing": 60,
+      "liquidity": "0",
+      "sqrtPriceX96": "1461446703485210103287273052203988822378723970341",
+      "tick": 887271,
+      "active": false
+    },
+    {
+      "protocol": "v3",
+      "index": 17,
+      "address": "TL4oTkiQSxezseomXkvj8V3p1TsWWMh31B",
+      "addressEvm": "0x6ec01a87721987f605745cf9fae222d91e77e5bd",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xa933077f1c54d4687c9f57ee942f25079b13c529",
+        "tron": "TRPrL49cpEEbGvjAji8fjZuese2BBYXtkC",
+        "key": "0xa933077f1c54d4687c9f57ee942f25079b13c529"
+      },
+      "feePpm": 10000,
+      "tickSpacing": 200,
+      "liquidity": "0",
+      "sqrtPriceX96": "100052462025760592572344566839895755818",
+      "tick": 419153,
+      "active": false
+    },
+    {
+      "protocol": "v3",
+      "index": 18,
+      "address": "TRagfZ7qEaAAaDug3PViF6Ht2CkcxfbrXP",
+      "addressEvm": "0xab3f89b59756293bb834766836381ee3946fc509",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x3487b63d30b5b2c87fb7ffa8bcfade38eaac1abe",
+        "tron": "TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8",
+        "key": "0x3487b63d30b5b2c87fb7ffa8bcfade38eaac1abe"
+      },
+      "token1": {
+        "evm": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+        "tron": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "key": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1"
+      },
+      "feePpm": 3000,
+      "tickSpacing": 60,
+      "liquidity": "0",
+      "sqrtPriceX96": "776574580215421961984029900771311587",
+      "tick": 321977,
+      "active": false
+    },
+    {
+      "protocol": "v3",
+      "index": 19,
+      "address": "TKh3bP6vfXqM3ZFVB2n6gDBe9PWSrHwPD1",
+      "addressEvm": "0x6aa2bfb520c35c05b7ba4a8524306ae0916cd359",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x11bde3a847bed3b1fc018f1e89eea56628b79c52",
+        "tron": "TBb1y4NsxXZZQ15wsVA6zkzx6cwgmz4RYo",
+        "key": "0x11bde3a847bed3b1fc018f1e89eea56628b79c52"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "feePpm": 100,
+      "tickSpacing": 1,
+      "liquidity": "0",
+      "sqrtPriceX96": "90330509304312336685392465222",
+      "tick": 2623,
+      "active": false
+    },
+    {
+      "protocol": "v4",
+      "index": 0,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0x5d998d14c22d3962d44013c8c28433779fdd4b4242c62296ea1cd8d456b145a6",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 3000,
+        "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+      },
+      "tickSpacing": 60,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "tron": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+        "key": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e"
+      },
+      "feePpm": 3000,
+      "configuredFeePpm": 3000,
+      "protocolFee": 0,
+      "liquidity": "4659169516979",
+      "sqrtPriceX96": "63056043557920792518730723912809873",
+      "tick": 271757,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 1,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0xdd123ccd452476874a0d49607cb38b8da3c56e6f072c39b0795ce2aba9aec5ac",
+      "poolKey": {
+        "currency0": "0x18fd0626daf3af02389aef3ed87db9c33f638ffa",
+        "currency1": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+        "fee": 8388608,
+        "parameters": "0x00000000000000000000000000000000000000000000000000000000006400c2"
+      },
+      "tickSpacing": 100,
+      "hookFlags": 194,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x18fd0626daf3af02389aef3ed87db9c33f638ffa",
+        "tron": "TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+        "key": "0x18fd0626daf3af02389aef3ed87db9c33f638ffa"
+      },
+      "token1": {
+        "evm": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "tron": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+        "key": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e"
+      },
+      "feePpm": 500,
+      "configuredFeePpm": 8388608,
+      "protocolFee": 0,
+      "liquidity": "6159729474728519714",
+      "sqrtPriceX96": "30994356052942628301194887003",
+      "tick": -18772,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 2,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0x780ff1ce730b2f2182278f2249600d9f8001e16a87fa0419f9e127f85dd71b8c",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+        "fee": 8388608,
+        "parameters": "0x00000000000000000000000000000000000000000000000000000000003c00c2"
+      },
+      "tickSpacing": 60,
+      "hookFlags": 194,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "tron": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+        "key": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e"
+      },
+      "feePpm": 500,
+      "configuredFeePpm": 8388608,
+      "protocolFee": 0,
+      "liquidity": "832425294215",
+      "sqrtPriceX96": "63822303844953467027935691327250063",
+      "tick": 271999,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 3,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0x96d895d181b0dee5a3435f827777bc380e56551ae23790289a847d786332253d",
+      "poolKey": {
+        "currency0": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382",
+        "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 60000,
+        "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+      },
+      "tickSpacing": 1,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382",
+        "tron": "TF9io9LGyjuK3uTpr73pAaQ5m9scxd9xvr",
+        "key": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382"
+      },
+      "token1": {
+        "evm": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "tron": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+        "key": "0x646dc03a0884cd4b5254297a04a58a56499f242d"
+      },
+      "feePpm": 60000,
+      "configuredFeePpm": 60000,
+      "protocolFee": 0,
+      "liquidity": "1121044789286759",
+      "sqrtPriceX96": "37976567546809146478871",
+      "tick": -291033,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 4,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0x347a83575825b1d562317f75322ac85c6259363e2b35c536c17c742b643df26e",
+      "poolKey": {
+        "currency0": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382",
+        "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 3000,
+        "parameters": "0x0000000000000000000000000000000000000000000000000000000000640000"
+      },
+      "tickSpacing": 100,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382",
+        "tron": "TF9io9LGyjuK3uTpr73pAaQ5m9scxd9xvr",
+        "key": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382"
+      },
+      "token1": {
+        "evm": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "tron": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+        "key": "0x646dc03a0884cd4b5254297a04a58a56499f242d"
+      },
+      "feePpm": 3000,
+      "configuredFeePpm": 3000,
+      "protocolFee": 0,
+      "liquidity": "287232419584195",
+      "sqrtPriceX96": "36922711581184949634573",
+      "tick": -291595,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 5,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0x6a425eff1e4c929332905d099d84ba8f7363c606dc37321c80767e7a991e2142",
+      "poolKey": {
+        "currency0": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382",
+        "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+        "fee": 8388608,
+        "parameters": "0x00000000000000000000000000000000000000000000000000000000000100c2"
+      },
+      "tickSpacing": 1,
+      "hookFlags": 194,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382",
+        "tron": "TF9io9LGyjuK3uTpr73pAaQ5m9scxd9xvr",
+        "key": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382"
+      },
+      "token1": {
+        "evm": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "tron": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+        "key": "0x646dc03a0884cd4b5254297a04a58a56499f242d"
+      },
+      "feePpm": 500,
+      "configuredFeePpm": 8388608,
+      "protocolFee": 0,
+      "liquidity": "152678891210132",
+      "sqrtPriceX96": "41531977463339212410608",
+      "tick": -289243,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 6,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0xf1c047ab26851480c375de788b924a86fc730d3493cbb2946796594acc445e88",
+      "poolKey": {
+        "currency0": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382",
+        "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 500,
+        "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+      },
+      "tickSpacing": 1,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382",
+        "tron": "TF9io9LGyjuK3uTpr73pAaQ5m9scxd9xvr",
+        "key": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382"
+      },
+      "token1": {
+        "evm": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "tron": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+        "key": "0x646dc03a0884cd4b5254297a04a58a56499f242d"
+      },
+      "feePpm": 500,
+      "configuredFeePpm": 500,
+      "protocolFee": 0,
+      "liquidity": "17756372846141429",
+      "sqrtPriceX96": "35475109692151047823945",
+      "tick": -292395,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 7,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0x83c4713f9cacea99664ed904062f955865835e97411701cbf760db490afd4968",
+      "poolKey": {
+        "currency0": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382",
+        "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+        "fee": 8388608,
+        "parameters": "0x00000000000000000000000000000000000000000000000000000000025800c2"
+      },
+      "tickSpacing": 600,
+      "hookFlags": 194,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382",
+        "tron": "TF9io9LGyjuK3uTpr73pAaQ5m9scxd9xvr",
+        "key": "0x38d5a8e87a4bcc2f822786a9b1134a3b7836e382"
+      },
+      "token1": {
+        "evm": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "tron": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+        "key": "0x646dc03a0884cd4b5254297a04a58a56499f242d"
+      },
+      "feePpm": 500,
+      "configuredFeePpm": 8388608,
+      "protocolFee": 0,
+      "liquidity": "1857230740594580366",
+      "sqrtPriceX96": "32226789205382204306939",
+      "tick": -294316,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 8,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0x45a1eaf9617b754c14c21d9afa6c6bbf555ef71afcd5fda0f4ee0df8e25893be",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 500,
+        "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+      },
+      "tickSpacing": 60,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "tron": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+        "key": "0x646dc03a0884cd4b5254297a04a58a56499f242d"
+      },
+      "feePpm": 500,
+      "configuredFeePpm": 500,
+      "protocolFee": 0,
+      "liquidity": "14984210979",
+      "sqrtPriceX96": "3546987068895048608486978472845",
+      "tick": 76034,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 9,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0xf4c7d55f64f2feafa8d8fa0502911777a9d0aeb83008976e58cdf5c57e09bf4d",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 3000,
+        "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+      },
+      "tickSpacing": 1,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+        "tron": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "key": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1"
+      },
+      "feePpm": 3000,
+      "configuredFeePpm": 3000,
+      "protocolFee": 0,
+      "liquidity": "14311301048171",
+      "sqrtPriceX96": "335893360673180043191485397241998111",
+      "tick": 305214,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 10,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0xe37e054374f63e18fd8a7c3d5ae82ec5c8c8348bd9715ed260c6a76a78c1374c",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 3000,
+        "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+      },
+      "tickSpacing": 60,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "feePpm": 3000,
+      "configuredFeePpm": 3000,
+      "protocolFee": 0,
+      "liquidity": "643176",
+      "sqrtPriceX96": "45959340154126970886195336417",
+      "tick": -10893,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 11,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0xaa9dd874ed373cf93a9a39f2e79476f996ff3f2de0332fdd851453964978e599",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 3000,
+        "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+      },
+      "tickSpacing": 1,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "feePpm": 3000,
+      "configuredFeePpm": 3000,
+      "protocolFee": 0,
+      "liquidity": "25511174522",
+      "sqrtPriceX96": "45332803544641168817526300079",
+      "tick": -11167,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 12,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0x9d4d21a1d77648ec7fc5c23123311f941e921c1cbc093d1852d52e4a36f2bc27",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 10000,
+        "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+      },
+      "tickSpacing": 60,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "tron": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+        "key": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e"
+      },
+      "feePpm": 10000,
+      "configuredFeePpm": 10000,
+      "protocolFee": 0,
+      "liquidity": "2226400632831",
+      "sqrtPriceX96": "63664222471946129957447741831680486",
+      "tick": 271949,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 13,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0xd9bfc59afd3f5accf9b209d7b1892cab77fd8d2d056f152a482d1c5c30624dcf",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+        "fee": 8388608,
+        "parameters": "0x00000000000000000000000000000000000000000000000000000000003c00c2"
+      },
+      "tickSpacing": 60,
+      "hookFlags": 194,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "feePpm": 500,
+      "configuredFeePpm": 8388608,
+      "protocolFee": 0,
+      "liquidity": "641262",
+      "sqrtPriceX96": "45122101748381636360961925828",
+      "tick": -11260,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 14,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0x9e82c15a1c6c8ce017b5405d6c5b0b4b94fbaca6c3bef4c0643510063c69e3e4",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 500,
+        "parameters": "0x00000000000000000000000000000000000000000000000000000000000a0000"
+      },
+      "tickSpacing": 10,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+        "tron": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "key": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1"
+      },
+      "feePpm": 500,
+      "configuredFeePpm": 500,
+      "protocolFee": 0,
+      "liquidity": "0",
+      "sqrtPriceX96": "1461446703485210103287273052203988822378723970341",
+      "tick": 887271,
+      "active": false
+    },
+    {
+      "protocol": "v4",
+      "index": 15,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0xa37c3f201b6bb0f32c8331f255886ca7c59c194321dee5b8b4be756af92c46c4",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 3000,
+        "parameters": "0x00000000000000000000000000000000000000000000000000000000000a0000"
+      },
+      "tickSpacing": 10,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "tron": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+        "key": "0x646dc03a0884cd4b5254297a04a58a56499f242d"
+      },
+      "feePpm": 3000,
+      "configuredFeePpm": 3000,
+      "protocolFee": 0,
+      "liquidity": "32418659",
+      "sqrtPriceX96": "1023756024070371096344393251457",
+      "tick": 51180,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 16,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0x485eefaf2482a3995315f49cbb86bd7ae8acc17dc7651206b62361bed1136c8f",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+        "fee": 8388608,
+        "parameters": "0x00000000000000000000000000000000000000000000000000000000000100c2"
+      },
+      "tickSpacing": 1,
+      "hookFlags": 194,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "feePpm": 500,
+      "configuredFeePpm": 8388608,
+      "protocolFee": 0,
+      "liquidity": "69772",
+      "sqrtPriceX96": "43167730527512423964322684546",
+      "tick": -12146,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 17,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0x9da2f9922835a19bd5c99923c92195344118ac7008b233e92c814df01a6f71fa",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 10000,
+        "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+      },
+      "tickSpacing": 1,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "feePpm": 10000,
+      "configuredFeePpm": 10000,
+      "protocolFee": 0,
+      "liquidity": "1175102",
+      "sqrtPriceX96": "46046007272640308004219892762",
+      "tick": -10855,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 18,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0xa27d385ca262bf3cfe34813ae40aebc52c210e27ca5ab9a57ae5156d459a0b1e",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 3000,
+        "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+      },
+      "tickSpacing": 1,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "tron": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+        "key": "0x646dc03a0884cd4b5254297a04a58a56499f242d"
+      },
+      "feePpm": 3000,
+      "configuredFeePpm": 3000,
+      "protocolFee": 0,
+      "liquidity": "34141369",
+      "sqrtPriceX96": "792281450588003167884250659085",
+      "tick": 46054,
+      "active": true
+    },
+    {
+      "protocol": "v4",
+      "index": 19,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0xcaa2322e7f78151bc623185f5020629a48124e2d17e359fbd192a77e01c2ddf6",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 10000,
+        "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+      },
+      "tickSpacing": 1,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0x646dc03a0884cd4b5254297a04a58a56499f242d",
+        "tron": "TK8E3sFhBt3EB6gTT6d6co8RMB6DFUnNwE",
+        "key": "0x646dc03a0884cd4b5254297a04a58a56499f242d"
+      },
+      "feePpm": 10000,
+      "configuredFeePpm": 10000,
+      "protocolFee": 0,
+      "liquidity": "12804562",
+      "sqrtPriceX96": "792281450588003167884250659085",
+      "tick": 46054,
+      "active": true
+    }
+  ]
+}
