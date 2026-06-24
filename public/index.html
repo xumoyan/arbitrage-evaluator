@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pool Analytics Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Pool Analytics</h1>
+    <div class="controls">
+      <select id="pool-selector">
+        <option value="">Select a pool...</option>
+      </select>
+      <div class="time-range">
+        <button data-range="1">1H</button>
+        <button data-range="4">4H</button>
+        <button data-range="24" class="active">24H</button>
+        <button data-range="168">7D</button>
+        <button data-range="720">30D</button>
+      </div>
+      <label class="auto-refresh">
+        <input type="checkbox" id="auto-refresh" checked>
+        Auto-refresh (60s)
+      </label>
+      <span id="status" class="status">Disconnected</span>
+    </div>
+  </header>
+
+  <div id="pool-info" class="pool-info hidden">
+    <span id="pool-pair"></span>
+    <span id="pool-protocol"></span>
+    <span id="pool-fee"></span>
+    <span id="pool-address"></span>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>Volume</h3>
+      <canvas id="volume-chart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Price (OHLC)</h3>
+      <canvas id="price-chart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>TVL</h3>
+      <canvas id="tvl-chart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Net Flow</h3>
+      <canvas id="flow-chart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Swap Count</h3>
+      <canvas id="swap-count-chart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Quantitative Signals</h3>
+      <div id="signals-panel" class="signals-panel">
+        <p class="placeholder">Select a pool to view signals</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="pools-overview" class="pools-overview">
+    <h2>All Pools Overview</h2>
+    <table id="pools-table">
+      <thead>
+        <tr>
+          <th>Pool</th>
+          <th>Protocol</th>
+          <th>Pair</th>
+          <th>Fee</th>
+          <th>Last Price</th>
+          <th>Swap Count</th>
+          <th>Volume (token0)</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

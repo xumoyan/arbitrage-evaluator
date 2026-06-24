@@ -1,16 +1,77 @@
 services:
   focused-monitor:
     image: node:20-bookworm-slim
+    network_mode: host
     working_dir: /workspace/arbitrage-evaluator
     volumes:
       - ..:/workspace
     environment:
       TRON_FULL_RPC: "http://10.8.6.153:2633"
       TRON_SOLIDITY_RPC: "http://10.8.6.153:2634"
-      TRON_READ_OWNER: "TDbinJzEN8R8snUF9yxCmpAk6TJfBkRyUu"
+      TRON_READ_OWNER: "TCeKLAgA3mQhrWLtLZJHBiFXbcnh55qrcV"
+      ARBITRAGE_HISTORY_ACCOUNT: "TCeKLAgA3mQhrWLtLZJHBiFXbcnh55qrcV"
     command: >
       sh -lc "npm run build-watch-plan -- --out-dir reports/focused_watch_plan
       && npm run monitor-focused -- --watch-plan reports/focused_watch_plan/watch-plan.json
       --out-dir reports/focused_monitor_live --duration-sec 86400 --poll-ms 9000
       --fresh --rpc-retries 2 --concurrency 12 --exact-top-n 50
       --exact-success-target 10 --exact-max-attempts 120"
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: pool_analytics
+      POSTGRES_USER: analytics
+      POSTGRES_PASSWORD: "${PG_PASSWORD:-analytics123}"
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  analytics-collector:
+    image: node:20-bookworm-slim
+    network_mode: host
+    working_dir: /workspace/arbitrage-evaluator
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    volumes:
+      - ..:/workspace
+    environment:
+      EVM_RPC_URL: "${EVM_RPC_URL}"
+      PG_URL: "postgresql://analytics:${PG_PASSWORD:-analytics123}@127.0.0.1:5432/pool_analytics"
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Analytics collector starting — runs every hour"
+        while true; do
+          echo "=== $(date -u '+%Y-%m-%dT%H:%M:%SZ') Running collection pass ==="
+          node bin/collect-pool-analytics.js \
+            --out-dir reports/analytics \
+            --discovery-mode mainstream \
+            --record-raw-events \
+            --concurrency 12 \
+            --rpc-retries 2 \
+            --bucket-seconds 3600
+          echo "=== Collection pass complete, sleeping 1 hour ==="
+          sleep 3600
+        done
+
+  analytics-server:
+    image: node:20-bookworm-slim
+    network_mode: host
+    working_dir: /workspace/arbitrage-evaluator
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    volumes:
+      - ..:/workspace
+    environment:
+      PG_URL: "postgresql://analytics:${PG_PASSWORD:-analytics123}@127.0.0.1:5432/pool_analytics"
+    command: >
+      node bin/serve-analytics.js
+      --port 3000
+
+volumes:
+  pgdata:

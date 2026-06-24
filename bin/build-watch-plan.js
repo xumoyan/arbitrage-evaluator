@@ -15,17 +15,44 @@ const {
 const PROJECT_ROOT = path.resolve(__dirname, '..')
 const WORKSPACE_ROOT = path.resolve(PROJECT_ROOT, '..')
 const DEFAULT_ANALYSIS = path.join(PROJECT_ROOT, 'reports', 'sample100_slow', 'analysis.json')
-const DEFAULT_CSV = path.join(WORKSPACE_ROOT, 'Transactions_20260608.csv')
+const DEFAULT_CSV = path.join(WORKSPACE_ROOT, 'Transactions_20260609.csv')
+const DEFAULT_RESOLVED = [
+  path.join(WORKSPACE_ROOT, 'transaction-parser', 'reports', 'transactions_20260609_day_container.json'),
+  path.join(WORKSPACE_ROOT, 'transaction-parser', 'reports', 'transactions_20260608_day_container.json')
+]
 const DEFAULT_STATE = path.join(PROJECT_ROOT, 'reports', 'all_pools_final_top50', 'latest-state.json')
 const DEFAULT_OUT_DIR = path.join(PROJECT_ROOT, 'reports', 'focused_watch_plan')
-const DEFAULT_ACCOUNT = constants.DEFAULT_OWNER
+const DEFAULT_ACCOUNT = process.env.ARBITRAGE_HISTORY_ACCOUNT || 'TCeKLAgA3mQhrWLtLZJHBiFXbcnh55qrcV'
 const DEFAULT_ROUTER = 'TQqgNg13s2DjvXhW1ky4v6TsR8wZGvb7Y4'
 const USDT = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t'
+const USDJ = 'TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT'
+const TUSD = 'TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4'
+const V1_EXCHANGE_FEE_PPM = 3000
+const MAX_AUTO_AMOUNT_TRX = 1_000_000
+const STABLE_POOLS = [
+  {
+    protocol: 'stable',
+    kind: 'old3pool',
+    index: 0,
+    address: 'TKcEU8ekq2ZoFzLSGFYCUY6aocJBX9X31b',
+    tokens: [USDJ, TUSD, USDT],
+    tokenCount: 3,
+    flag: '0x40100',
+    exactness: 'stable-local-invariant',
+    quoteFunction: 'get_dy-or-local-invariant',
+    watchReason: ['known-stableswap-old3pool']
+  }
+]
+const V1_EVENT_TOPICS = new Set([
+  'dad9ec5c9b9c82bf6927bf0b64293dcdd1f82c92793aef3c5f26d7b93a4a5306',
+  'cd60aa75dea3072fbc07ae6d7d856b5dc5f4eee88854f5b4abf7b680ef8bc50f'
+])
 
 function parseArgs(argv) {
   const args = {
     analysis: DEFAULT_ANALYSIS,
     csv: DEFAULT_CSV,
+    resolved: [...DEFAULT_RESOLVED],
     state: DEFAULT_STATE,
     outDir: DEFAULT_OUT_DIR,
     account: DEFAULT_ACCOUNT,
@@ -46,6 +73,7 @@ function parseArgs(argv) {
     const next = () => argv[++i]
     if (arg === '--analysis') args.analysis = next()
     else if (arg === '--csv') args.csv = next()
+    else if (arg === '--resolved') args.resolved = splitList(next())
     else if (arg === '--state') args.state = next()
     else if (arg === '--out-dir') args.outDir = next()
     else if (arg === '--account') args.account = next()
@@ -69,6 +97,7 @@ function parseArgs(argv) {
 
   args.analysis = path.resolve(process.cwd(), args.analysis)
   args.csv = path.resolve(process.cwd(), args.csv)
+  args.resolved = args.resolved.map(file => path.resolve(process.cwd(), file))
   args.state = path.resolve(process.cwd(), args.state)
   args.outDir = path.resolve(process.cwd(), args.outDir)
   args.maxAmounts = Math.max(3, Math.floor(args.maxAmounts || 12))
@@ -90,6 +119,7 @@ Builds a focused pool watch plan from profitable router transactions and the lat
 Options:
   --analysis <json>              analyze-resolved output. Default: ${DEFAULT_ANALYSIS}
   --csv <csv>                    Transaction CSV. Default: ${DEFAULT_CSV}
+  --resolved <a,b>               Optional resolved transaction JSON files for V1/TGnC route seeds.
   --state <latest-state.json>    Latest all-pool state. Default: ${DEFAULT_STATE}
   --out-dir <dir>                Output directory. Default: ${DEFAULT_OUT_DIR}
   --account <addr>               Profitable account. Default: ${DEFAULT_ACCOUNT}
@@ -98,6 +128,10 @@ Options:
   --poll-ms <n>                  Override monitor poll interval. Default: CSV p25 gap.
   --max-amounts <n>              Max simulated input buckets. Default: 12.
 `)
+}
+
+function splitList(value) {
+  return String(value || '').split(',').map(item => item.trim()).filter(Boolean)
 }
 
 function readJson(file) {
@@ -193,7 +227,163 @@ function countMap(values) {
     .sort((a, b) => b.count - a.count || String(a.key).localeCompare(String(b.key)))
 }
 
-function summarizeAnalysis(analysis, states, args) {
+function loadRouteDecoder() {
+  const parserRoot = path.join(WORKSPACE_ROOT, 'transaction-parser')
+  const { ethers } = require(path.join(parserRoot, 'node_modules', 'ethers'))
+  const { fromHex } = require(path.join(parserRoot, 'sdks', 'parser', 'base', 'dist'))
+  const iface = new ethers.utils.Interface([
+    'function swapExactInput(address[] path,string[] poolVersion,uint256[] versionLen,uint24[] fees,(uint256 amountIn,uint256 amountOutMin,address to,uint256 deadline) data) payable returns (uint256[] amountsOut)'
+  ])
+  return { ethers, fromHex, iface }
+}
+
+function logAddressToTron(fromHex, address) {
+  const clean = String(address || '').replace(/^0x/, '')
+  if (!clean) return ''
+  return fromHex(clean.startsWith('41') ? clean : `41${clean}`)
+}
+
+function evmToTron(fromHex, address) {
+  const clean = String(address || '').replace(/^0x/, '')
+  if (!clean || /^0+$/.test(clean)) return constants.TRX_BASE58
+  return fromHex(clean.length === 42 && clean.startsWith('41') ? clean : `41${clean}`)
+}
+
+function decodeSwapExactInput(item, decoder) {
+  const tx = item.transaction || {}
+  if (!tx.data || String(tx.data).slice(0, 10).toLowerCase() !== '0xcef95229') return null
+  try {
+    const parsed = decoder.iface.parseTransaction({ data: tx.data, value: tx.value || 0 })
+    return {
+      path: parsed.args.path.map(address => evmToTron(decoder.fromHex, address)),
+      poolVersion: parsed.args.poolVersion.map(value => String(value).toLowerCase()),
+      amountInSun: toBigInt(parsed.args.data.amountIn.toString()),
+      amountOutMinSun: toBigInt(parsed.args.data.amountOutMin.toString())
+    }
+  } catch {
+    return null
+  }
+}
+
+function isNativeToken(token) {
+  return token === constants.TRX_BASE58 || token === constants.WTRX_BASE58
+}
+
+function isMonitorAmountToken(token) {
+  return isNativeToken(token) || token === USDT
+}
+
+function isV1Version(version) {
+  return String(version || '').toLowerCase() === 'v1'
+}
+
+function isV1Event(log) {
+  const topic0 = String(log.topics?.[0] || '').replace(/^0x/, '').toLowerCase()
+  return V1_EVENT_TOPICS.has(topic0)
+}
+
+function summarizeResolvedRoutes(files, args) {
+  const existing = files.filter(file => fs.existsSync(file))
+  const result = {
+    files: existing,
+    rows: [],
+    v1Pools: new Map(),
+    tokenUniverse: new Set(),
+    pairUniverse: new Set(),
+    amountsSun: [],
+    routeCounts: new Map()
+  }
+  if (!existing.length) return result
+
+  const decoder = loadRouteDecoder()
+  for (const file of existing) {
+    const data = readJson(file)
+    for (const item of data.items || []) {
+      const tx = item.transaction || {}
+      if (tx.from !== args.account) continue
+      if (!String(item.category || '').startsWith('swap_')) continue
+      const decoded = decodeSwapExactInput(item, decoder)
+      if (!decoded?.path?.length) continue
+
+      const routeKey = `${decoded.path.join('>')}|${decoded.poolVersion.join('>')}`
+      result.routeCounts.set(routeKey, (result.routeCounts.get(routeKey) || 0) + 1)
+      if (isMonitorAmountToken(decoded.path[0])) {
+        result.amountsSun.push(decoded.amountInSun)
+      }
+
+      for (const token of decoded.path) result.tokenUniverse.add(token)
+      for (let i = 0; i < decoded.path.length - 1; i++) {
+        result.pairUniverse.add(pairKey(decoded.path[i], decoded.path[i + 1]))
+      }
+
+      const v1Logs = (tx.info?.log || []).filter(isV1Event)
+      let v1LogIndex = 0
+      for (let i = 0; i < decoded.poolVersion.length && i < decoded.path.length - 1; i++) {
+        if (!isV1Version(decoded.poolVersion[i])) continue
+        const tokenA = decoded.path[i]
+        const tokenB = decoded.path[i + 1]
+        const token = isNativeToken(tokenA) ? tokenB : tokenA
+        if (isNativeToken(token)) continue
+        const log = v1Logs[v1LogIndex++]
+        if (!log) continue
+        const address = logAddressToTron(decoder.fromHex, log.address)
+        if (!address) continue
+        result.v1Pools.set(address, {
+          protocol: 'v1',
+          index: result.v1Pools.size,
+          address,
+          addressEvm: `0x${String(log.address || '').replace(/^0x/, '').slice(-40).toLowerCase()}`,
+          feePpm: V1_EXCHANGE_FEE_PPM,
+          exactness: 'v1-reserve',
+          token0: {
+            tron: constants.TRX_BASE58
+          },
+          inferredToken: {
+            tron: token
+          },
+          tokenAddressSource: 'runtime-tokenAddress',
+          watchReason: ['historical-v1-route']
+        })
+      }
+
+      result.rows.push({
+        hash: item.hash,
+        timeUTC: item.csv?.['Time (UTC)'] || '',
+        result: item.csv?.Result || '',
+        category: item.category || '',
+        path: decoded.path,
+        poolVersion: decoded.poolVersion,
+        amountInSun: decoded.amountInSun.toString()
+      })
+    }
+  }
+
+  return result
+}
+
+function mergeResolvedSignals(summary, resolvedSummary) {
+  for (const token of resolvedSummary.tokenUniverse) summary.tokenUniverse.add(token)
+  for (const pair of resolvedSummary.pairUniverse) summary.pairUniverse.add(pair)
+  for (const pool of STABLE_POOLS) {
+    for (const token of pool.tokens || []) summary.tokenUniverse.add(token)
+    for (let i = 0; i < (pool.tokens || []).length; i++) {
+      for (let j = i + 1; j < (pool.tokens || []).length; j++) {
+        summary.pairUniverse.add(pairKey(pool.tokens[i], pool.tokens[j]))
+      }
+      for (const anchor of [constants.TRX_BASE58, constants.WTRX_BASE58, USDT]) {
+        summary.pairUniverse.add(pairKey(anchor, pool.tokens[i]))
+      }
+    }
+  }
+  summary.resolvedRows = resolvedSummary.rows
+  summary.resolvedAmountsSun = resolvedSummary.amountsSun
+  summary.resolvedRouteCounts = Array.from(resolvedSummary.routeCounts.entries())
+    .map(([key, count]) => ({ key, count }))
+    .sort((a, b) => b.count - a.count || a.key.localeCompare(b.key))
+  return summary
+}
+
+function summarizeAnalysis(analysis, states, args, resolvedSummary) {
   const profitableRows = (analysis.rows || []).filter(row => row.isNativeCycle && toBigInt(row.grossProfitSun) > 0n)
   const historicalNonV4Pools = new Set()
   const tokenUniverse = new Set([constants.TRX_BASE58, constants.WTRX_BASE58])
@@ -236,7 +426,7 @@ function summarizeAnalysis(analysis, states, args) {
     pairUniverse.add(pairKey(pool.token0.tron, pool.token1.tron))
   }
 
-  return {
+  return mergeResolvedSignals({
     profitableRows,
     historicalNonV4Pools,
     tokenUniverse,
@@ -245,11 +435,14 @@ function summarizeAnalysis(analysis, states, args) {
     tokenCounts: countMap(swapTokens),
     pairCounts: countMap(swapPairs),
     operationCounts: countMap(profitableRows.map(row => row.operationsKey || '(unknown)')),
-    grossProfitSun: profitableRows.reduce((sum, row) => sum + toBigInt(row.grossProfitSun), 0n)
-  }
+    grossProfitSun: profitableRows.reduce((sum, row) => sum + toBigInt(row.grossProfitSun), 0n),
+    resolvedRows: [],
+    resolvedAmountsSun: [],
+    resolvedRouteCounts: []
+  }, resolvedSummary)
 }
 
-function selectPools(states, analysisSummary, args) {
+function selectPools(states, analysisSummary, args, resolvedSummary) {
   const anchors = new Set([constants.TRX_BASE58, constants.WTRX_BASE58, USDT])
   const selected = []
 
@@ -277,6 +470,19 @@ function selectPools(states, analysisSummary, args) {
       watchReason: Array.from(new Set(reasons))
     })
   }
+  for (const pool of resolvedSummary.v1Pools.values()) {
+    selected.push({
+      ...pool,
+      watchReason: Array.from(new Set(pool.watchReason || ['historical-v1-route']))
+    })
+  }
+  for (const pool of STABLE_POOLS) {
+    selected.push({
+      ...pool,
+      tokens: pool.tokens.map(token => ({ tron: token })),
+      watchReason: Array.from(new Set(pool.watchReason || ['known-stableswap']))
+    })
+  }
 
   return selected.sort((left, right) => {
     if (left.protocol !== right.protocol) return left.protocol.localeCompare(right.protocol)
@@ -284,11 +490,24 @@ function selectPools(states, analysisSummary, args) {
   })
 }
 
-function buildAmounts(csvSummary, profitableRows, maxAmounts) {
+function buildAmounts(csvSummary, profitableRows, resolvedAmountsSun, maxAmounts) {
   const profitableAmounts = profitableRows
     .map(row => sunToTrx(toBigInt(row.initialSun)))
     .filter(value => Number.isFinite(value) && value > 0)
+  const resolvedAmounts = resolvedAmountsSun
+    .map(value => sunToTrx(toBigInt(value)))
+    .filter(value => Number.isFinite(value) && value > 0)
+    .filter(value => value <= MAX_AUTO_AMOUNT_TRX)
+  const resolvedAmountCounts = new Map()
+  for (const amount of resolvedAmounts.map(value => Number(value.toFixed(6)))) {
+    resolvedAmountCounts.set(amount, (resolvedAmountCounts.get(amount) || 0) + 1)
+  }
+  const pinned = new Set(Array.from(resolvedAmountCounts.entries())
+    .sort((left, right) => right[1] - left[1] || left[0] - right[0])
+    .slice(0, Math.min(maxAmounts, 12))
+    .map(([amount]) => amount))
   const raw = [
+    ...pinned,
     csvSummary.amountTrx.p10,
     csvSummary.amountTrx.p25,
     csvSummary.amountTrx.p50,
@@ -300,16 +519,25 @@ function buildAmounts(csvSummary, profitableRows, maxAmounts) {
     percentile(profitableAmounts, 0.5),
     percentile(profitableAmounts, 0.75),
     percentile(profitableAmounts, 0.9),
-    percentile(profitableAmounts, 1)
+    percentile(profitableAmounts, 1),
+    percentile(resolvedAmounts, 0.1),
+    percentile(resolvedAmounts, 0.25),
+    percentile(resolvedAmounts, 0.5),
+    percentile(resolvedAmounts, 0.75),
+    percentile(resolvedAmounts, 0.9),
+    percentile(resolvedAmounts, 1)
   ].filter(value => Number.isFinite(value) && value > 0)
+    .filter(value => value <= MAX_AUTO_AMOUNT_TRX)
 
   const unique = Array.from(new Set(raw.map(value => Number(value.toFixed(6)))))
     .sort((a, b) => a - b)
   if (unique.length <= maxAmounts) return unique
-  const result = new Set()
-  for (let i = 0; i < maxAmounts; i++) {
-    const index = Math.round((unique.length - 1) * (i / (maxAmounts - 1)))
-    result.add(unique[index])
+  const result = new Set(Array.from(pinned).slice(0, maxAmounts))
+  const candidates = unique.filter(value => !result.has(value))
+  const remaining = maxAmounts - result.size
+  for (let i = 0; i < remaining; i++) {
+    const index = remaining === 1 ? 0 : Math.round((candidates.length - 1) * (i / (remaining - 1)))
+    if (candidates[index] !== undefined) result.add(candidates[index])
   }
   return Array.from(result).sort((a, b) => a - b)
 }
@@ -369,6 +597,8 @@ function buildReport(plan) {
   lines.push(`- Poll interval selected: ${plan.monitor.pollMs} ms (CSV p25 gap ${plan.historical.csv.gapSec.p25}s)`)
   lines.push(`- Parsed profitable native cycles: ${plan.historical.analysis.profitableRows}`)
   lines.push(`- Parsed gross profit: ${formatTrxSun(plan.historical.analysis.grossProfitSun)} TRX`)
+  lines.push(`- Resolved swap rows used: ${plan.historical.resolved.rows}`)
+  lines.push(`- Historical V1 pools seeded: ${plan.historical.resolved.v1Pools}`)
   lines.push('')
   lines.push('## Selected Pools')
   lines.push('')
@@ -399,8 +629,9 @@ function buildReport(plan) {
   lines.push('## Notes')
   lines.push('')
   lines.push('- V4 historical logs expose the PoolManager address, so V4 pool selection is inferred from PoolManager poolKey token pairs.')
+  lines.push('- V1 historical routes are seeded from resolved transaction logs because deprecated exchanges are not present in the V2/V3/V4 catalog.')
   lines.push('- The focused monitor records gross exact-quoted profit and resource estimates; it does not subtract Energy/Bandwidth yet.')
-  lines.push('- V3/V4 spot rows are only leads. A row is treated as constructed/profitable only after exact quote succeeds.')
+  lines.push('- V1/V2 reserve-only rows are exact quote-only leads until router calldata support is available for the deprecated exchange leg.')
   return `${lines.join('\n')}\n`
 }
 
@@ -410,9 +641,10 @@ function main() {
   const latestState = readJson(args.state)
   const states = latestState.states || []
   const csvSummary = summarizeCsv(args.csv, args)
-  const analysisSummary = summarizeAnalysis(analysis, states, args)
-  const selectedPools = selectPools(states, analysisSummary, args)
-  const amountsTrx = buildAmounts(csvSummary, analysisSummary.profitableRows, args.maxAmounts)
+  const resolvedSummary = summarizeResolvedRoutes(args.resolved, args)
+  const analysisSummary = summarizeAnalysis(analysis, states, args, resolvedSummary)
+  const selectedPools = selectPools(states, analysisSummary, args, resolvedSummary)
+  const amountsTrx = buildAmounts(csvSummary, analysisSummary.profitableRows, analysisSummary.resolvedAmountsSun, args.maxAmounts)
   const pollMs = args.pollMs || Math.max(3000, Math.round((csvSummary.gapSec.p25 || 9) * 1000))
 
   const selectedCatalog = {
@@ -421,8 +653,10 @@ function main() {
       method: 'historical-profitable-token-pairs',
       analysis: args.analysis,
       csv: args.csv,
+      resolved: args.resolved,
       state: args.state,
       v4PoolSelection: 'poolKey token pair match; PoolManager address alone is not treated as a pool hit',
+      v1PoolSelection: 'resolved transaction V1 logs matched to swapExactInput v1 route legs',
       includeTokenNeighbors: args.includeTokenNeighbors
     },
     pools: selectedPools
@@ -435,6 +669,7 @@ function main() {
       router: args.router,
       analysis: args.analysis,
       csv: args.csv,
+      resolved: args.resolved,
       state: args.state
     },
     monitor: {
@@ -443,7 +678,7 @@ function main() {
       maxHops: args.maxHops,
       minProfitTrx: args.minProfitTrx,
       amountsTrx,
-      baseAssets: [constants.TRX_BASE58, constants.WTRX_BASE58],
+      baseAssets: [constants.TRX_BASE58, constants.WTRX_BASE58, USDT],
       exactTopN: args.exactTopN,
       exactSuccessTarget: args.exactSuccessTarget,
       exactMaxAttempts: args.exactMaxAttempts
@@ -477,6 +712,14 @@ function main() {
         topTokens: analysisSummary.tokenCounts.slice(0, 30),
         topPairs: analysisSummary.pairCounts.slice(0, 30),
         topOperations: analysisSummary.operationCounts.slice(0, 30)
+      },
+      resolved: {
+        files: resolvedSummary.files,
+        rows: resolvedSummary.rows.length,
+        v1Pools: resolvedSummary.v1Pools.size,
+        amountBucketsSeen: resolvedSummary.amountsSun.length,
+        topRoutes: analysisSummary.resolvedRouteCounts.slice(0, 30),
+        sampleRows: resolvedSummary.rows.slice(0, 30)
       }
     },
     catalog: selectedCatalog,

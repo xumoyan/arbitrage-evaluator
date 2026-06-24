@@ -11,6 +11,9 @@ const DEFAULT_OWNER = process.env.TRON_READ_OWNER || 'TDbinJzEN8R8snUF9yxCmpAk6T
 const ZERO_EVM = '0x0000000000000000000000000000000000000000'
 const TRX_BASE58 = 'T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb'
 const WTRX_BASE58 = 'TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR'
+const USDT_BASE58 = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t'
+const USDJ_BASE58 = 'TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT'
+const TUSD_BASE58 = 'TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4'
 
 const DEFAULT_V2_FACTORY = 'TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY'
 const DEFAULT_V3_FACTORY = 'TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x'
@@ -18,7 +21,7 @@ const DEFAULT_V3_QUOTER = 'TLhZ48yfHygMLM2uZr87zJJusHjGen97gh'
 const DEFAULT_V4_POOL_MANAGER = 'TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br'
 const DEFAULT_V4_CL_QUOTER = 'TSupQTJWWoVpUqA7KGVYb8dB97n3civwiJ'
 
-const DEFAULT_BASE_ASSETS = [TRX_BASE58, WTRX_BASE58]
+const DEFAULT_BASE_ASSETS = [TRX_BASE58, WTRX_BASE58, USDT_BASE58]
 const DEFAULT_AMOUNTS_TRX = [100, 1000, 5000]
 const DEFAULT_V2_FEE_PPM = 3000
 
@@ -215,6 +218,12 @@ function toBase58Address(tronWeb, evmAddress) {
   const evm = normalizeEvm(evmAddress)
   if (evm === ZERO_EVM) return TRX_BASE58
   return tronWeb.address.fromHex(`41${evm.slice(2)}`)
+}
+
+function decimalPrecisionMultiplier(decimals) {
+  const value = Number(decimals)
+  if (!Number.isFinite(value) || value < 0 || value >= 18) return 1n
+  return 10n ** BigInt(18 - Math.floor(value))
 }
 
 function topicToAddress(topic) {
@@ -515,6 +524,56 @@ async function readV2State(tronWeb, ethers, pool) {
   }
 }
 
+async function readV1State(tronWeb, ethers, pool) {
+  const inferredTokenAddress = pool.inferredToken?.tron || pool.token1?.tron || pool.token?.tron || ''
+  const tokenAddress = await readV1TokenAddress(tronWeb, ethers, pool)
+  const exchangeAddress = pool.address
+  const [tokenReserve] = await constantCall(
+    tronWeb,
+    ethers,
+    tokenAddress,
+    'balanceOf(address)',
+    [{ type: 'address', value: toEvmAddress(tronWeb, exchangeAddress) }],
+    ['uint256']
+  )
+  const trxReserve = await getTrxBalance(tronWeb, exchangeAddress)
+  return {
+    ...pool,
+    token0: tokenInfo(tronWeb, ZERO_EVM),
+    token1: tokenInfo(tronWeb, toEvmAddress(tronWeb, tokenAddress)),
+    token: tokenInfo(tronWeb, toEvmAddress(tronWeb, tokenAddress)),
+    reserve0: trxReserve.toString(),
+    reserve1: tokenReserve.toString(),
+    feePpm: pool.feePpm ?? DEFAULT_V2_FEE_PPM,
+    exactness: 'v1-reserve',
+    tokenAddressSource: 'tokenAddress()',
+    inferredTokenAddress,
+    inferredTokenMismatch: Boolean(inferredTokenAddress && inferredTokenAddress !== tokenAddress),
+    active: trxReserve > 0n && tokenReserve.gt(0)
+  }
+}
+
+async function getTrxBalance(tronWeb, address) {
+  const account = await tronWeb.fullNode.request(
+    'wallet/getaccount',
+    { address: tronWeb.address.toHex(address) },
+    'post'
+  )
+  return BigInt(account?.balance || 0)
+}
+
+async function readV1TokenAddress(tronWeb, ethers, pool) {
+  const [token] = await constantCall(
+    tronWeb,
+    ethers,
+    pool.address,
+    'tokenAddress()',
+    [],
+    ['address']
+  )
+  return toBase58Address(tronWeb, token)
+}
+
 async function readV3State(tronWeb, ethers, pool) {
   const [token0] = await constantCall(tronWeb, ethers, pool.address, 'token0()', [], ['address'])
   const [token1] = await constantCall(tronWeb, ethers, pool.address, 'token1()', [], ['address'])
@@ -539,6 +598,69 @@ async function readV3State(tronWeb, ethers, pool) {
     sqrtPriceX96: slot0[0].toString(),
     tick: Number(slot0[1]),
     active: liquidity.gt(0) && slot0[0].gt(0)
+  }
+}
+
+async function readTokenDecimals(tronWeb, ethers, token) {
+  try {
+    const [decimals] = await constantCall(tronWeb, ethers, token, 'decimals()', [], ['uint8'])
+    return Number(decimals)
+  } catch {
+    return null
+  }
+}
+
+async function readStableState(tronWeb, ethers, pool) {
+  const configuredTokens = pool.tokens || []
+  const tokenCount = Number(pool.tokenCount || configuredTokens.length || 3)
+  const tokens = []
+  const balances = []
+  for (let index = 0; index < tokenCount; index++) {
+    let coin
+    try {
+      const [value] = await constantCall(
+        tronWeb,
+        ethers,
+        pool.address,
+        'coins(uint256)',
+        [{ type: 'uint256', value: index }],
+        ['address']
+      )
+      coin = toBase58Address(tronWeb, value)
+    } catch {
+      coin = configuredTokens[index]?.tron || configuredTokens[index] || ''
+    }
+    if (!coin) continue
+    const decimals = await readTokenDecimals(tronWeb, ethers, coin)
+    tokens.push({
+      ...tokenInfo(tronWeb, toEvmAddress(tronWeb, coin)),
+      decimals: decimals === null ? configuredTokens[index]?.decimals : decimals,
+      index
+    })
+    const [balance] = await constantCall(
+      tronWeb,
+      ethers,
+      pool.address,
+      'balances(uint256)',
+      [{ type: 'uint256', value: index }],
+      ['uint256']
+    )
+    balances.push(balance.toString())
+  }
+  const aResult = await tryCall(() => constantCall(tronWeb, ethers, pool.address, 'A()', [], ['uint256']))
+  const feeResult = await tryCall(() => constantCall(tronWeb, ethers, pool.address, 'fee()', [], ['uint256']))
+  const precisionMultipliers = tokens.map(token => decimalPrecisionMultiplier(token.decimals).toString())
+  return {
+    ...pool,
+    tokens,
+    balances,
+    precisionMultipliers,
+    A: aResult.ok ? aResult.value[0].toString() : String(pool.A || 0),
+    fee: feeResult.ok ? feeResult.value[0].toString() : String(pool.fee || 0),
+    feeDenominator: String(pool.feeDenominator || 10000000000n),
+    flag: pool.flag || pool.stableFlag || '0x40100',
+    exactness: 'stable-local-invariant',
+    active: tokens.length >= 2 && balances.filter(value => toBigInt(value) > 0n).length >= 2
   }
 }
 
@@ -595,16 +717,18 @@ function toEvmStatic(base58) {
 
 async function readPoolStates(tronWeb, ethers, pools, args) {
   const rows = []
-  for (const protocol of ['v2', 'v3', 'v4']) {
+  for (const protocol of ['v1', 'v2', 'v3', 'v4', 'stable']) {
     const protocolPools = pools.filter(pool => pool.protocol === protocol)
     if (!protocolPools.length) continue
     const startedAt = Date.now()
     console.log(`Reading ${protocol.toUpperCase()} pool states (${protocolPools.length})...`)
     const protocolRows = await runLimited(protocolPools, args.concurrency, async pool => {
       if (pool.error) return pool
+      if (pool.protocol === 'v1') return readV1State(tronWeb, ethers, pool)
       if (pool.protocol === 'v2') return readV2State(tronWeb, ethers, pool)
       if (pool.protocol === 'v3') return readV3State(tronWeb, ethers, pool)
       if (pool.protocol === 'v4') return readV4State(tronWeb, ethers, pool)
+      if (pool.protocol === 'stable') return readStableState(tronWeb, ethers, pool)
       return { ...pool, error: `Unsupported protocol ${pool.protocol}` }
     }, { retries: args.rpcRetries })
     rows.push(...protocolRows)
@@ -631,11 +755,38 @@ function buildEdges(states) {
   const edges = []
   for (const pool of states) {
     if (pool.error || !pool.active) continue
+    if (pool.protocol === 'stable') {
+      for (let i = 0; i < (pool.tokens || []).length; i++) {
+        for (let j = 0; j < (pool.tokens || []).length; j++) {
+          if (i !== j) edges.push(makeStableEdge(pool, i, j))
+        }
+      }
+      continue
+    }
     if (!pool.token0?.key || !pool.token1?.key || pool.token0.key === pool.token1.key) continue
     edges.push(makeEdge(pool, true))
     edges.push(makeEdge(pool, false))
   }
   return edges
+}
+
+function makeStableEdge(pool, tokenInIndex, tokenOutIndex) {
+  const tokenIn = pool.tokens[tokenInIndex]
+  const tokenOut = pool.tokens[tokenOutIndex]
+  return {
+    id: `${pool.protocol}:${pool.address}:${tokenInIndex}:${tokenOutIndex}`,
+    protocol: pool.protocol,
+    poolAddress: pool.address,
+    poolId: '',
+    poolIndex: pool.index,
+    tokenIn,
+    tokenOut,
+    tokenInIndex,
+    tokenOutIndex,
+    zeroForOne: tokenInIndex < tokenOutIndex,
+    feePpm: null,
+    pool
+  }
 }
 
 function makeEdge(pool, zeroForOne) {
@@ -657,9 +808,15 @@ function makeEdge(pool, zeroForOne) {
 
 function quoteEdgeSpot(edge, amountInRaw) {
   if (amountInRaw <= 0n) return null
+  if (edge.protocol === 'v1') return quoteV1(edge, amountInRaw)
   if (edge.protocol === 'v2') return quoteV2(edge, amountInRaw)
   if (edge.protocol === 'v3' || edge.protocol === 'v4') return quoteClSpot(edge, amountInRaw)
+  if (edge.protocol === 'stable') return quoteStableLocal(edge, amountInRaw)
   return null
+}
+
+function quoteV1(edge, amountInRaw) {
+  return quoteV2(edge, amountInRaw)
 }
 
 function quoteV2(edge, amountInRaw) {
@@ -684,6 +841,91 @@ function quoteClSpot(edge, amountInRaw) {
   const out = Number(amountInRaw) * mult * fee
   if (!Number.isFinite(out) || out <= 0) return null
   return BigInt(Math.floor(out))
+}
+
+function stableXp(pool) {
+  const balances = pool.balances || []
+  const multipliers = pool.precisionMultipliers || []
+  return balances.map((balance, index) => toBigInt(balance) * toBigInt(multipliers[index] || 1))
+}
+
+function getStableD(xp, amp) {
+  const n = BigInt(xp.length)
+  const sum = xp.reduce((total, value) => total + value, 0n)
+  if (sum <= 0n || n <= 0n) return 0n
+  let d = sum
+  const ann = amp * n
+  for (let iteration = 0; iteration < 255; iteration++) {
+    let dP = d
+    for (const x of xp) {
+      if (x <= 0n) return 0n
+      dP = dP * d / (x * n)
+    }
+    const previous = d
+    d = (ann * sum + dP * n) * d / ((ann - 1n) * d + (n + 1n) * dP)
+    const diff = d > previous ? d - previous : previous - d
+    if (diff <= 1n) break
+  }
+  return d
+}
+
+function getStableY(i, j, x, xp, amp) {
+  const n = BigInt(xp.length)
+  const d = getStableD(xp, amp)
+  if (d <= 0n) return 0n
+  const ann = amp * n
+  let c = d
+  let sum = 0n
+  for (let index = 0; index < xp.length; index++) {
+    let value
+    if (index === i) value = x
+    else if (index !== j) value = xp[index]
+    else continue
+    if (value <= 0n) return 0n
+    sum += value
+    c = c * d / (value * n)
+  }
+  c = c * d / (ann * n)
+  const b = sum + d / ann
+  let y = d
+  for (let iteration = 0; iteration < 255; iteration++) {
+    const previous = y
+    y = (y * y + c) / (2n * y + b - d)
+    const diff = y > previous ? y - previous : previous - y
+    if (diff <= 1n) break
+  }
+  return y
+}
+
+function quoteStableLocal(edge, amountInRaw) {
+  const pool = edge.pool
+  const i = Number(edge.tokenInIndex)
+  const j = Number(edge.tokenOutIndex)
+  const xp = stableXp(pool)
+  if (!xp[i] || !xp[j]) return null
+  const amp = toBigInt(pool.A || 0)
+  if (amp <= 0n) return quoteStableBalanceRatio(edge, amountInRaw)
+  const multipliers = pool.precisionMultipliers || []
+  const inMultiplier = toBigInt(multipliers[i] || 1)
+  const outMultiplier = toBigInt(multipliers[j] || 1)
+  const x = xp[i] + amountInRaw * inMultiplier
+  const y = getStableY(i, j, x, xp, amp)
+  if (y <= 0n || xp[j] <= y + 1n) return null
+  let dy = (xp[j] - y - 1n) / outMultiplier
+  const fee = toBigInt(pool.fee || 0)
+  const feeDenominator = toBigInt(pool.feeDenominator || 10000000000n)
+  if (fee > 0n && feeDenominator > 0n) {
+    dy -= dy * fee / feeDenominator
+  }
+  return dy > 0n ? dy : null
+}
+
+function quoteStableBalanceRatio(edge, amountInRaw) {
+  const pool = edge.pool
+  const reserveIn = toBigInt(pool.balances?.[edge.tokenInIndex] || 0)
+  const reserveOut = toBigInt(pool.balances?.[edge.tokenOutIndex] || 0)
+  if (reserveIn <= 0n || reserveOut <= 0n) return null
+  return amountInRaw * reserveOut / reserveIn
 }
 
 function groupEdges(edges) {
@@ -727,7 +969,7 @@ function simulateOpportunities(states, args, tronWeb) {
 
           const nextRoute = item.route.concat(edge)
           const nextTokenKey = edge.tokenOut.key
-          if (startKeys.has(nextTokenKey) && nextRoute.length >= 2) {
+          if (nextTokenKey === startKey && nextRoute.length >= 2) {
             const grossProfitSun = amountOut - amountInSun
             const netProfitSun = grossProfitSun - costSun
             if (netProfitSun > minProfitSun) {
@@ -754,7 +996,7 @@ function simulateOpportunities(states, args, tronWeb) {
     }
   }
 
-  opportunities.sort((a, b) => Number(toBigInt(b.spot.netProfitSun) - toBigInt(a.spot.netProfitSun)))
+  opportunities.sort((a, b) => compareBigIntDesc(a.spot.netProfitSun, b.spot.netProfitSun))
   return { edges: edges.length, routesScanned, opportunities }
 }
 
@@ -770,7 +1012,24 @@ function buildOpportunity(route, amountInSun, amountOutSun, grossProfitSun, netP
       feePpm: edge.feePpm,
       tokenIn: edge.tokenIn.tron,
       tokenOut: edge.tokenOut.tron,
-      zeroForOne: edge.zeroForOne
+      zeroForOne: edge.zeroForOne,
+      tokenInIndex: edge.tokenInIndex,
+      tokenOutIndex: edge.tokenOutIndex,
+      tokens: edge.protocol === 'stable' ? edge.pool.tokens : undefined,
+      balances: edge.protocol === 'stable' ? edge.pool.balances : undefined,
+      precisionMultipliers: edge.protocol === 'stable' ? edge.pool.precisionMultipliers : undefined,
+      A: edge.protocol === 'stable' ? edge.pool.A : undefined,
+      fee: edge.protocol === 'stable' ? edge.pool.fee : undefined,
+      feeDenominator: edge.protocol === 'stable' ? edge.pool.feeDenominator : undefined,
+      flag: edge.protocol === 'stable' ? edge.pool.flag : undefined,
+      reserve0: edge.protocol === 'v1' || edge.protocol === 'v2' ? edge.pool.reserve0 : undefined,
+      reserve1: edge.protocol === 'v1' || edge.protocol === 'v2' ? edge.pool.reserve1 : undefined,
+      reserveIn: edge.protocol === 'v1' || edge.protocol === 'v2'
+        ? (edge.zeroForOne ? edge.pool.reserve0 : edge.pool.reserve1)
+        : edge.protocol === 'stable' ? edge.pool.balances?.[edge.tokenInIndex] : undefined,
+      reserveOut: edge.protocol === 'v1' || edge.protocol === 'v2'
+        ? (edge.zeroForOne ? edge.pool.reserve1 : edge.pool.reserve0)
+        : edge.protocol === 'stable' ? edge.pool.balances?.[edge.tokenOutIndex] : undefined
     })),
     path: [route[0].tokenIn.tron, ...route.map(edge => edge.tokenOut.tron)],
     spot: {
@@ -783,7 +1042,7 @@ function buildOpportunity(route, amountInSun, amountOutSun, grossProfitSun, netP
       amountOutTRX: sunToTrx(amountOutSun),
       grossProfitTRX: sunToTrx(grossProfitSun),
       netProfitTRX: sunToTrx(netProfitSun),
-      exactness: route.every(edge => edge.protocol === 'v2') ? 'exact-v2-reserves' : 'spot-screen'
+      exactness: route.every(edge => edge.protocol === 'v1' || edge.protocol === 'v2') ? 'exact-reserves' : 'spot-screen'
     },
     exact: null
   }
@@ -798,7 +1057,11 @@ async function quoteOpportunityExact(tronWeb, ethers, opportunity, args) {
     try {
       let out
       let gas = 0n
-      if (pool.protocol === 'v2') {
+      if (pool.protocol === 'v1') {
+        const edge = findEdgeFromOpportunityStep(opportunity, pool)
+        out = quoteV1(edge, amount)
+        gas = 0n
+      } else if (pool.protocol === 'v2') {
         const edge = findEdgeFromOpportunityStep(opportunity, pool)
         out = quoteV2(edge, amount)
         gas = 0n
@@ -812,9 +1075,20 @@ async function quoteOpportunityExact(tronWeb, ethers, opportunity, args) {
         const result = await quoteV4Exact(tronWeb, ethers, args, pool, amount)
         out = result.amountOut
         gas = result.gasEstimate
+      } else if (pool.protocol === 'stable') {
+        const result = await quoteStableExact(tronWeb, ethers, pool, amount)
+        out = result.amountOut
+        gas = result.gasEstimate
+        pool._lastStableQuoteSource = result.quoteSource
       }
       if (!out || out <= 0n) return { error: `zero output at ${pool.protocol}:${pool.address || pool.poolId}` }
-      steps.push({ protocol: pool.protocol, amountIn: amount.toString(), amountOut: out.toString(), gasEstimate: gas.toString() })
+      steps.push({
+        protocol: pool.protocol,
+        amountIn: amount.toString(),
+        amountOut: out.toString(),
+        gasEstimate: gas.toString(),
+        quoteSource: pool._lastStableQuoteSource || undefined
+      })
       amount = out
       gasEstimate += gas
     } catch (error) {
@@ -835,7 +1109,9 @@ async function quoteOpportunityExact(tronWeb, ethers, opportunity, args) {
     netProfitTRX: sunToTrx(netProfitSun),
     quoterGasEstimate: gasEstimate.toString(),
     steps,
-    exactness: 'edge-quoters'
+    exactness: steps.some(step => step.quoteSource === 'stable-local-invariant')
+      ? 'edge-quoters-with-stable-local-invariant'
+      : 'edge-quoters'
   }
 }
 
@@ -893,6 +1169,34 @@ async function quoteV4Exact(tronWeb, ethers, args, step, amountIn) {
   return { amountOut: toBigInt(result[0].toString()), gasEstimate: toBigInt(result[1].toString()) }
 }
 
+async function quoteStableExact(tronWeb, ethers, step, amountIn) {
+  const i = Number(step.tokenInIndex)
+  const j = Number(step.tokenOutIndex)
+  for (const selector of ['get_dy(uint256,uint256,uint256)', 'get_dy(int128,int128,uint256)']) {
+    try {
+      const result = await constantCall(
+        tronWeb,
+        ethers,
+        step.address,
+        selector,
+        [
+          { type: selector.includes('int128') ? 'int128' : 'uint256', value: i },
+          { type: selector.includes('int128') ? 'int128' : 'uint256', value: j },
+          { type: 'uint256', value: amountIn.toString() }
+        ],
+        ['uint256']
+      )
+      const amountOut = toBigInt(result[0].toString())
+      if (amountOut > 0n) return { amountOut, gasEstimate: 0n, quoteSource: 'stable-get_dy' }
+    } catch {
+      // Old SunSwap stable pools can expose coins/balances but return no data for get_dy.
+    }
+  }
+  const amountOut = quoteStableLocal({ pool: step, tokenInIndex: i, tokenOutIndex: j }, amountIn)
+  if (!amountOut || amountOut <= 0n) throw new Error(`stable quote failed at ${step.address}`)
+  return { amountOut, gasEstimate: 0n, quoteSource: 'stable-local-invariant' }
+}
+
 function isExactAttempted(opp) {
   return Boolean(opp.exact)
 }
@@ -920,8 +1224,25 @@ function enrichOpportunitiesWithState(opportunities, states) {
         step.reserveIn = step.zeroForOne ? state.reserve0 : state.reserve1
         step.reserveOut = step.zeroForOne ? state.reserve1 : state.reserve0
       }
+      if (step.protocol === 'v1') {
+        step.reserve0 = state.reserve0
+        step.reserve1 = state.reserve1
+        step.reserveIn = step.zeroForOne ? state.reserve0 : state.reserve1
+        step.reserveOut = step.zeroForOne ? state.reserve1 : state.reserve0
+      }
       if (step.protocol === 'v4') {
         step.poolKey = state.poolKey
+      }
+      if (step.protocol === 'stable') {
+        step.tokens = state.tokens
+        step.balances = state.balances
+        step.precisionMultipliers = state.precisionMultipliers
+        step.A = state.A
+        step.fee = state.fee
+        step.feeDenominator = state.feeDenominator
+        step.flag = state.flag
+        step.reserveIn = state.balances?.[step.tokenInIndex]
+        step.reserveOut = state.balances?.[step.tokenOutIndex]
       }
     }
   }
@@ -935,38 +1256,87 @@ async function exactQuoteTop(tronWeb, ethers, states, opportunities, args) {
     args.exactSuccessTarget > 0 ? (args.exactMaxAttempts || opportunities.length) : args.exactTopN
   )
   if (maxAttempts <= 0) return
+  const queue = selectExactQuoteQueue(opportunities, args, maxAttempts)
 
-  const batchSize = Math.min(args.concurrency, 4, maxAttempts)
+  const batchSize = Math.min(args.concurrency, 4, queue.length)
   let attempted = 0
   let successes = 0
-  console.log(`Exact-quoting candidates: max attempts ${maxAttempts}, success target ${args.exactSuccessTarget || 'none'}`)
+  const thematic = queue.filter(opp => exactPriorityScore(opp) > 0).length
+  console.log(`Exact-quoting candidates: max attempts ${queue.length}, success target ${args.exactSuccessTarget || 'none'}, stable/v4 priority ${thematic}`)
 
   while (
-    attempted < maxAttempts &&
+    attempted < queue.length &&
     (attempted < args.exactTopN || !args.exactSuccessTarget || successes < args.exactSuccessTarget)
   ) {
-    const batch = opportunities.slice(attempted, Math.min(maxAttempts, attempted + batchSize))
+    const batch = queue.slice(attempted, Math.min(queue.length, attempted + batchSize))
     await runLimited(batch, batchSize, async opp => {
       opp.exact = await quoteOpportunityExact(tronWeb, ethers, opp, args)
       return opp
     })
     attempted += batch.length
-    successes = opportunities.slice(0, attempted).filter(isExactSuccess).length
-    const failed = opportunities.slice(0, attempted).filter(opp => opp.exact?.error).length
-    console.log(`Exact quote progress: attempts ${attempted}/${maxAttempts}, successes ${successes}, failures ${failed}`)
+    const attemptedRows = queue.slice(0, attempted)
+    successes = attemptedRows.filter(isExactSuccess).length
+    const failed = attemptedRows.filter(opp => opp.exact?.error).length
+    console.log(`Exact quote progress: attempts ${attempted}/${queue.length}, successes ${successes}, failures ${failed}`)
   }
+}
+
+function exactPriorityScore(opp) {
+  const protocols = opp.protocols || []
+  const v4Count = protocols.filter(protocol => protocol === 'v4').length
+  let score = 0
+  if (protocols.includes('stable') && v4Count >= 2) score += 100
+  else if (protocols.includes('stable') && v4Count >= 1) score += 80
+  else if (protocols.includes('stable')) score += 60
+  else if (v4Count >= 2) score += 40
+  else if (v4Count >= 1) score += 20
+  if (protocols.length <= 3) score += 5
+  return score
+}
+
+function selectExactQuoteQueue(opportunities, args, maxAttempts) {
+  const seen = new Set()
+  const queue = []
+  const add = opp => {
+    const key = `${opp?.routeKey || ''}|${opp?.spot?.amountInSun || ''}`
+    if (!opp || seen.has(key)) return
+    seen.add(key)
+    queue.push(opp)
+  }
+  const thematic = opportunities
+    .filter(opp => exactPriorityScore(opp) > 0)
+    .sort((a, b) => {
+      const priority = exactPriorityScore(b) - exactPriorityScore(a)
+      if (priority) return priority
+      return compareBigIntDesc(a.spot?.netProfitSun || 0, b.spot?.netProfitSun || 0)
+    })
+  for (const opp of thematic) {
+    if (queue.length >= maxAttempts) break
+    add(opp)
+  }
+  const topN = Math.min(opportunities.length, Math.max(args.exactTopN || 0, maxAttempts))
+  for (const opp of opportunities.slice(0, topN)) {
+    if (queue.length >= maxAttempts) break
+    add(opp)
+  }
+  for (const opp of opportunities) {
+    if (queue.length >= maxAttempts) break
+    add(opp)
+  }
+  return queue
 }
 
 function summarizePools(pools, states) {
   const byProtocol = {}
-  for (const protocol of ['v2', 'v3', 'v4']) {
+  for (const protocol of ['v1', 'v2', 'v3', 'v4', 'stable']) {
     const catalog = pools.filter(pool => pool.protocol === protocol)
     const stateRows = states.filter(pool => pool.protocol === protocol)
     byProtocol[protocol] = {
       catalogCount: catalog.length,
       stateCount: stateRows.length,
       active: stateRows.filter(pool => pool.active).length,
-      errors: stateRows.filter(pool => pool.error).length
+      errors: stateRows.filter(pool => pool.error).length,
+      inferredTokenMismatches: stateRows.filter(pool => pool.inferredTokenMismatch).length
     }
   }
   return byProtocol
@@ -1098,7 +1468,7 @@ function buildMarkdown(result) {
   lines.push('')
   lines.push('| Protocol | Catalog | Active at latest snapshot | State errors |')
   lines.push('|---|---:|---:|---:|')
-  for (const protocol of ['v2', 'v3', 'v4']) {
+  for (const protocol of ['v1', 'v2', 'v3', 'v4', 'stable']) {
     const row = result.latestSnapshot?.poolSummary?.[protocol] || result.poolSummary[protocol]
     lines.push(`| ${protocol.toUpperCase()} | ${row.catalogCount} | ${row.active} | ${row.errors} |`)
   }
@@ -1346,6 +1716,9 @@ module.exports = {
     ZERO_EVM,
     TRX_BASE58,
     WTRX_BASE58,
+    USDT_BASE58,
+    USDJ_BASE58,
+    TUSD_BASE58,
     DEFAULT_FULLNODE,
     DEFAULT_SOLIDITY,
     DEFAULT_OWNER,

@@ -9,7 +9,11 @@
     "usdt-state": "node bin/usdt-cycle-state.js",
     "simulate-all": "node bin/simulate-all-pools.js",
     "build-watch-plan": "node bin/build-watch-plan.js",
-    "monitor-focused": "node bin/monitor-focused-pools.js"
+    "monitor-focused": "node bin/monitor-focused-pools.js",
+    "uniswap-pools": "node bin/analyze-uniswap-pools.js",
+    "simulate-uniswap": "node bin/simulate-uniswap-pools.js",
+    "collect-analytics": "node bin/collect-pool-analytics.js",
+    "serve-analytics": "node bin/serve-analytics.js"
   },
   "engines": {
     "node": ">=20"

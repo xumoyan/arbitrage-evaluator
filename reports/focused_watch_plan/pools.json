@@ -1,14 +1,241 @@
 {
-  "generatedAt": "2026-06-09T01:18:13.711Z",
+  "generatedAt": "2026-06-15T09:28:32.443Z",
   "source": {
     "method": "historical-profitable-token-pairs",
-    "analysis": "/Users/zhangguanqing/Documents/work/parser/arbitrage-evaluator/reports/sample100_slow/analysis.json",
-    "csv": "/Users/zhangguanqing/Documents/work/parser/Transactions_20260608.csv",
-    "state": "/Users/zhangguanqing/Documents/work/parser/arbitrage-evaluator/reports/all_pools_final_top50/latest-state.json",
+    "analysis": "/workspace/arbitrage-evaluator/reports/sample100_slow/analysis.json",
+    "csv": "/workspace/Transactions_20260609.csv",
+    "resolved": [
+      "/workspace/transaction-parser/reports/transactions_20260609_day_container.json",
+      "/workspace/transaction-parser/reports/transactions_20260608_day_container.json"
+    ],
+    "state": "/workspace/arbitrage-evaluator/reports/all_pools_final_top50/latest-state.json",
     "v4PoolSelection": "poolKey token pair match; PoolManager address alone is not treated as a pool hit",
+    "v1PoolSelection": "resolved transaction V1 logs matched to swapExactInput v1 route legs",
     "includeTokenNeighbors": false
   },
   "pools": [
+    {
+      "protocol": "stable",
+      "kind": "old3pool",
+      "index": 0,
+      "address": "TKcEU8ekq2ZoFzLSGFYCUY6aocJBX9X31b",
+      "tokens": [
+        {
+          "tron": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT"
+        },
+        {
+          "tron": "TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4"
+        },
+        {
+          "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+        }
+      ],
+      "tokenCount": 3,
+      "flag": "0x40100",
+      "exactness": "stable-local-invariant",
+      "quoteFunction": "get_dy-or-local-invariant",
+      "watchReason": [
+        "known-stableswap-old3pool"
+      ]
+    },
+    {
+      "protocol": "v1",
+      "index": 4,
+      "address": "TSJWbBJAS8HgQCMJfY5drVwYDa7JBAm6Es",
+      "addressEvm": "0xb3289906ad9381cb2d891dff19a053181c53b99d",
+      "feePpm": 3000,
+      "exactness": "v1-reserve",
+      "token0": {
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      },
+      "inferredToken": {
+        "tron": "TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8"
+      },
+      "tokenAddressSource": "runtime-tokenAddress",
+      "watchReason": [
+        "historical-v1-route"
+      ]
+    },
+    {
+      "protocol": "v1",
+      "index": 6,
+      "address": "TPavNqt8xhoBp4NNBSdEx3FBP24NBfVRxU",
+      "addressEvm": "0x955abb8287358c929c7d371a8d034c51426743b8",
+      "feePpm": 3000,
+      "exactness": "v1-reserve",
+      "token0": {
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      },
+      "inferredToken": {
+        "tron": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4"
+      },
+      "tokenAddressSource": "runtime-tokenAddress",
+      "watchReason": [
+        "historical-v1-route"
+      ]
+    },
+    {
+      "protocol": "v1",
+      "index": 6,
+      "address": "TLLBBiX3HqVZZsUQTBXgurA3pdw317PmjM",
+      "addressEvm": "0x71a87a16a9062142da4ebc986360793064567fca",
+      "feePpm": 3000,
+      "exactness": "v1-reserve",
+      "token0": {
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      },
+      "inferredToken": {
+        "tron": "TDyvndWuvX5xTBwHPYJi7J3Yq8pq8yh62h"
+      },
+      "tokenAddressSource": "runtime-tokenAddress",
+      "watchReason": [
+        "historical-v1-route"
+      ]
+    },
+    {
+      "protocol": "v1",
+      "index": 7,
+      "address": "TUrShbxXkLHbWFqmkoHoYUvy6pJY92CQ3u",
+      "addressEvm": "0xcf22e9de15d128f86ce0279eefd3ce92b21c4c11",
+      "feePpm": 3000,
+      "exactness": "v1-reserve",
+      "token0": {
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      },
+      "inferredToken": {
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+      },
+      "tokenAddressSource": "runtime-tokenAddress",
+      "watchReason": [
+        "historical-v1-route"
+      ]
+    },
+    {
+      "protocol": "v1",
+      "index": 10,
+      "address": "TCkBkQBnSmsNXJvdn5ihPKUjUSHrjfT5xv",
+      "addressEvm": "0x1e71ec9329412fc1c0e8feb6444dfa0ab28be078",
+      "feePpm": 3000,
+      "exactness": "v1-reserve",
+      "token0": {
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      },
+      "inferredToken": {
+        "tron": "TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv"
+      },
+      "tokenAddressSource": "runtime-tokenAddress",
+      "watchReason": [
+        "historical-v1-route"
+      ]
+    },
+    {
+      "protocol": "v1",
+      "index": 10,
+      "address": "TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE",
+      "addressEvm": "0xa2726afbecbd8e936000ed684cef5e2f5cf43008",
+      "feePpm": 3000,
+      "exactness": "v1-reserve",
+      "token0": {
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      },
+      "inferredToken": {
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+      },
+      "tokenAddressSource": "runtime-tokenAddress",
+      "watchReason": [
+        "historical-v1-route"
+      ]
+    },
+    {
+      "protocol": "v1",
+      "index": 10,
+      "address": "TVrZ3PjjFGbnp44p6SGASAKrJWAUjCHmCA",
+      "addressEvm": "0xda20552b472a1ff36b84187e0d87873a1c9fe885",
+      "feePpm": 3000,
+      "exactness": "v1-reserve",
+      "token0": {
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      },
+      "inferredToken": {
+        "tron": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF"
+      },
+      "tokenAddressSource": "runtime-tokenAddress",
+      "watchReason": [
+        "historical-v1-route"
+      ]
+    },
+    {
+      "protocol": "v1",
+      "index": 10,
+      "address": "TCRjXHk5ny1NfyicmjHmCr4ssk1NjDUCqf",
+      "addressEvm": "0x1af48b5de633474aa8ff57cef35572bd63fe02dd",
+      "feePpm": 3000,
+      "exactness": "v1-reserve",
+      "token0": {
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      },
+      "inferredToken": {
+        "tron": "TD74cpU4JfMKhuWVs6uKYXKUy8nvC6EQ95"
+      },
+      "tokenAddressSource": "runtime-tokenAddress",
+      "watchReason": [
+        "historical-v1-route"
+      ]
+    },
+    {
+      "protocol": "v1",
+      "index": 11,
+      "address": "TXX1i3BWKBuTxUmTERCztGyxSSpRagEcjX",
+      "addressEvm": "0xec5e8661f8855b1724d4f668f11ab722b4b3b74d",
+      "feePpm": 3000,
+      "exactness": "v1-reserve",
+      "token0": {
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      },
+      "inferredToken": {
+        "tron": "TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8"
+      },
+      "tokenAddressSource": "runtime-tokenAddress",
+      "watchReason": [
+        "historical-v1-route"
+      ]
+    },
+    {
+      "protocol": "v1",
+      "index": 11,
+      "address": "TKAtLoCB529zusLfLVkGvLNis6okwjB7jf",
+      "addressEvm": "0x64ee8c1a2da984ba891834268db95fa544fe0938",
+      "feePpm": 3000,
+      "exactness": "v1-reserve",
+      "token0": {
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      },
+      "inferredToken": {
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+      },
+      "tokenAddressSource": "runtime-tokenAddress",
+      "watchReason": [
+        "historical-v1-route"
+      ]
+    },
+    {
+      "protocol": "v1",
+      "index": 11,
+      "address": "TYN6Wh11maRfzgG7n5B6nM5VW1jfGs9chu",
+      "addressEvm": "0xf5a6eae2fb24b0bda6288e346982fc14e094c19a",
+      "feePpm": 3000,
+      "exactness": "v1-reserve",
+      "token0": {
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb"
+      },
+      "inferredToken": {
+        "tron": "TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7"
+      },
+      "tokenAddressSource": "runtime-tokenAddress",
+      "watchReason": [
+        "historical-v1-route"
+      ]
+    },
     {
       "protocol": "v2",
       "index": 0,
@@ -30,6 +257,58 @@
       "reserve0": "141519978374365",
       "reserve1": "46305365142228",
       "blockTimestampLast": 1780931295,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 1,
+      "address": "TTdeCobmYxhfFBYUZbiQqbZ56zrFkSE5DG",
+      "addressEvm": "0xc1befb9cf01691c9e96755e070120cdf98ecf59c",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "token1": {
+        "evm": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+        "tron": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "key": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1"
+      },
+      "reserve0": "2579983557273",
+      "reserve1": "146904591946085205319918556",
+      "blockTimestampLast": 1780927938,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 2,
+      "address": "TLKyq7eJ4YKbs3TGEvoBJWkAXWYQKWo2Nn",
+      "addressEvm": "0x719eff8174cf078495a3b20514f087d1a549a0c3",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x032017411f4663b317fe77c257d28d5cd1b26e3d",
+        "tron": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+        "key": "0x032017411f4663b317fe77c257d28d5cd1b26e3d"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "reserve0": "6249722179643814954975581163955",
+      "reserve1": "1695492343495",
+      "blockTimestampLast": 1780919019,
       "active": true,
       "watchReason": [
         "historical-token-pair"
@@ -63,6 +342,58 @@
     },
     {
       "protocol": "v2",
+      "index": 17,
+      "address": "TYtVkfCdjsnaDufhrhPWYN59NThMVSgiJs",
+      "addressEvm": "0xfb66cbfefbb18364a5ca00ad7b915e7278c0211d",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x032017411f4663b317fe77c257d28d5cd1b26e3d",
+        "tron": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+        "key": "0x032017411f4663b317fe77c257d28d5cd1b26e3d"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "reserve0": "1063206880262706471456953824030",
+      "reserve1": "884765314286",
+      "blockTimestampLast": 1780927785,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 22,
+      "address": "TDq9PCXQM5RfpN14T8sc6ePYJRFecPJCut",
+      "addressEvm": "0x2a5a27b23eb88f3769ca3c227e6c25159fa1c73a",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x74472e7d35395a6b5add427eecb7f4b62ad2b071",
+        "tron": "TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7",
+        "key": "0x74472e7d35395a6b5add427eecb7f4b62ad2b071"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "reserve0": "239708706592697",
+      "reserve1": "12828941248",
+      "blockTimestampLast": 1780926462,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
       "index": 23,
       "address": "TUDo1PuMG6j4aDSg6rsCNiz5gR5cnQaNTT",
       "addressEvm": "0xc83479647bd52ebed75603368c84289cf119daef",
@@ -82,6 +413,188 @@
       "reserve0": "35507804235149321739481457",
       "reserve1": "8651615388268",
       "blockTimestampLast": 1780929243,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 35,
+      "address": "TPMVeY18uPGAgWQ1Vim3RPjMX6BoA1Q9Sk",
+      "addressEvm": "0x92d0ae8db11f026ea791874502d4e5023e092396",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x3487b63d30b5b2c87fb7ffa8bcfade38eaac1abe",
+        "tron": "TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8",
+        "key": "0x3487b63d30b5b2c87fb7ffa8bcfade38eaac1abe"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "reserve0": "7378550280",
+      "reserve1": "21248089259",
+      "blockTimestampLast": 1780930824,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 65,
+      "address": "TSBj41HqTSBvpjS7Vfrbboaa2SUVfML4EY",
+      "addressEvm": "0xb1e016d7f1b100f0751a2734576d9757279b73ec",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x032017411f4663b317fe77c257d28d5cd1b26e3d",
+        "tron": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+        "key": "0x032017411f4663b317fe77c257d28d5cd1b26e3d"
+      },
+      "token1": {
+        "evm": "0x6a6337ae47a09aea0bbd4faeb23ca94349c7b774",
+        "tron": "TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt",
+        "key": "0x6a6337ae47a09aea0bbd4faeb23ca94349c7b774"
+      },
+      "reserve0": "19212719421199506409058230",
+      "reserve1": "4451273824",
+      "blockTimestampLast": 1780912173,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 139,
+      "address": "TAQCLN5kbhRUrNDQ3AVmaiXJfchc7cEBVW",
+      "addressEvm": "0x04b9d796388e331fd9e1b21be008f0bf31206b5d",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x3487b63d30b5b2c87fb7ffa8bcfade38eaac1abe",
+        "tron": "TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8",
+        "key": "0x3487b63d30b5b2c87fb7ffa8bcfade38eaac1abe"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "reserve0": "537945807",
+      "reserve1": "503464439",
+      "blockTimestampLast": 1780930824,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 160,
+      "address": "TEPuc1nSPnsJYvWhdzgPAM33wodjF4fdet",
+      "addressEvm": "0x308c612f38b0e5525e85c1e16e71447a10d36087",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x2c036253e0c053188c621b81b7cd40a99b828400",
+        "tron": "TDyvndWuvX5xTBwHPYJi7J3Yq8pq8yh62h",
+        "key": "0x2c036253e0c053188c621b81b7cd40a99b828400"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "reserve0": "417746590667487808563",
+      "reserve1": "126752180",
+      "blockTimestampLast": 1780873203,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 174,
+      "address": "TH39qL219FayKqeFFv8hxd7tMPKdu4x6mF",
+      "addressEvm": "0x4d87e6678d3d4e914be8ea5e80e6109b4d71a1b5",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "tron": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+        "key": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "reserve0": "1566595214563591021821",
+      "reserve1": "795761415",
+      "blockTimestampLast": 1780910004,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 205,
+      "address": "TTDiSZfLFcsPYXYkakR3fiqbKmWqjtzFBx",
+      "addressEvm": "0xbd38896ecbc5553bce2be2e74decd75b151c04d3",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x84716914c0fdf7110a44030d04d0c4923504d9cc",
+        "tron": "TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9",
+        "key": "0x84716914c0fdf7110a44030d04d0c4923504d9cc"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "reserve0": "490660",
+      "reserve1": "947226543",
+      "blockTimestampLast": 1780880850,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 232,
+      "address": "TMr7LizLihDymctG2w2ezLxjZDrv9S53p6",
+      "addressEvm": "0x8249df4603b087d3bcfc25a46734c58164a2f196",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xcebde71077b830b958c8da17bcddeeb85d0bcf25",
+        "tron": "TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4",
+        "key": "0xcebde71077b830b958c8da17bcddeeb85d0bcf25"
+      },
+      "reserve0": "12933375319",
+      "reserve1": "4232549819037626965403",
+      "blockTimestampLast": 1780918893,
       "active": true,
       "watchReason": [
         "historical-token-pair"
@@ -115,6 +628,84 @@
     },
     {
       "protocol": "v2",
+      "index": 247,
+      "address": "TWNjMgKWAJtdGx5tR1fJNyK76zo1KXcruU",
+      "addressEvm": "0xdfd56c1c04f8cb05f7b37ad24f77aed25815f7cc",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x53908308f4aa220fb10d778b5d1b34489cd6edfc",
+        "tron": "THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+        "key": "0x53908308f4aa220fb10d778b5d1b34489cd6edfc"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "reserve0": "3960575752988309313",
+      "reserve1": "6759422285",
+      "blockTimestampLast": 1780927635,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 252,
+      "address": "TY7QsKavxSey2xDoQ3WZkcPLwv5LXwS8iW",
+      "addressEvm": "0xf2e0002bcc6eed8c695af52f126c214c98d8ab95",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "tron": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+        "key": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "reserve0": "50835520524109017645",
+      "reserve1": "78754584",
+      "blockTimestampLast": 1780874562,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 286,
+      "address": "TCExSvZtZ59p1feEU6TVncYuWcP9E9Qmod",
+      "addressEvm": "0x18eac20289476f6ae66e292b46737275ad89b38c",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xf142f4a51ffb850b093476d8d2b0284d1c5652f5",
+        "tron": "TXxt4T3do2drYAcp4AXMNPqzGUsRYdqh1p",
+        "key": "0xf142f4a51ffb850b093476d8d2b0284d1c5652f5"
+      },
+      "reserve0": "1964851983",
+      "reserve1": "43231694359638824474257",
+      "blockTimestampLast": 1780923165,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
       "index": 405,
       "address": "TW68dBGdy9gtk16BfzmvaCZ9pEti3KFkk2",
       "addressEvm": "0xdcb1c6012338d4f3f1bd5b288f26558ad20e6831",
@@ -134,6 +725,32 @@
       "reserve0": "66844110692992528694267496",
       "reserve1": "5315406985426",
       "blockTimestampLast": 1780929099,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 407,
+      "address": "TC1GhhC5iGFLuuUthriuUu183P8YWPmQsK",
+      "addressEvm": "0x16542c2f3fca9bf358b60329979af79883be9682",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x74472e7d35395a6b5add427eecb7f4b62ad2b071",
+        "tron": "TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7",
+        "key": "0x74472e7d35395a6b5add427eecb7f4b62ad2b071"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "reserve0": "37081986935740929",
+      "reserve1": "652446711114",
+      "blockTimestampLast": 1780931106,
       "active": true,
       "watchReason": [
         "historical-token-pair"
@@ -167,6 +784,32 @@
     },
     {
       "protocol": "v2",
+      "index": 441,
+      "address": "TR4fHizLc7xCy6v1UVdTqLxYzTW1QHCds6",
+      "addressEvm": "0xa591e8fe71f6c7f6c9c8d48fe7a308ff03b62000",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "token1": {
+        "evm": "0xcebde71077b830b958c8da17bcddeeb85d0bcf25",
+        "tron": "TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4",
+        "key": "0xcebde71077b830b958c8da17bcddeeb85d0bcf25"
+      },
+      "reserve0": "623324257189",
+      "reserve1": "624812204891301699566403",
+      "blockTimestampLast": 1780574955,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
       "index": 487,
       "address": "TDza4FbffCYvTV8SjWNmL37e8ZREg44iXg",
       "addressEvm": "0x2c227eb6c2604e25c91d3acf9ea582d796af3e94",
@@ -186,6 +829,136 @@
       "reserve0": "821160017",
       "reserve1": "1871879034064031248424",
       "blockTimestampLast": 1779254925,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 681,
+      "address": "TTQpjqQUjMJjF3MAvWWVURn3YrRxg2quTM",
+      "addressEvm": "0xbf525e9aed941e6474fd182fb73103cc32bd061a",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x84716914c0fdf7110a44030d04d0c4923504d9cc",
+        "tron": "TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9",
+        "key": "0x84716914c0fdf7110a44030d04d0c4923504d9cc"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "reserve0": "1595736223",
+      "reserve1": "1017058451122",
+      "blockTimestampLast": 1780931043,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 874,
+      "address": "TNLcz8A9hGKbTNJ6b6C1GTyigwxURbWzkM",
+      "addressEvm": "0x87ae43ed58e88ac5869d47482e73975654127da4",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x94f24e992ca04b49c6f2a2753076ef8938ed4daa",
+        "tron": "TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn",
+        "key": "0x94f24e992ca04b49c6f2a2753076ef8938ed4daa"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "reserve0": "261674646779150002728515",
+      "reserve1": "262116606256",
+      "blockTimestampLast": 1780743846,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 875,
+      "address": "TS1TcGJJxLcvhMk73L3vsnUpVzMQceMPkm",
+      "addressEvm": "0xafef09ab22c33d4025bf0b76a873bdc2ad3b2465",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x3487b63d30b5b2c87fb7ffa8bcfade38eaac1abe",
+        "tron": "TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8",
+        "key": "0x3487b63d30b5b2c87fb7ffa8bcfade38eaac1abe"
+      },
+      "token1": {
+        "evm": "0x94f24e992ca04b49c6f2a2753076ef8938ed4daa",
+        "tron": "TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn",
+        "key": "0x94f24e992ca04b49c6f2a2753076ef8938ed4daa"
+      },
+      "reserve0": "1019335678",
+      "reserve1": "956192937032704028360",
+      "blockTimestampLast": 1780929723,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 877,
+      "address": "TEjpEVwm3Xr5VHfa2CWYLqcyKZEGE9CGUz",
+      "addressEvm": "0x345037265030033d75759d4fa16454148a2f7665",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0x94f24e992ca04b49c6f2a2753076ef8938ed4daa",
+        "tron": "TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn",
+        "key": "0x94f24e992ca04b49c6f2a2753076ef8938ed4daa"
+      },
+      "reserve0": "11242434337",
+      "reserve1": "3671122784369901691421",
+      "blockTimestampLast": 1780919517,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 1073,
+      "address": "TAhicxCPWbzMd2CZKwRxvYgHTXdsbxLhic",
+      "addressEvm": "0x080a31e975eb85c0f00c38ee0926aa64d7920cbb",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x2264b4f74b35e29bbf5ec2881a9250f3c771a590",
+        "tron": "TD74cpU4JfMKhuWVs6uKYXKUy8nvC6EQ95",
+        "key": "0x2264b4f74b35e29bbf5ec2881a9250f3c771a590"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "reserve0": "125006476674149",
+      "reserve1": "3757813874",
+      "blockTimestampLast": 1780891374,
       "active": true,
       "watchReason": [
         "historical-token-pair"
@@ -219,6 +992,32 @@
     },
     {
       "protocol": "v2",
+      "index": 1221,
+      "address": "THW2KCE2rxPiusv5QzZ85ZmFKqf9JEYtWi",
+      "addressEvm": "0x529cda9e1cc17bb325d387b150972fa46a98bdd6",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x3e5fba224c32a32d88aca00a52594c06e4b5eabb",
+        "tron": "TFf1aBoNFqxN32V2NQdvNrXVyYCy9qY8p1",
+        "key": "0x3e5fba224c32a32d88aca00a52594c06e4b5eabb"
+      },
+      "token1": {
+        "evm": "0x84716914c0fdf7110a44030d04d0c4923504d9cc",
+        "tron": "TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9",
+        "key": "0x84716914c0fdf7110a44030d04d0c4923504d9cc"
+      },
+      "reserve0": "696089405661167898418123",
+      "reserve1": "24691790",
+      "blockTimestampLast": 1780930653,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
       "index": 1239,
       "address": "TUwjx2hQeSq5wyVAG4uUoKkyfXdQWg9NBd",
       "addressEvm": "0xd0236451b10679082a4a8163823db3f04c97f637",
@@ -238,6 +1037,136 @@
       "reserve0": "3145841605573506696915",
       "reserve1": "41348293724347281",
       "blockTimestampLast": 1780927782,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 1259,
+      "address": "TQNyKQSSWTyN98zd8iMXgtsmTknXfEqaFV",
+      "addressEvm": "0x9e10524ce7485a18a4e8e1ac41797bf5db8bc6a0",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x3e5fba224c32a32d88aca00a52594c06e4b5eabb",
+        "tron": "TFf1aBoNFqxN32V2NQdvNrXVyYCy9qY8p1",
+        "key": "0x3e5fba224c32a32d88aca00a52594c06e4b5eabb"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "reserve0": "17465197388904833663329",
+      "reserve1": "395175357",
+      "blockTimestampLast": 1780873179,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 4510,
+      "address": "TKvBLaRCqdnGabMWTZDi8oiYhtnFrp8DF9",
+      "addressEvm": "0x6d1e9f109251aa9ad15bc938aa1ee23896fcb97d",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x6c50dddaeca053249582d7f823bcc8299b3fb293",
+        "tron": "TKqvrVG7a2zJvQ3VysLoiz9ijuMNDehwy7",
+        "key": "0x6c50dddaeca053249582d7f823bcc8299b3fb293"
+      },
+      "token1": {
+        "evm": "0x84716914c0fdf7110a44030d04d0c4923504d9cc",
+        "tron": "TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9",
+        "key": "0x84716914c0fdf7110a44030d04d0c4923504d9cc"
+      },
+      "reserve0": "94443824893298",
+      "reserve1": "4035117",
+      "blockTimestampLast": 1780916142,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 4524,
+      "address": "TGDtUmgSKxvdtLyafcebvTTmcPu3Xcb1M2",
+      "addressEvm": "0x44978856a5e8b295d30143d004f5005f5ee7facb",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x442b9b103e18ebaae12c3fe513e5a44c9845360c",
+        "tron": "TGBfBt6Y2Dm3RHdNpZAdqywBsvfdysf834",
+        "key": "0x442b9b103e18ebaae12c3fe513e5a44c9845360c"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "reserve0": "9487746741",
+      "reserve1": "546057415",
+      "blockTimestampLast": 1780923570,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 4571,
+      "address": "TBudU1VfRcmC2i82QpcLuDMSf5eG6Gqpft",
+      "addressEvm": "0x15430281a8d63f16bb391d8cbae4d9c4dd8b4531",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x91bed8e784249c91611e61c4585c40e21fd0ace2",
+        "tron": "TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc",
+        "key": "0x91bed8e784249c91611e61c4585c40e21fd0ace2"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "reserve0": "576003846641541181",
+      "reserve1": "569666",
+      "blockTimestampLast": 1777223883,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v2",
+      "index": 4721,
+      "address": "TCd33fPbq8tCjCTUxQXsgSCNU2Wg3nGjsg",
+      "addressEvm": "0x1d17bf7d8c9f52820e203bcd327bf268f43dbcc5",
+      "factory": "TKWJdrQkqHisa1X8HUdHEfREvTzw4pMAaY",
+      "feePpm": 3000,
+      "exactness": "reserve",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xa7a572f6d8b4ca291b9353cf26580abed74f3e31",
+        "tron": "TRFe3hT5oYhjSZ6f3ji5FJ7YCfrkWnHRvh",
+        "key": "0xa7a572f6d8b4ca291b9353cf26580abed74f3e31"
+      },
+      "reserve0": "880351021027",
+      "reserve1": "169457876118278891422",
+      "blockTimestampLast": 1780930986,
       "active": true,
       "watchReason": [
         "historical-token-pair"
@@ -273,6 +1202,87 @@
     },
     {
       "protocol": "v3",
+      "index": 2,
+      "address": "TMxxHG5PRVakKwNCvTWDb73gPwXvkZAhpm",
+      "addressEvm": "0x839538a1b5e9b57c639035a453e07c9a4309f9d9",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x94f24e992ca04b49c6f2a2753076ef8938ed4daa",
+        "tron": "TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn",
+        "key": "0x94f24e992ca04b49c6f2a2753076ef8938ed4daa"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "feePpm": 100,
+      "tickSpacing": 1,
+      "liquidity": "19655943533027550912",
+      "sqrtPriceX96": "79222391857734857147566",
+      "tick": -276326,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v3",
+      "index": 3,
+      "address": "TW7pbp4pD38qv6kSaw44i4uVzthz2bBpYc",
+      "addressEvm": "0xdd038f617a057cd1ad6fa795f026265bed391a67",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "token1": {
+        "evm": "0xcebde71077b830b958c8da17bcddeeb85d0bcf25",
+        "tron": "TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4",
+        "key": "0xcebde71077b830b958c8da17bcddeeb85d0bcf25"
+      },
+      "feePpm": 100,
+      "tickSpacing": 1,
+      "liquidity": "183913334576605660868",
+      "sqrtPriceX96": "79294714575557361661536351222533910",
+      "tick": 276340,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v3",
+      "index": 9,
+      "address": "TXRBgSdqy6R9xWT1syXTp87ZbTDFqCtdSW",
+      "addressEvm": "0xeb445a91199c5cda052770d0b2855791c3fb6a20",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "token1": {
+        "evm": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+        "tron": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "key": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1"
+      },
+      "feePpm": 3000,
+      "tickSpacing": 60,
+      "liquidity": "305491001655",
+      "sqrtPriceX96": "649337693592989774381630274494310942",
+      "tick": 318398,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v3",
       "index": 12,
       "address": "TC9QmgR8MUwRCYe3kCLwH8MW2WtxiLd6AV",
       "addressEvm": "0x17de3c58e08f09b3b1d0f3d5fb163fbeb3d826cd",
@@ -293,6 +1303,33 @@
       "liquidity": "43111943706",
       "sqrtPriceX96": "45329290895297190985417373601",
       "tick": -11169,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v3",
+      "index": 20,
+      "address": "TTFc7puyspGNvKNxcdeRi1QmYgZEcia4VM",
+      "addressEvm": "0xbd94172e6fbd39c425dc42ac127e982f8482d0de",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x3487b63d30b5b2c87fb7ffa8bcfade38eaac1abe",
+        "tron": "TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8",
+        "key": "0x3487b63d30b5b2c87fb7ffa8bcfade38eaac1abe"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "feePpm": 3000,
+      "tickSpacing": 60,
+      "liquidity": "13452055",
+      "sqrtPriceX96": "106277874817895326298414264358",
+      "tick": 5874,
       "active": true,
       "watchReason": [
         "historical-token-pair"
@@ -327,6 +1364,33 @@
     },
     {
       "protocol": "v3",
+      "index": 30,
+      "address": "TDekxeNYewm1WMKmn2mAvfoV3SgKM8NrMZ",
+      "addressEvm": "0x286347020a8b4d2fcfa2afa3770c0fa09f17e390",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x74472e7d35395a6b5add427eecb7f4b62ad2b071",
+        "tron": "TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7",
+        "key": "0x74472e7d35395a6b5add427eecb7f4b62ad2b071"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "feePpm": 3000,
+      "tickSpacing": 60,
+      "liquidity": "247791957245",
+      "sqrtPriceX96": "1803124458820647596449525744",
+      "tick": -75660,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v3",
       "index": 31,
       "address": "TY1Nzu3P89TorQd41icdqWUSYDWkQAKVRb",
       "addressEvm": "0xf1bbf1c62e1d39e1dfb2b80a2f06e61796a3024f",
@@ -350,6 +1414,222 @@
       "active": true,
       "watchReason": [
         "historical-non-v4-pool",
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v3",
+      "index": 63,
+      "address": "TKNrjhpJmRMcbvjoFRV1CyKwHYiNungGPy",
+      "addressEvm": "0x673232f109660179a9f5af5363ccec5eb8c38753",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x84716914c0fdf7110a44030d04d0c4923504d9cc",
+        "tron": "TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9",
+        "key": "0x84716914c0fdf7110a44030d04d0c4923504d9cc"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "feePpm": 3000,
+      "tickSpacing": 60,
+      "liquidity": "90035643",
+      "sqrtPriceX96": "3484111721843993111389476067207",
+      "tick": 75676,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v3",
+      "index": 140,
+      "address": "TUijXw7B5q3X3d5Zaa7NBdu8pv1eMvir3n",
+      "addressEvm": "0xcdada3376494fc88ab68eb2f36ed5236610cb6f7",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x032017411f4663b317fe77c257d28d5cd1b26e3d",
+        "tron": "TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4",
+        "key": "0x032017411f4663b317fe77c257d28d5cd1b26e3d"
+      },
+      "token1": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "feePpm": 3000,
+      "tickSpacing": 60,
+      "liquidity": "376270036030664691",
+      "sqrtPriceX96": "72267969482800777579",
+      "tick": -416326,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v3",
+      "index": 199,
+      "address": "TRVMCEXvaMNd56v4my9AVf8AR79qRR5MGj",
+      "addressEvm": "0xaa3d345ad523b5e74d82f6cf7bd8149ab42aed16",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "tron": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+        "key": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "feePpm": 500,
+      "tickSpacing": 10,
+      "liquidity": "911896527475",
+      "sqrtPriceX96": "237692815761276343200988",
+      "tick": -254350,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v3",
+      "index": 212,
+      "address": "TGUZpxeGtx6sWBbeXxakaEui7iFb7RaM9z",
+      "addressEvm": "0x475e33c1203caec6fa712b39e0e6df3c82e480f6",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x91bed8e784249c91611e61c4585c40e21fd0ace2",
+        "tron": "TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc",
+        "key": "0x91bed8e784249c91611e61c4585c40e21fd0ace2"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "feePpm": 100,
+      "tickSpacing": 1,
+      "liquidity": "204351885348630028515",
+      "sqrtPriceX96": "79206347465163395212123",
+      "tick": -276330,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v3",
+      "index": 214,
+      "address": "TJn3qJRDjEyhhh5iyWZhSu1RMaH76vURgQ",
+      "addressEvm": "0x609ce73900fec65201291db4f06440e8a8f1e86d",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0x91bed8e784249c91611e61c4585c40e21fd0ace2",
+        "tron": "TPFqcBAaaUMCSVRCqPaQ9QnzKhmuoLR6Rc",
+        "key": "0x91bed8e784249c91611e61c4585c40e21fd0ace2"
+      },
+      "feePpm": 500,
+      "tickSpacing": 10,
+      "liquidity": "5955633411889643935",
+      "sqrtPriceX96": "45307914175766339462794923638952643",
+      "tick": 265146,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v3",
+      "index": 227,
+      "address": "TSc6Vfv9Sd6DbV1rVtRU1dy3dZsRNtLg6t",
+      "addressEvm": "0xb67bf8bc8be584c8e25808c186da198ec4ac6603",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18",
+        "tron": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0xa7a572f6d8b4ca291b9353cf26580abed74f3e31",
+        "tron": "TRFe3hT5oYhjSZ6f3ji5FJ7YCfrkWnHRvh",
+        "key": "0xa7a572f6d8b4ca291b9353cf26580abed74f3e31"
+      },
+      "feePpm": 3000,
+      "tickSpacing": 60,
+      "liquidity": "1485406525125422",
+      "sqrtPriceX96": "850745027963137030994511450711475",
+      "tick": 185639,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v3",
+      "index": 234,
+      "address": "TAP22WjnmhFkVUtQV8aKbGVGXuyLEghVWA",
+      "addressEvm": "0x0480d25998478752c0f82f77ff5b73361f2331d5",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x3e5fba224c32a32d88aca00a52594c06e4b5eabb",
+        "tron": "TFf1aBoNFqxN32V2NQdvNrXVyYCy9qY8p1",
+        "key": "0x3e5fba224c32a32d88aca00a52594c06e4b5eabb"
+      },
+      "token1": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "feePpm": 3000,
+      "tickSpacing": 60,
+      "liquidity": "108074856242469787",
+      "sqrtPriceX96": "11904287652451726441535",
+      "tick": -314235,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v3",
+      "index": 235,
+      "address": "TZES9XDa2a6QYUkwX5VQdFfVXrGWJA3f6s",
+      "addressEvm": "0xff2c1b29d3ba03d2a9455fc0b16266d0833d4a40",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x3e5fba224c32a32d88aca00a52594c06e4b5eabb",
+        "tron": "TFf1aBoNFqxN32V2NQdvNrXVyYCy9qY8p1",
+        "key": "0x3e5fba224c32a32d88aca00a52594c06e4b5eabb"
+      },
+      "token1": {
+        "evm": "0x84716914c0fdf7110a44030d04d0c4923504d9cc",
+        "tron": "TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9",
+        "key": "0x84716914c0fdf7110a44030d04d0c4923504d9cc"
+      },
+      "feePpm": 10000,
+      "tickSpacing": 200,
+      "liquidity": "3995314367766281",
+      "sqrtPriceX96": "473922646715669858733",
+      "tick": -378711,
+      "active": true,
+      "watchReason": [
         "historical-token-pair"
       ]
     },
@@ -411,6 +1691,33 @@
     },
     {
       "protocol": "v3",
+      "index": 278,
+      "address": "TDvGaAn29mHna9b4yrdvX2hivitYUkWTh5",
+      "addressEvm": "0x2b523c6e7875d89318a82e47d08d6f05e9bcb2fa",
+      "factory": "TThJt8zaJzJMhCEScH7zWKnp5buVZqys9x",
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "token1": {
+        "evm": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+        "tron": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "key": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1"
+      },
+      "feePpm": 500,
+      "tickSpacing": 10,
+      "liquidity": "810495034278822",
+      "sqrtPriceX96": "596813404980140608964457441476673754",
+      "tick": 316711,
+      "active": true,
+      "watchReason": [
+        "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v3",
       "index": 288,
       "address": "TH2ZK1sca1V27cCPN5feKZ9ZfEFG4vg7HU",
       "addressEvm": "0x4d6b14fc2f0747944d9e7cf444bc78457c2ca46f",
@@ -435,6 +1742,82 @@
       "watchReason": [
         "historical-non-v4-pool",
         "historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v4",
+      "index": 0,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0x5d998d14c22d3962d44013c8c28433779fdd4b4242c62296ea1cd8d456b145a6",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 3000,
+        "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+      },
+      "tickSpacing": 60,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "tron": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+        "key": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e"
+      },
+      "feePpm": 3000,
+      "configuredFeePpm": 3000,
+      "protocolFee": 0,
+      "liquidity": "4659169516979",
+      "sqrtPriceX96": "63056043557920792518730723912809873",
+      "tick": 271757,
+      "active": true,
+      "watchReason": [
+        "v4-poolkey-historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v4",
+      "index": 2,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0x780ff1ce730b2f2182278f2249600d9f8001e16a87fa0419f9e127f85dd71b8c",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "hooks": "0x5eedd79bbea73a4ce8071ecabbb052a5f87e0acb",
+        "fee": 8388608,
+        "parameters": "0x00000000000000000000000000000000000000000000000000000000003c00c2"
+      },
+      "tickSpacing": 60,
+      "hookFlags": 194,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "tron": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+        "key": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e"
+      },
+      "feePpm": 500,
+      "configuredFeePpm": 8388608,
+      "protocolFee": 0,
+      "liquidity": "832425294215",
+      "sqrtPriceX96": "63822303844953467027935691327250063",
+      "tick": 271999,
+      "active": true,
+      "watchReason": [
+        "v4-poolkey-historical-token-pair"
       ]
     },
     {
@@ -508,6 +1891,44 @@
       "liquidity": "25511174522",
       "sqrtPriceX96": "45332803544641168817526300079",
       "tick": -11167,
+      "active": true,
+      "watchReason": [
+        "v4-poolkey-historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v4",
+      "index": 12,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0x9d4d21a1d77648ec7fc5c23123311f941e921c1cbc093d1852d52e4a36f2bc27",
+      "poolKey": {
+        "currency0": "0x0000000000000000000000000000000000000000",
+        "currency1": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 10000,
+        "parameters": "0x00000000000000000000000000000000000000000000000000000000003c0000"
+      },
+      "tickSpacing": 60,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0x0000000000000000000000000000000000000000",
+        "tron": "T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb",
+        "key": "0x891cdb91d149f23b1a45d9c5ca78a88d0cb44c18"
+      },
+      "token1": {
+        "evm": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e",
+        "tron": "TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+        "key": "0x834295921a488d9d42b4b3021ed1a3c39fb0f03e"
+      },
+      "feePpm": 10000,
+      "configuredFeePpm": 10000,
+      "protocolFee": 0,
+      "liquidity": "2226400632831",
+      "sqrtPriceX96": "63664222471946129957447741831680486",
+      "tick": 271949,
       "active": true,
       "watchReason": [
         "v4-poolkey-historical-token-pair"
@@ -698,6 +2119,82 @@
       "liquidity": "868932",
       "sqrtPriceX96": "45437695120420492827157646639",
       "tick": -11121,
+      "active": true,
+      "watchReason": [
+        "v4-poolkey-historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v4",
+      "index": 24,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0xf0ce11cb0dc0941a7732c6d0a8509ca12ae4ba966480b61c126e88aa1897fed4",
+      "poolKey": {
+        "currency0": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 3000,
+        "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+      },
+      "tickSpacing": 1,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "token1": {
+        "evm": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+        "tron": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "key": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1"
+      },
+      "feePpm": 3000,
+      "configuredFeePpm": 3000,
+      "protocolFee": 0,
+      "liquidity": "216909342082",
+      "sqrtPriceX96": "548784998181678073230888126812545059",
+      "tick": 315033,
+      "active": true,
+      "watchReason": [
+        "v4-poolkey-historical-token-pair"
+      ]
+    },
+    {
+      "protocol": "v4",
+      "index": 39,
+      "address": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "addressEvm": "0xd8de75898a30b097da826464e932934a512c7be3",
+      "poolManager": "TVjuTE3V5bMVdpfNhid8kD2v35T2k1u1Br",
+      "poolId": "0x118d873cd2186eba78a2764151359c16fc5328900dc270274a8446a1d99076a8",
+      "poolKey": {
+        "currency0": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "currency1": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+        "hooks": "0x0000000000000000000000000000000000000000",
+        "fee": 10000,
+        "parameters": "0x0000000000000000000000000000000000000000000000000000000000010000"
+      },
+      "tickSpacing": 1,
+      "hookFlags": 0,
+      "exactness": "slot0-liquidity",
+      "token0": {
+        "evm": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c",
+        "tron": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "key": "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+      },
+      "token1": {
+        "evm": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1",
+        "tron": "TSSMHYeV2uE9qYH95DqyoCuNCzEL1NvU3S",
+        "key": "0xb4a428ab7092c2f1395f376ce297033b3bb446c1"
+      },
+      "feePpm": 10000,
+      "configuredFeePpm": 10000,
+      "protocolFee": 0,
+      "liquidity": "431982076997",
+      "sqrtPriceX96": "552532667085007054894058652472708852",
+      "tick": 315169,
       "active": true,
       "watchReason": [
         "v4-poolkey-historical-token-pair"
