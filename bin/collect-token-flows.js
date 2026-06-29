@@ -1,0 +1,136 @@
+#!/usr/bin/env node
+'use strict'
+
+// Incremental Uniswap token-flow collector. Reads swap edges from ClickHouse,
+// values each edge via its anchor leg, and upserts per-token USD inflow/outflow
+// into Postgres (hourly + daily) plus a tokens directory. Fixed start at
+// FLOW_START_ISO (defaults to BACKFILL_START_ISO); no rolling prune.
+//
+//   node bin/collect-token-flows.js [--start-iso ISO] [--batch-hours 24] [--once|--loop]
+
+const { query, buildEdgeQuery, toChDateTime } = require('./lib/clickhouse')
+const { pivotEdges } = require('./lib/flow-aggregate')
+const store = require('./lib/flow-store')
+
+const HOUR_MS = 3600 * 1000
+const DAY_MS = 24 * HOUR_MS
+
+function parseArgs(argv) {
+  const a = {
+    chainId: Number(process.env.FLOW_CHAIN_ID || 1),
+    startIso: process.env.FLOW_START_ISO || process.env.BACKFILL_START_ISO || '2026-01-01T00:00:00Z',
+    endIso: '',
+    batchHours: 24,
+    maxHours: 0,     // 0 = unlimited
+    loop: false
+  }
+  for (let i = 0; i < argv.length; i++) {
+    const v = argv[i]
+    if (v === '--start-iso') a.startIso = argv[++i]
+    else if (v === '--end-iso') a.endIso = argv[++i]
+    else if (v === '--batch-hours') a.batchHours = Number(argv[++i])
+    else if (v === '--max-hours') a.maxHours = Number(argv[++i])
+    else if (v === '--chain-id') a.chainId = Number(argv[++i])
+    else if (v === '--loop') a.loop = true
+    else if (v === '--once') a.loop = false
+  }
+  return a
+}
+
+function floorToHour(ms) { return ms - (ms % HOUR_MS) }
+function floorToDayIso(ms) { return new Date(ms - (ms % DAY_MS)).toISOString() }
+const sleep = (ms) => new Promise(r => setTimeout(r, ms))
+
+// Process one [batchStart, batchEnd) window: one ClickHouse query, then per-hour
+// pricing/pivot/upsert. Returns { lastHourMs, touchedDays:Set, tokenTotal:number }.
+async function processBatch(pool, args, batchStartMs, batchEndMs) {
+  const floorCh = toChDateTime(new Date(batchStartMs))
+  const ceilCh = toChDateTime(new Date(batchEndMs))
+  const rows = await query(buildEdgeQuery(floorCh, ceilCh))
+
+  // Group edge rows by hour. ClickHouse returns hour as 'YYYY-MM-DD HH:MM:SS'.
+  const byHour = new Map()
+  for (const r of rows) {
+    const hourMs = new Date(r.hour.replace(' ', 'T') + 'Z').getTime()
+    if (!byHour.has(hourMs)) byHour.set(hourMs, [])
+    byHour.get(hourMs).push({
+      token_in: r.token_in, token_out: r.token_out,
+      amount_in: Number(r.amount_in), amount_out: Number(r.amount_out), swaps: Number(r.swaps)
+    })
+  }
+
+  const touchedDays = new Set()
+  let lastHourMs = batchStartMs
+  let tokenTotal = 0
+  // Walk every hour in the window so empty hours still advance the watermark.
+  for (let h = batchStartMs; h < batchEndMs; h += HOUR_MS) {
+    const hourIso = new Date(h).toISOString()
+    const edges = byHour.get(h) || []
+    if (edges.length > 0) {
+      const priceAt = await store.loadAnchorPrices(pool, hourIso)
+      const byToken = pivotEdges(edges, priceAt)
+      tokenTotal += await store.upsertHourly(pool, args.chainId, hourIso, byToken)
+      await store.upsertTokens(pool, args.chainId, byToken, hourIso)
+      touchedDays.add(floorToDayIso(h))
+    }
+    lastHourMs = h
+  }
+  return { lastHourMs, touchedDays, tokenTotal }
+}
+
+async function runOnce(pool, args) {
+  const state = await store.getState(pool, args.chainId)
+  const startFloorMs = floorToHour(new Date(args.startIso).getTime())
+  // Resume from the hour after the last processed one, else from the fixed floor.
+  let cursor = state && state.last_processed_hour
+    ? new Date(state.last_processed_hour).getTime() + HOUR_MS
+    : startFloorMs
+
+  // Only process complete hours: stop before the current partial hour (or --end-iso).
+  const ceil = args.endIso ? floorToHour(new Date(args.endIso).getTime()) : floorToHour(Date.now())
+  if (cursor >= ceil) { console.log('Up to date — nothing to process.'); return 0 }
+
+  let hoursDone = 0
+  let processed = 0
+  while (cursor < ceil) {
+    let batchEnd = Math.min(cursor + args.batchHours * HOUR_MS, ceil)
+    if (args.maxHours && processed + (batchEnd - cursor) / HOUR_MS > args.maxHours) {
+      batchEnd = cursor + (args.maxHours - processed) * HOUR_MS
+    }
+    const { lastHourMs, touchedDays, tokenTotal } = await processBatch(pool, args, cursor, batchEnd)
+    for (const dayIso of touchedDays) await store.rollupDaily(pool, args.chainId, dayIso)
+
+    hoursDone += (batchEnd - cursor) / HOUR_MS
+    await store.advanceState(pool, args.chainId, new Date(lastHourMs).toISOString(),
+      new Date(startFloorMs).toISOString(), { hours: hoursDone, tokens: tokenTotal })
+
+    console.log(`Processed ${toChDateTime(new Date(cursor))} → ${toChDateTime(new Date(batchEnd))} ` +
+      `(${tokenTotal} token-rows, ${touchedDays.size} days)`)
+
+    processed += (batchEnd - cursor) / HOUR_MS
+    cursor = batchEnd
+    if (args.maxHours && processed >= args.maxHours) break
+  }
+  return hoursDone
+}
+
+async function main() {
+  const args = parseArgs(process.argv.slice(2))
+  if (!Number.isFinite(new Date(args.startIso).getTime())) {
+    console.error(`Invalid --start-iso: ${args.startIso}`); process.exit(1)
+  }
+  const { pool } = store.connect()
+  try {
+    do {
+      await runOnce(pool, args)
+      if (args.loop) { console.log('Sleeping 3600s...'); await sleep(3600 * 1000) }
+    } while (args.loop)
+  } catch (e) {
+    console.error('Collector error:', e.message)
+    process.exitCode = 1
+  } finally {
+    await pool.end()
+  }
+}
+
+main()

@@ -22,8 +22,9 @@ function buildPgUrl() {
 function connect() {
   const schema = process.env.PG_SCHEMA || 'pool_analytics'
   const pg = loadPg()
-  const pool = new pg.Pool({ connectionString: buildPgUrl() })
-  pool.on('connect', c => c.query(`SET search_path TO ${schema}`))
+  // Set search_path at connection startup (via libpq `options`) rather than an
+  // event handler — avoids racing the first query on a freshly-acquired client.
+  const pool = new pg.Pool({ connectionString: buildPgUrl(), options: `-c search_path=${schema}` })
   return { pool, schema }
 }
 
