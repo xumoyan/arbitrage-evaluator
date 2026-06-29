@@ -13,7 +13,11 @@
     "uniswap-pools": "node bin/analyze-uniswap-pools.js",
     "simulate-uniswap": "node bin/simulate-uniswap-pools.js",
     "collect-analytics": "node bin/collect-pool-analytics.js",
-    "serve-analytics": "node bin/serve-analytics.js"
+    "load-prices": "node bin/load-binance-prices.js",
+    "backfill": "node bin/backfill-pool-analytics.js",
+    "serve-analytics": "node bin/serve-analytics.js",
+    "collect-flows": "node bin/collect-token-flows.js",
+    "test": "node --test 'test/**/*.test.js'"
   },
   "engines": {
     "node": ">=20"
