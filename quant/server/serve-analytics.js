@@ -584,6 +584,54 @@ async function handleApiRequest(pathname, searchParams, pgPool, res) {
     })
   }
 
+  // ── lending / liquidation ────────────────────────────────────────────────
+  if (pathname === '/api/lending/summary') {
+    const chain = searchParams.get('chain') || ''
+    const from = searchParams.get('from') || ''
+    const to = searchParams.get('to') || ''
+    const where = ["1=1"]
+    const params = []
+    let i = 1
+    if (chain) { where.push(`chain = $${i++}`); params.push(chain) }
+    if (from) { where.push(`block_time >= $${i++}`); params.push(from) }
+    if (to) { where.push(`block_time <= $${i++}`); params.push(to) }
+    const r = await pgPool.query(`
+      SELECT date_trunc('day', block_time) AS day, chain, protocol, action,
+             COUNT(*) AS events, SUM(amount_usd) AS usd
+      FROM lending_events
+      WHERE ${where.join(' AND ')}
+      GROUP BY 1, 2, 3, 4 ORDER BY 1 ASC
+    `, params)
+    return jsonResponse(res, {
+      count: r.rows.length,
+      points: r.rows.map(x => ({
+        day: x.day, chain: x.chain, protocol: x.protocol, action: x.action,
+        events: Number(x.events), usd: x.usd == null ? null : Number(x.usd)
+      }))
+    })
+  }
+
+  if (pathname === '/api/lending/liquidations') {
+    const chain = searchParams.get('chain') || ''
+    const limit = Math.min(Math.max(Number(searchParams.get('limit') || '100'), 1), 1000)
+    const where = ["action = 'liquidation'"]
+    const params = []
+    let i = 1
+    if (chain) { where.push(`chain = $${i++}`); params.push(chain) }
+    const from = searchParams.get('from') || ''
+    const to = searchParams.get('to') || ''
+    if (from) { where.push(`block_time >= $${i++}`); params.push(from) }
+    if (to) { where.push(`block_time <= $${i++}`); params.push(to) }
+    const r = await pgPool.query(`
+      SELECT chain, protocol, tx_hash, block_time, user_address, liquidator,
+             asset, asset_symbol, amount_usd, collateral_asset, debt_to_cover, collateral_amount
+      FROM lending_events
+      WHERE ${where.join(' AND ')}
+      ORDER BY block_time DESC LIMIT $${i}
+    `, [...params, limit])
+    return jsonResponse(res, { count: r.rows.length, liquidations: r.rows })
+  }
+
   // ── strategy simulation (backtest + paper trading) ──────────────────────
   if (pathname === '/api/strategy/runs') {
     const r = await pgPool.query(`

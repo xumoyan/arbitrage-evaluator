@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lending</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Fira+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark"></span>
+      <h1>Lending</h1>
+    </div>
+    <nav class="nav">
+      <a href="/">Pools</a>
+      <a href="/flows.html">Token Flows</a>
+      <a href="/stake.html">Staking</a>
+      <a href="/lending.html" class="active">Lending</a>
+      <a href="/strategy.html">Strategy</a>
+    </nav>
+    <div class="topbar-right">
+      <span id="status" class="status">
+        <span class="status-dot"></span><span class="status-text">Connecting</span>
+      </span>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="toolbar">
+      <div class="segmented" id="chain-picker">
+        <button data-chain="" class="active">All</button>
+        <button data-chain="eth">ETH · AAVE</button>
+        <button data-chain="tron">TRON · JustLend</button>
+      </div>
+      <div class="segmented time-range">
+        <button data-range="7">7D</button>
+        <button data-range="30" class="active">30D</button>
+        <button data-range="90">90D</button>
+        <button data-range="0">All</button>
+      </div>
+    </section>
+
+    <section class="kpi-row">
+      <div class="kpi-card">
+        <span class="kpi-label">Borrowed</span>
+        <span class="kpi-value" id="kpi-borrow">—</span>
+        <span class="kpi-sub" id="kpi-borrow-n">—</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Repaid</span>
+        <span class="kpi-value" id="kpi-repay">—</span>
+        <span class="kpi-sub" id="kpi-repay-n">—</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Supplied / Withdrawn</span>
+        <span class="kpi-value" id="kpi-supply">—</span>
+        <span class="kpi-sub" id="kpi-withdraw">—</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Liquidations</span>
+        <span class="kpi-value" id="kpi-liq" style="color:var(--danger)">—</span>
+        <span class="kpi-sub" id="kpi-liq-usd">—</span>
+      </div>
+    </section>
+
+    <section class="card chart-card">
+      <div class="card-head">
+        <h3>Daily lending flow <span class="muted">— USD (priced assets only)</span></h3>
+      </div>
+      <div class="chart-wrap tall"><canvas id="lending-chart"></canvas></div>
+    </section>
+
+    <section class="card table-card">
+      <div class="card-head"><h3>Liquidations <span class="muted">— newest first</span></h3></div>
+      <div class="table-scroll">
+        <table id="liq-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Chain</th>
+              <th>Borrower</th>
+              <th>Liquidator</th>
+              <th>Debt asset</th>
+              <th class="num">Debt covered (USD)</th>
+              <th>Tx</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/lending.js"></script>
+</body>
+</html>
