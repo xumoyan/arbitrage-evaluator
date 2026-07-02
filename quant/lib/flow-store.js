@@ -164,6 +164,19 @@ async function advanceState(pool, chainId, lastHourIso, startFloorIso, totals = 
   `, [chainId, lastHourIso, startFloorIso, totals.hours ?? null, totals.tokens ?? null])
 }
 
+// Extend coverage backward: lower start_floor without touching the forward
+// watermark (used by --backfill).
+async function lowerStartFloor(pool, chainId, floorIso) {
+  await pool.query(`
+    INSERT INTO flow_collector_state (chain_id, start_floor, updated_at)
+    VALUES ($1, $2::timestamptz, NOW())
+    ON CONFLICT (chain_id) DO UPDATE SET
+      start_floor = LEAST(flow_collector_state.start_floor, EXCLUDED.start_floor),
+      updated_at = NOW()
+  `, [chainId, floorIso])
+}
+
 module.exports = {
-  connect, getState, loadAnchorPrices, upsertHourly, upsertTokens, rollupDaily, advanceState, buildPgUrl
+  connect, getState, loadAnchorPrices, upsertHourly, upsertTokens, rollupDaily, advanceState, buildPgUrl,
+  lowerStartFloor
 }

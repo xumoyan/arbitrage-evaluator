@@ -33,6 +33,7 @@ function parseArgs(argv) {
     else if (v === '--chain-id') a.chainId = Number(argv[++i])
     else if (v === '--loop') a.loop = true
     else if (v === '--once') a.loop = false
+    else if (v === '--backfill') a.backfill = true
   }
   return a
 }
@@ -40,6 +41,18 @@ function parseArgs(argv) {
 function floorToHour(ms) { return ms - (ms % HOUR_MS) }
 function floorToDayIso(ms) { return new Date(ms - (ms % DAY_MS)).toISOString() }
 const sleep = (ms) => new Promise(r => setTimeout(r, ms))
+
+// Retry transient ClickHouse/network failures so multi-year backfills survive
+// a blip instead of dying mid-run.
+async function withRetry(fn, label, attempts = 4) {
+  for (let i = 1; ; i++) {
+    try { return await fn() } catch (err) {
+      if (i >= attempts) throw err
+      console.warn(`${label} failed (${err.message}), retry ${i}/${attempts - 1} in ${10 * i}s`)
+      await sleep(10 * i * 1000)
+    }
+  }
+}
 
 // Process one [batchStart, batchEnd) window: one ClickHouse query, then per-hour
 // pricing/pivot/upsert. Returns { lastHourMs, touchedDays:Set, tokenTotal:number }.
@@ -81,6 +94,35 @@ async function processBatch(pool, args, batchStartMs, batchEndMs) {
 async function runOnce(pool, args) {
   const state = await store.getState(pool, args.chainId)
   const startFloorMs = floorToHour(new Date(args.startIso).getTime())
+
+  // --backfill: extend history BEFORE the existing start_floor. Processes
+  // [--start-iso, --end-iso || current start_floor) without touching the
+  // forward watermark; upserts are idempotent so interrupt + rerun is safe
+  // (rerun with a later --start-iso to resume where the log left off).
+  if (args.backfill) {
+    const floorEnd = args.endIso
+      ? floorToHour(new Date(args.endIso).getTime())
+      : (state && state.start_floor ? floorToHour(new Date(state.start_floor).getTime()) : null)
+    if (!floorEnd) { console.error('--backfill needs --end-iso (no existing start_floor to fill up to)'); process.exit(1) }
+    if (startFloorMs >= floorEnd) { console.log('Backfill window is empty — nothing to process.'); return 0 }
+    await store.lowerStartFloor(pool, args.chainId, new Date(startFloorMs).toISOString())
+    let cursor = startFloorMs
+    let hoursDone = 0
+    while (cursor < floorEnd) {
+      const batchEnd = Math.min(cursor + args.batchHours * HOUR_MS, floorEnd)
+      const start = cursor
+      const { touchedDays, tokenTotal } = await withRetry(
+        () => processBatch(pool, args, start, batchEnd), `backfill ${toChDateTime(new Date(start))}`)
+      for (const dayIso of touchedDays) await store.rollupDaily(pool, args.chainId, dayIso)
+      hoursDone += (batchEnd - cursor) / HOUR_MS
+      console.log(`Backfilled ${toChDateTime(new Date(cursor))} → ${toChDateTime(new Date(batchEnd))} ` +
+        `(${tokenTotal} token-rows, ${touchedDays.size} days)`)
+      cursor = batchEnd
+      if (args.maxHours && hoursDone >= args.maxHours) break
+    }
+    return hoursDone
+  }
+
   // Resume from the hour after the last processed one, else from the fixed floor.
   let cursor = state && state.last_processed_hour
     ? new Date(state.last_processed_hour).getTime() + HOUR_MS

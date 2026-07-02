@@ -20,6 +20,7 @@
     "collect-flows": "node quant/collectors/collect-token-flows.js",
     "enrich-tokens": "node quant/collectors/enrich-tokens.js",
     "strategy": "node quant/strategy/flow-momentum.js",
+    "collect-swap-details": "node quant/collectors/collect-swap-details.js",
     "test": "node --test 'test/**/*.test.js'"
   },
   "engines": {
