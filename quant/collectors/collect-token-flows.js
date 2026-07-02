@@ -6,11 +6,11 @@
 // into Postgres (hourly + daily) plus a tokens directory. Fixed start at
 // FLOW_START_ISO (defaults to BACKFILL_START_ISO); no rolling prune.
 //
-//   node bin/collect-token-flows.js [--start-iso ISO] [--batch-hours 24] [--once|--loop]
+//   node quant/collectors/collect-token-flows.js [--start-iso ISO] [--batch-hours 24] [--once|--loop]
 
-const { query, buildEdgeQuery, toChDateTime } = require('./lib/clickhouse')
-const { pivotEdges } = require('./lib/flow-aggregate')
-const store = require('./lib/flow-store')
+const { query, buildEdgeQuery, toChDateTime } = require('../lib/clickhouse')
+const { pivotEdges } = require('../lib/flow-aggregate')
+const store = require('../lib/flow-store')
 
 const HOUR_MS = 3600 * 1000
 const DAY_MS = 24 * HOUR_MS

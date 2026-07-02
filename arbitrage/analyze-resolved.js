@@ -52,7 +52,7 @@ function parseArgs(argv) {
 function printHelp() {
   console.log(`
 Usage:
-  node bin/analyze-resolved.js --input <resolved-json> [options]
+  node arbitrage/analyze-resolved.js --input <resolved-json> [options]
 
 Options:
   --input <json>                 JSON produced by transaction-parser/scripts/resolve_tron_txs.js.

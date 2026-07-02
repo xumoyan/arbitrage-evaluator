@@ -7,7 +7,7 @@ const {
   groupStakeRows,
   transactionsToCsv,
   utcDateKey
-} = require('../bin/lib/stake-history')
+} = require('../quant/lib/stake-history')
 
 test('utc helpers build inclusive day keys', () => {
   assert.equal(utcDateKey('2026-01-01T23:59:59+08:00'), '2026-01-01')

@@ -4,16 +4,16 @@
 const http = require('http')
 const fs = require('fs')
 const path = require('path')
-const { query: chQuery, buildTokenTxQuery, toChDateTime } = require('./lib/clickhouse')
-const { WETH: WETH_ADDR } = require('./lib/flow-anchors')
+const { query: chQuery, buildTokenTxQuery, toChDateTime } = require('../lib/clickhouse')
+const { WETH: WETH_ADDR } = require('../lib/flow-anchors')
 const {
   queryStakeChart,
   queryStakeGroups,
   queryStakeTransactions,
   transactionsToCsv
-} = require('./lib/stake-history')
+} = require('../lib/stake-history')
 
-const DEFAULT_PARSER_ROOT = path.resolve(__dirname, '..', '..', 'transaction-parser')
+const DEFAULT_PARSER_ROOT = path.resolve(__dirname, '..', '..', '..', 'transaction-parser')
 
 function buildPgUrl() {
   if (process.env.PG_URL || process.env.DATABASE_URL) return process.env.PG_URL || process.env.DATABASE_URL
@@ -30,7 +30,7 @@ function parseArgs(argv) {
     port: Number(process.env.ANALYTICS_PORT) || 3000,
     pgUrl: buildPgUrl(),
     pgSchema: process.env.PG_SCHEMA || 'pool_analytics',
-    staticDir: path.resolve(__dirname, '..', 'public'),
+    staticDir: path.resolve(__dirname, '..', '..', 'public'),
     parserRoot: DEFAULT_PARSER_ROOT
   }
   for (let i = 0; i < argv.length; i++) {
@@ -48,7 +48,7 @@ function parseArgs(argv) {
 
 function printHelp() {
   console.log(`
-Usage: node bin/serve-analytics.js [options]
+Usage: node quant/server/serve-analytics.js [options]
 
 Serves pool analytics data from PostgreSQL and a frontend dashboard.
 

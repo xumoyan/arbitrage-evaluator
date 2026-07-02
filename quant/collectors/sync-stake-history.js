@@ -13,9 +13,9 @@ const {
   utcDateKey,
   utcDayEnd,
   utcDayStart
-} = require('./lib/stake-history')
+} = require('../lib/stake-history')
 
-const DEFAULT_PARSER_ROOT = path.resolve(__dirname, '..', '..', 'transaction-parser')
+const DEFAULT_PARSER_ROOT = path.resolve(__dirname, '..', '..', '..', 'transaction-parser')
 const BATCH_SIZE = 500
 
 function buildPgUrl() {
@@ -75,7 +75,7 @@ function parseArgs(argv) {
 
 function printHelp() {
   console.log(`
-Usage: node bin/sync-stake-history.js [options]
+Usage: node quant/collectors/sync-stake-history.js [options]
 
 Synchronizes ETH/TRON staking daily metrics and raw details from chaincloud-fe's
 unstake database into the local analytics PostgreSQL schema.
@@ -100,7 +100,7 @@ function quoteIdent(value) {
 
 async function ensureSchema(targetPool, schema) {
   const schemaName = quoteIdent(schema)
-  let sql = fs.readFileSync(path.resolve(__dirname, '..', 'db', 'stake-schema.sql'), 'utf8')
+  let sql = fs.readFileSync(path.resolve(__dirname, '..', '..', 'db', 'stake-schema.sql'), 'utf8')
   sql = sql.replace(/pool_analytics/g, schemaName)
   await targetPool.query(sql)
 }

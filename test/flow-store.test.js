@@ -4,9 +4,9 @@ const assert = require('node:assert')
 
 // Integration: requires Postgres with db/flow-schema.sql applied. Opt-in via FLOW_IT=1.
 const RUN = process.env.FLOW_IT === '1'
-const { WETH } = require('../bin/lib/flow-anchors')
-const { pivotEdges } = require('../bin/lib/flow-aggregate')
-const store = require('../bin/lib/flow-store')
+const { WETH } = require('../quant/lib/flow-anchors')
+const { pivotEdges } = require('../quant/lib/flow-aggregate')
+const store = require('../quant/lib/flow-store')
 
 const PEPE = '0x6982508145454ce325ddbe47a25d4ec3d2311933'
 const HOUR = '2020-01-01T00:00:00.000Z'   // a test hour far from real data

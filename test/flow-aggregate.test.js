@@ -1,8 +1,8 @@
 'use strict'
 const test = require('node:test')
 const assert = require('node:assert')
-const { WETH } = require('../bin/lib/flow-anchors')
-const { edgeUsd, pivotEdges } = require('../bin/lib/flow-aggregate')
+const { WETH } = require('../quant/lib/flow-anchors')
+const { edgeUsd, pivotEdges } = require('../quant/lib/flow-aggregate')
 
 const USDC = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
 const PEPE = '0x6982508145454ce325ddbe47a25d4ec3d2311933'

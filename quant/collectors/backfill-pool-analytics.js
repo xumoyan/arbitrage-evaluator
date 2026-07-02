@@ -13,7 +13,7 @@
 const path = require('path')
 const { spawnSync } = require('child_process')
 
-const DEFAULT_PARSER_ROOT = path.resolve(__dirname, '..', '..', 'transaction-parser')
+const DEFAULT_PARSER_ROOT = path.resolve(__dirname, '..', '..', '..', 'transaction-parser')
 
 function parseArgs(argv) {
   const args = {
@@ -43,7 +43,7 @@ function parseArgs(argv) {
 
 function printHelp() {
   console.log(`
-Usage: node bin/backfill-pool-analytics.js [options] [-- <collector args>]
+Usage: node quant/collectors/backfill-pool-analytics.js [options] [-- <collector args>]
 
 Backfills hourly pool analytics from a start timestamp to chain head in
 hour-aligned windows, calling collect-pool-analytics.js per window.
@@ -60,7 +60,7 @@ Options:
 }
 
 function loadEthers(parserRoot) {
-  const sim = require(path.resolve(__dirname, 'simulate-uniswap-pools.js'))
+  const sim = require(path.resolve(__dirname, '..', '..', 'arbitrage', 'simulate-uniswap-pools.js'))
   return sim.loadEthers(parserRoot)
 }
 

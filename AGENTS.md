@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-This is a Node.js CommonJS project for TRON/SunSwap and EVM/Uniswap arbitrage analysis. Executable scripts live in `bin/`; shared helpers are in `bin/lib/`. Database schemas are in `db/`, browser-facing analytics files are in `public/`, and automated tests are in `test/`. Generated analysis output belongs under `reports/` and should not be treated as source. The project also depends on a sibling `../transaction-parser` checkout for TRON parsing utilities unless a script is given another `--parser-root`.
+This is a Node.js CommonJS project split into two domains: `arbitrage/` holds the TRON/SunSwap and EVM/Uniswap arbitrage scripts (on-chain profit models), and `quant/` holds the quant-data side — collectors in `quant/collectors/`, shared helpers in `quant/lib/`, strategy engines in `quant/strategy/`, and the analytics HTTP server in `quant/server/`. Database schemas are in `db/`, browser-facing analytics files are in `public/`, and automated tests are in `test/`. Generated analysis output belongs under `reports/` and should not be treated as source. The project also depends on a sibling `../transaction-parser` checkout for TRON parsing utilities unless a script is given another `--parser-root`.
 
 ## Build, Test, and Development Commands
 

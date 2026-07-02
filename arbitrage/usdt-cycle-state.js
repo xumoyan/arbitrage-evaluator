@@ -87,7 +87,7 @@ function splitList(value) {
 function printHelp() {
   console.log(`
 Usage:
-  node bin/usdt-cycle-state.js [options]
+  node arbitrage/usdt-cycle-state.js [options]
 
 Options:
   --fullnode <url>                 TRON fullnode. Default: ${DEFAULT_FULLNODE}

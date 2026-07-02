@@ -4,7 +4,7 @@
 // Loads hourly USD token prices into token_prices_hourly from Binance public
 // market data (https://data.binance.vision). One row per (token_address, hour).
 //
-//   node bin/load-binance-prices.js --start-iso 2026-01-01T00:00:00Z [--end-iso ...]
+//   node quant/collectors/load-binance-prices.js --start-iso 2026-01-01T00:00:00Z [--end-iso ...]
 //
 // Pricing sources per token:
 //   - binance : <PAIR> 1h klines close (e.g. WETH -> ETHUSDT)
@@ -20,7 +20,7 @@ const os = require('os')
 const path = require('path')
 const { spawnSync } = require('child_process')
 
-const DEFAULT_PARSER_ROOT = path.resolve(__dirname, '..', '..', 'transaction-parser')
+const DEFAULT_PARSER_ROOT = path.resolve(__dirname, '..', '..', '..', 'transaction-parser')
 const BINANCE_BASE = 'https://data.binance.vision/data/spot'
 
 // Mainnet token universe (lowercase address -> pricing rule).
@@ -74,7 +74,7 @@ function parseArgs(argv) {
     else if (arg === '--pg-schema') args.pgSchema = next()
     else if (arg === '--tmp-dir') args.tmpDir = next()
     else if (arg === '--parser-root') args.parserRoot = next()
-    else if (arg === '--help' || arg === '-h') { console.log('Usage: node bin/load-binance-prices.js [--start-iso ISO] [--end-iso ISO] [--catalog file]'); process.exit(0) }
+    else if (arg === '--help' || arg === '-h') { console.log('Usage: node quant/collectors/load-binance-prices.js [--start-iso ISO] [--end-iso ISO] [--catalog file]'); process.exit(0) }
   }
   return args
 }

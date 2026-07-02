@@ -4,7 +4,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const DEFAULT_PARSER_ROOT = path.resolve(__dirname, '..', '..', 'transaction-parser')
+const DEFAULT_PARSER_ROOT = path.resolve(__dirname, '..', '..', '..', 'transaction-parser')
 
 const V2_SWAP_EVENT = 'event Swap(address indexed sender, uint256 amount0In, uint256 amount1In, uint256 amount0Out, uint256 amount1Out, address indexed to)'
 const V3_SWAP_EVENT = 'event Swap(address indexed sender, address indexed recipient, int256 amount0, int256 amount1, uint160 sqrtPriceX96, uint128 liquidity, int24 tick)'
@@ -101,7 +101,7 @@ function parseArgs(argv) {
 
 function printHelp() {
   console.log(`
-Usage: node bin/collect-pool-analytics.js --out-dir <dir> [options]
+Usage: node quant/collectors/collect-pool-analytics.js --out-dir <dir> [options]
 
 Collects on-chain Swap/Mint/Burn events for Uniswap V2/V3 pools, aggregates
 into hourly analytics buckets, and stores to PostgreSQL. Each run processes
@@ -144,7 +144,7 @@ Collector params can be set via env vars:
 }
 
 function resolveArgs(args) {
-  const sim = require(path.resolve(__dirname, 'simulate-uniswap-pools.js'))
+  const sim = require(path.resolve(__dirname, '..', '..', 'arbitrage', 'simulate-uniswap-pools.js'))
   const defaults = sim.CHAIN_DEFAULTS[args.chain] || sim.CHAIN_DEFAULTS.mainnet
   args.defaults = defaults
   args.weth = sim.normalizeAddress(defaults.weth)
@@ -342,7 +342,7 @@ function getMintBurnTopics(ethers) {
 }
 
 async function fetchSwapEvents(provider, ethers, poolMap, fromBlock, toBlock, args) {
-  const sim = require(path.resolve(__dirname, 'simulate-uniswap-pools.js'))
+  const sim = require(path.resolve(__dirname, '..', '..', 'arbitrage', 'simulate-uniswap-pools.js'))
   const { v2SwapTopic, v3SwapTopic, v2Iface, v3Iface } = getSwapTopics(ethers)
   const poolAddresses = Array.from(poolMap.keys())
 
@@ -412,7 +412,7 @@ async function fetchSwapEvents(provider, ethers, poolMap, fromBlock, toBlock, ar
 }
 
 async function fetchLiquidityEvents(provider, ethers, poolMap, fromBlock, toBlock, args) {
-  const sim = require(path.resolve(__dirname, 'simulate-uniswap-pools.js'))
+  const sim = require(path.resolve(__dirname, '..', '..', 'arbitrage', 'simulate-uniswap-pools.js'))
   const topics = getMintBurnTopics(ethers)
   const poolAddresses = Array.from(poolMap.keys())
 
@@ -888,7 +888,7 @@ async function main() {
   if (!args.outDir) { console.error('Error: --out-dir required'); process.exit(1) }
   if (!args.pgUrl) { console.error('Error: --pg-url or PG_URL required'); process.exit(1) }
 
-  const sim = require(path.resolve(__dirname, 'simulate-uniswap-pools.js'))
+  const sim = require(path.resolve(__dirname, '..', '..', 'arbitrage', 'simulate-uniswap-pools.js'))
   const ethers = sim.loadEthers(args.parserRoot)
   resolveArgs(args)
 

@@ -38,9 +38,9 @@ services:
         set -e
         START="$${BACKFILL_START_ISO:-2026-01-01T00:00:00Z}"
         echo "=== Loading Binance prices from $$START ==="
-        node bin/load-binance-prices.js --start-iso "$$START"
+        node quant/collectors/load-binance-prices.js --start-iso "$$START"
         echo "=== Backfilling pool analytics from $$START ==="
-        node bin/backfill-pool-analytics.js --start-iso "$$START" -- --concurrency 12 --rpc-retries 2 --tvl-only
+        node quant/collectors/backfill-pool-analytics.js --start-iso "$$START" -- --concurrency 12 --rpc-retries 2 --tvl-only
         echo "=== Backfill complete ==="
 
   # Hourly: refresh recent prices, then collect the latest incremental window.
@@ -63,8 +63,8 @@ services:
         while true; do
           echo "=== $$(date -u '+%Y-%m-%dT%H:%M:%SZ') collection pass ==="
           RECENT=$$(date -u -d '3 days ago' '+%Y-%m-%dT00:00:00Z' 2>/dev/null || date -u -v-3d '+%Y-%m-%dT00:00:00Z')
-          node bin/load-binance-prices.js --start-iso "$$RECENT" || true
-          node bin/collect-pool-analytics.js --out-dir reports/analytics --tvl-only || true
+          node quant/collectors/load-binance-prices.js --start-iso "$$RECENT" || true
+          node quant/collectors/collect-pool-analytics.js --out-dir reports/analytics --tvl-only || true
           echo "=== pass complete, sleeping 1 hour ==="
           sleep 3600
         done
@@ -84,7 +84,7 @@ services:
     command:
       - |
         echo "Token-flow collector starting — catches up from FLOW_START_ISO, then hourly"
-        node bin/collect-token-flows.js --loop
+        node quant/collectors/collect-token-flows.js --loop
 
   # Fills ERC20 symbol/decimals for newly-seen tokens from the EVM node so the
   # dashboard shows real symbols and human amounts. Loops every ~10 min.
@@ -101,7 +101,7 @@ services:
     command:
       - |
         echo "Token enricher starting — fills symbol/decimals from the node"
-        node bin/enrich-tokens.js --loop
+        node quant/collectors/enrich-tokens.js --loop
 
   # One-shot: copy ETH/TRON stake, unstake, and withdrawal history from the
   # chaincloud-fe unstake database into the local analytics PostgreSQL schema.
@@ -129,7 +129,7 @@ services:
         FULL_REFRESH=""
         if [ "$${STAKE_FULL_REFRESH:-false}" = "true" ]; then FULL_REFRESH="--full-refresh"; fi
         echo "=== Syncing staking history from $$START for $$CHAINS ==="
-        node bin/sync-stake-history.js --chains "$$CHAINS" --from "$$START" --batch-days "$$BATCH_DAYS" $$FULL_REFRESH
+        node quant/collectors/sync-stake-history.js --chains "$$CHAINS" --from "$$START" --batch-days "$$BATCH_DAYS" $$FULL_REFRESH
         echo "=== Staking history sync complete ==="
 
   # Hourly: refresh the recent staking window after the initial catch-up.
@@ -159,7 +159,7 @@ services:
         while true; do
           echo "=== $$(date -u '+%Y-%m-%dT%H:%M:%SZ') staking sync pass ==="
           RECENT=$$(date -u -d '3 days ago' '+%Y-%m-%dT00:00:00Z' 2>/dev/null || date -u -v-3d '+%Y-%m-%dT00:00:00Z')
-          node bin/sync-stake-history.js --chains "$$CHAINS" --from "$$RECENT" --batch-days "$$BATCH_DAYS" || true
+          node quant/collectors/sync-stake-history.js --chains "$$CHAINS" --from "$$RECENT" --batch-days "$$BATCH_DAYS" || true
           echo "=== staking pass complete, sleeping $$INTERVAL seconds ==="
           sleep "$$INTERVAL"
         done
@@ -179,4 +179,4 @@ services:
       - ..:/workspace
     env_file: .env
     command: >
-      node bin/serve-analytics.js
+      node quant/server/serve-analytics.js

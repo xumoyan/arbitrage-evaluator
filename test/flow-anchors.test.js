@@ -1,7 +1,7 @@
 'use strict'
 const test = require('node:test')
 const assert = require('node:assert')
-const { ANCHORS, WETH, normalizeToken, getAnchor } = require('../bin/lib/flow-anchors')
+const { ANCHORS, WETH, normalizeToken, getAnchor } = require('../quant/lib/flow-anchors')
 
 test('normalizeToken lowercases and maps empty to WETH', () => {
   assert.equal(normalizeToken(''), WETH)

@@ -1,7 +1,7 @@
 'use strict'
 const test = require('node:test')
 const assert = require('node:assert')
-const { buildEdgeQuery, toChDateTime } = require('../bin/lib/clickhouse')
+const { buildEdgeQuery, toChDateTime } = require('../quant/lib/clickhouse')
 
 test('toChDateTime formats a Date as UTC ClickHouse DateTime', () => {
   assert.equal(toChDateTime(new Date('2026-01-01T00:00:00Z')), '2026-01-01 00:00:00')
