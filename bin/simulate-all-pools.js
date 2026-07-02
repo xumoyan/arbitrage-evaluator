@@ -294,15 +294,82 @@ async function runLimited(items, limit, worker, options = {}) {
   return results
 }
 
-async function constantCall(tronWeb, ethers, contract, selector, params, outputTypes) {
-  const result = await tronWeb.transactionBuilder.triggerConstantContract(contract, selector, {}, params)
-  if (!result?.constant_result?.length) {
-    const message = result?.result?.message
-      ? Buffer.from(result.result.message, 'hex').toString('utf8')
-      : JSON.stringify(result?.result || {})
-    throw new Error(`No constant result for ${selector}: ${message}`)
+// Common Solidity / Uniswap-v4-style revert selectors used to decode revert
+// return data (tronweb throws away the data, so we recover it via rawConstantCall).
+const REVERT_SELECTORS = {
+  '0xecbd9804': 'QuoteSwap(uint256)', // v4 quoter revert-to-return sentinel
+  '0x6190b2b0': 'UnexpectedRevertBytes(bytes)',
+  '0xe0752a5a': 'UnexpectedCallSuccess()',
+  '0x7a5ed734': 'NotEnoughLiquidity(bytes32)',
+  '0x29c3b7ee': 'NotSelf()',
+  '0x08c379a0': 'Error(string)',
+  '0x4e487b71': 'Panic(uint256)',
+  '0xae18210a': 'NotPoolManager()',
+  '0x486aa307': 'PoolNotInitialized()',
+  '0x66a7598c': 'InvalidLockCaller()',
+  '0x54e3ca0d': 'ManagerLocked()',
+  '0x5212cba1': 'CurrencyNotSettled()'
+}
+
+function hexToUtf8(hex) {
+  try {
+    return Buffer.from(String(hex).replace(/^0x/, ''), 'hex').toString('utf8')
+  } catch {
+    return String(hex)
   }
-  return ethers.utils.defaultAbiCoder.decode(outputTypes, `0x${result.constant_result[0].replace(/^0x/, '')}`)
+}
+
+function encodeTriggerParameter(ethers, params) {
+  if (!params || !params.length) return ''
+  const types = params.map(param => param.type)
+  const values = params.map(param => param.value)
+  return ethers.utils.defaultAbiCoder.encode(types, values).replace(/^0x/, '')
+}
+
+function describeRevert(ethers, data) {
+  const clean = `0x${String(data || '').replace(/^0x/, '')}`
+  if (clean.length < 10) return { selector: null, name: null, reason: 'empty revert data' }
+  const selector = clean.slice(0, 10).toLowerCase()
+  const name = REVERT_SELECTORS[selector] || null
+  let reason = name || `unknown selector ${selector}`
+  try {
+    if (selector === '0x08c379a0') reason = `Error(${ethers.utils.defaultAbiCoder.decode(['string'], `0x${clean.slice(10)}`)[0]})`
+    else if (selector === '0x4e487b71') reason = `Panic(0x${ethers.utils.defaultAbiCoder.decode(['uint256'], `0x${clean.slice(10)}`)[0].toHexString().replace(/^0x/, '')})`
+  } catch {
+    // keep the generic reason
+  }
+  return { selector, name, reason }
+}
+
+// Calls a constant contract WITHOUT going through tronweb's result manager, which
+// throws on any revert and discards `constant_result`. Returns the raw response so
+// callers can recover revert return data (e.g. v4 quoter revert-to-return answers).
+async function rawConstantCall(tronWeb, ethers, contract, selector, params) {
+  const args = {
+    owner_address: tronWeb.defaultAddress.hex,
+    contract_address: tronWeb.address.toHex(contract),
+    function_selector: String(selector).replace(/\s*/g, ''),
+    parameter: encodeTriggerParameter(ethers, params)
+  }
+  const tx = await tronWeb.fullNode.request('wallet/triggerconstantcontract', args, 'post')
+  const constantResult = Array.isArray(tx?.constant_result) ? tx.constant_result : []
+  const rawMessage = tx?.result?.message ? hexToUtf8(tx.result.message) : ''
+  const failed = tx?.result?.result !== true
+  const reverted = failed && Boolean(rawMessage || (tx?.result && tx.result.code))
+  return { tx, constantResult, message: rawMessage, reverted, failed }
+}
+
+async function constantCall(tronWeb, ethers, contract, selector, params, outputTypes) {
+  const { constantResult, message, reverted } = await rawConstantCall(tronWeb, ethers, contract, selector, params)
+  if (reverted || !constantResult.length) {
+    let detail = message || 'no constant result'
+    if (constantResult.length) {
+      const decoded = describeRevert(ethers, constantResult[0])
+      detail = `${message || 'reverted'} (${decoded.reason})`
+    }
+    throw new Error(`${selector} reverted: ${detail}`)
+  }
+  return ethers.utils.defaultAbiCoder.decode(outputTypes, `0x${constantResult[0].replace(/^0x/, '')}`)
 }
 
 async function withRetries(fn, retries) {
@@ -1048,46 +1115,75 @@ function buildOpportunity(route, amountInSun, amountOutSun, grossProfitSun, netP
   }
 }
 
-async function quoteOpportunityExact(tronWeb, ethers, opportunity, args) {
+// Per-pool exact quote keyed by pool identity + direction + input amount. Used so a
+// given (pool, direction, amount) leg is quoted on-chain at most once per poll — the
+// same first legs repeat across thousands of routes, and broken/timing-out legs (e.g.
+// a stable pool that can't quote, or a V4 leg that hits the node CPU limit) are cached
+// as failures so they cost one attempt instead of being re-called by every route.
+function legCacheKey(pool, amount) {
+  return `${pool.protocol}:${pool.poolId || pool.address}:${pool.zeroForOne ? 1 : 0}:${amount.toString()}`
+}
+
+async function quoteLegExact(tronWeb, ethers, opportunity, pool, amount, args, cache) {
+  const key = cache ? legCacheKey(pool, amount) : null
+  if (cache && cache.has(key)) {
+    const cached = cache.get(key)
+    if (cached.error) throw new Error(cached.error)
+    return cached
+  }
+  try {
+    let out
+    let gas = 0n
+    let quoteSource
+    if (pool.protocol === 'v1') {
+      out = quoteV1(findEdgeFromOpportunityStep(opportunity, pool), amount)
+    } else if (pool.protocol === 'v2') {
+      out = quoteV2(findEdgeFromOpportunityStep(opportunity, pool), amount)
+    } else if (pool.protocol === 'v3') {
+      if (!args.v3Quoter) throw new Error('missing-v3-quoter')
+      const result = await quoteV3Exact(tronWeb, ethers, args, pool, amount)
+      out = result.amountOut
+      gas = result.gasEstimate
+    } else if (pool.protocol === 'v4') {
+      if (!args.v4Quoter) throw new Error('missing-v4-quoter')
+      const result = await quoteV4Exact(tronWeb, ethers, args, pool, amount)
+      out = result.amountOut
+      gas = result.gasEstimate
+    } else if (pool.protocol === 'stable') {
+      const result = await quoteStableExact(tronWeb, ethers, pool, amount)
+      out = result.amountOut
+      gas = result.gasEstimate
+      quoteSource = result.quoteSource
+    }
+    if (!out || out <= 0n) throw new Error(`zero output at ${pool.protocol}:${pool.address || pool.poolId}`)
+    const resolved = { amountOut: out, gasEstimate: gas, quoteSource }
+    if (cache) cache.set(key, resolved)
+    return resolved
+  } catch (error) {
+    const message = error.message || String(error)
+    if (cache) cache.set(key, { error: message })
+    throw error
+  }
+}
+
+async function quoteOpportunityExact(tronWeb, ethers, opportunity, args, cache) {
   if (args.noExactQuote) return { skipped: true, reason: 'disabled' }
+  if (!args.v3Quoter && opportunity.pools.some(pool => pool.protocol === 'v3')) return { skipped: true, reason: 'missing-v3-quoter' }
+  if (!args.v4Quoter && opportunity.pools.some(pool => pool.protocol === 'v4')) return { skipped: true, reason: 'missing-v4-quoter' }
   let amount = toBigInt(opportunity.spot.amountInSun)
   let gasEstimate = 0n
   const steps = []
   for (const pool of opportunity.pools) {
     try {
-      let out
-      let gas = 0n
-      if (pool.protocol === 'v1') {
-        const edge = findEdgeFromOpportunityStep(opportunity, pool)
-        out = quoteV1(edge, amount)
-        gas = 0n
-      } else if (pool.protocol === 'v2') {
-        const edge = findEdgeFromOpportunityStep(opportunity, pool)
-        out = quoteV2(edge, amount)
-        gas = 0n
-      } else if (pool.protocol === 'v3') {
-        if (!args.v3Quoter) return { skipped: true, reason: 'missing-v3-quoter' }
-        const result = await quoteV3Exact(tronWeb, ethers, args, pool, amount)
-        out = result.amountOut
-        gas = result.gasEstimate
-      } else if (pool.protocol === 'v4') {
-        if (!args.v4Quoter) return { skipped: true, reason: 'missing-v4-quoter' }
-        const result = await quoteV4Exact(tronWeb, ethers, args, pool, amount)
-        out = result.amountOut
-        gas = result.gasEstimate
-      } else if (pool.protocol === 'stable') {
-        const result = await quoteStableExact(tronWeb, ethers, pool, amount)
-        out = result.amountOut
-        gas = result.gasEstimate
-        pool._lastStableQuoteSource = result.quoteSource
-      }
-      if (!out || out <= 0n) return { error: `zero output at ${pool.protocol}:${pool.address || pool.poolId}` }
+      const result = await quoteLegExact(tronWeb, ethers, opportunity, pool, amount, args, cache)
+      const out = result.amountOut
+      const gas = result.gasEstimate
       steps.push({
         protocol: pool.protocol,
         amountIn: amount.toString(),
         amountOut: out.toString(),
         gasEstimate: gas.toString(),
-        quoteSource: pool._lastStableQuoteSource || undefined
+        quoteSource: result.quoteSource || undefined
       })
       amount = out
       gasEstimate += gas
@@ -1127,22 +1223,41 @@ function findEdgeFromOpportunityStep(opportunity, step) {
   }
 }
 
+// Decodes a quoter response that may either return its result normally OR encode
+// it inside a `QuoteSwap(uint256)` revert (the Uniswap-v4 / PancakeSwap-Infinity
+// revert-to-return pattern). Returns the leading uint256 (amountOut) in both cases.
+function decodeQuoterAmount(ethers, selector, raw) {
+  const { constantResult, message, reverted } = raw
+  if (!reverted && constantResult.length) {
+    return toBigInt(ethers.utils.defaultAbiCoder.decode(['uint256'], `0x${constantResult[0].replace(/^0x/, '')}`)[0].toString())
+  }
+  if (constantResult.length) {
+    const data = `0x${constantResult[0].replace(/^0x/, '')}`
+    if (data.slice(0, 10).toLowerCase() === '0xecbd9804') {
+      return toBigInt(ethers.utils.defaultAbiCoder.decode(['uint256'], `0x${data.slice(10)}`)[0].toString())
+    }
+    const decoded = describeRevert(ethers, data)
+    throw new Error(`${selector} reverted: ${decoded.reason}`)
+  }
+  throw new Error(`${selector} reverted: ${message || 'no return data'}`)
+}
+
 async function quoteV3Exact(tronWeb, ethers, args, step, amountIn) {
-  const result = await constantCall(
+  const selector = 'quoteExactInputSingle(address,address,uint24,uint256,uint160)'
+  const raw = await rawConstantCall(
     tronWeb,
     ethers,
     args.v3Quoter,
-    'quoteExactInputSingle(address,address,uint24,uint256,uint160)',
+    selector,
     [
       { type: 'address', value: toEvmAddress(tronWeb, step.tokenIn) },
       { type: 'address', value: toEvmAddress(tronWeb, step.tokenOut) },
       { type: 'uint24', value: step.feePpm },
       { type: 'uint256', value: amountIn.toString() },
       { type: 'uint160', value: 0 }
-    ],
-    ['uint256']
+    ]
   )
-  return { amountOut: toBigInt(result[0].toString()), gasEstimate: 0n }
+  return { amountOut: decodeQuoterAmount(ethers, selector, raw), gasEstimate: 0n }
 }
 
 async function quoteV4Exact(tronWeb, ethers, args, step, amountIn) {
@@ -1150,11 +1265,12 @@ async function quoteV4Exact(tronWeb, ethers, args, step, amountIn) {
   if (!key) {
     throw new Error('V4 exact quote missing poolKey in opportunity step')
   }
-  const result = await constantCall(
+  const selector = 'quoteExactInputSingle(((address,address,address,uint24,bytes32),bool,uint128,bytes))'
+  const raw = await rawConstantCall(
     tronWeb,
     ethers,
     args.v4Quoter,
-    'quoteExactInputSingle(((address,address,address,uint24,bytes32),bool,uint128,bytes))',
+    selector,
     [{
       type: '((address,address,address,uint24,bytes32),bool,uint128,bytes)',
       value: [
@@ -1163,10 +1279,18 @@ async function quoteV4Exact(tronWeb, ethers, args, step, amountIn) {
         amountIn.toString(),
         '0x'
       ]
-    }],
-    ['uint256', 'uint256']
+    }]
   )
-  return { amountOut: toBigInt(result[0].toString()), gasEstimate: toBigInt(result[1].toString()) }
+  // v4 normal return is (amountOut, gasEstimate); revert-to-return only carries amountOut.
+  let gasEstimate = 0n
+  if (!raw.reverted && raw.constantResult.length) {
+    try {
+      gasEstimate = toBigInt(ethers.utils.defaultAbiCoder.decode(['uint256', 'uint256'], `0x${raw.constantResult[0].replace(/^0x/, '')}`)[1].toString())
+    } catch {
+      gasEstimate = 0n
+    }
+  }
+  return { amountOut: decodeQuoterAmount(ethers, selector, raw), gasEstimate }
 }
 
 async function quoteStableExact(tronWeb, ethers, step, amountIn) {
@@ -1193,7 +1317,11 @@ async function quoteStableExact(tronWeb, ethers, step, amountIn) {
     }
   }
   const amountOut = quoteStableLocal({ pool: step, tokenInIndex: i, tokenOutIndex: j }, amountIn)
-  if (!amountOut || amountOut <= 0n) throw new Error(`stable quote failed at ${step.address}`)
+  if (!amountOut || amountOut <= 0n) {
+    const balIn = String(step.balances?.[i] ?? 'n/a')
+    const balOut = String(step.balances?.[j] ?? 'n/a')
+    throw new Error(`stable quote failed at ${step.address} (i=${i} j=${j} A=${step.A ?? 'n/a'} balIn=${balIn} balOut=${balOut} amtIn=${amountIn.toString()})`)
+  }
   return { amountOut, gasEstimate: 0n, quoteSource: 'stable-local-invariant' }
 }
 
@@ -1263,6 +1391,8 @@ async function exactQuoteTop(tronWeb, ethers, states, opportunities, args) {
   let successes = 0
   const thematic = queue.filter(opp => exactPriorityScore(opp) > 0).length
   console.log(`Exact-quoting candidates: max attempts ${queue.length}, success target ${args.exactSuccessTarget || 'none'}, stable/v4 priority ${thematic}`)
+  const uniqueErrors = new Set()
+  const quoteCache = new Map()
 
   while (
     attempted < queue.length &&
@@ -1270,7 +1400,15 @@ async function exactQuoteTop(tronWeb, ethers, states, opportunities, args) {
   ) {
     const batch = queue.slice(attempted, Math.min(queue.length, attempted + batchSize))
     await runLimited(batch, batchSize, async opp => {
-      opp.exact = await quoteOpportunityExact(tronWeb, ethers, opp, args)
+      opp.exact = await quoteOpportunityExact(tronWeb, ethers, opp, args, quoteCache)
+      if (opp.exact?.error && uniqueErrors.size < 5) {
+        const protocols = (opp.protocols || []).join(',')
+        const msg = `[${protocols}] ${opp.exact.error}`
+        if (!uniqueErrors.has(msg)) {
+          uniqueErrors.add(msg)
+          console.log(`  Exact quote error: ${msg}`)
+        }
+      }
       return opp
     })
     attempted += batch.length

@@ -233,3 +233,57 @@ Important execution boundary:
 - V4 pools are included in discovery/state/spot evaluation; V4 transaction construction is still marked pending.
 - ETH/WETH-start routes can be constructed with native ETH input. USDT-start routes need a sender with USDT balance and allowance, or a deployed executor / Permit2 flow, before gas estimation can fully succeed.
 - Mixed V2/V3 WETH routes are built through Universal Router for dry-run candidates. Treat mixed routes as candidates until the constructed transaction estimates successfully.
+
+## Staking History Analytics
+
+The analytics UI also has a staking tab for ETH/TRON stake, unstake, and withdrawal history. It copies the daily metrics and complete transaction details from the `chaincloud-fe` unstake database into the local PostgreSQL analytics schema, then serves the data from local tables so it can be joined with pool and flow data for quantitative analysis.
+
+Configure the source database URL with the same value used by `chaincloud-fe`:
+
+```bash
+# .env
+DATABASE_UNSTAKE_URL=postgresql://user:password@host:5432/database
+STAKE_START_ISO=2026-01-01T00:00:00Z
+STAKE_CHAINS=eth,tron
+STAKE_BATCH_DAYS=14
+```
+
+With Docker, the normal compose stack runs the staking pipeline too:
+
+```bash
+docker compose up -d
+```
+
+`stake-init` performs the startup catch-up into the local PostgreSQL database, and `stake-collector` refreshes recent ETH/TRON staking history hourly. If `DATABASE_UNSTAKE_URL` is not set, those services skip/idle and the staking page will have no synced data.
+
+For a manual one-off sync outside Docker:
+
+```bash
+DATABASE_UNSTAKE_URL="postgresql://user:password@host:5432/database" \
+npm run sync-stake -- \
+  --chains eth,tron \
+  --from 2026-01-01T00:00:00Z \
+  --full-refresh
+```
+
+The synced actions are stake, unstake, and withdrawal/extraction for both ETH and TRON, not only stake.
+
+The sync script creates these local tables when needed:
+
+- `stake_daily_metrics`: daily stake/unstake/withdrawal totals, counts, and ETH/TRX price.
+- `stake_transactions`: raw transaction-level detail for every synced action.
+- `stake_address_labels`: copied label/entity data used for grouped views.
+- `stake_sync_state`: latest sync window per chain/action.
+
+After syncing, start the analytics server and open `/stake.html`:
+
+```bash
+npm run serve-analytics
+```
+
+The staking page supports ETH/TRON switching, action tabs, daily chart drill-down, grouped address/entity view, raw transaction detail, address/hash filtering, CSV export, and JSON export. API endpoints are:
+
+- `GET /api/stake/chart?chain=tron&from=...&to=...`
+- `GET /api/stake/groups?chain=eth&action=unstake&from=...&to=...`
+- `GET /api/stake/transactions?chain=tron&action=withdrawal&page=1&pageSize=50`
+- `GET /api/stake/export?chain=eth&action=stake&format=csv`

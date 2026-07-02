@@ -60,4 +60,36 @@ FROM (
 GROUP BY hour, token_in, token_out`.trim()
 }
 
-module.exports = { query, buildEdgeQuery, toChDateTime, chConfig }
+// Individual swaps (deduped by Hash) touching `token` within a window, newest
+// first. `token` MUST be a validated lowercase 0x address (caller's job).
+// floorCh inclusive, ceilCh exclusive. Empty token field in ParseOutput = native
+// ETH = WETH, so WETH queries also match empty legs.
+function buildTokenTxQuery(token, floorCh, ceilCh, limit) {
+  const t = String(token).toLowerCase()
+  const isWeth = t === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+  const inExpr = `lower(JSONExtractString(ParseOutput, 'tokenIn'))`
+  const outExpr = `lower(JSONExtractString(ParseOutput, 'tokenOut'))`
+  const match = isWeth
+    ? `(${inExpr} IN ('${t}', '') OR ${outExpr} IN ('${t}', ''))`
+    : `(${inExpr} = '${t}' OR ${outExpr} = '${t}')`
+  const lim = Math.min(Math.max(parseInt(limit, 10) || 100, 1), 1000)
+  return `
+SELECT
+  Hash                                                            AS hash,
+  any(CreatedAt)                                                  AS ts,
+  ${inExpr}                                                       AS token_in,
+  ${outExpr}                                                      AS token_out,
+  any(toFloat64OrZero(JSONExtractString(ParseOutput, 'amountIn')))  AS amount_in,
+  any(toFloat64OrZero(JSONExtractString(ParseOutput, 'amountOut'))) AS amount_out
+FROM eth.distributed_history_categories
+WHERE ParseSummary = 'Uniswap.Swap'
+  AND TxReceiptStatus = 1
+  AND CreatedAt >= toDateTime('${floorCh}')
+  AND CreatedAt <  toDateTime('${ceilCh}')
+  AND ${match}
+GROUP BY Hash, token_in, token_out
+ORDER BY ts DESC
+LIMIT ${lim}`.trim()
+}
+
+module.exports = { query, buildEdgeQuery, buildTokenTxQuery, toChDateTime, chConfig }

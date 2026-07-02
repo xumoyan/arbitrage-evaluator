@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Token Flows</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Fira+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark"></span>
+      <h1>Token Flows</h1>
+    </div>
+    <nav class="nav">
+      <a href="/">Pools</a>
+      <a href="/flows.html" class="active">Token Flows</a>
+      <a href="/stake.html">Staking</a>
+    </nav>
+    <div class="topbar-right">
+      <label class="switch" title="Refresh data every 60s">
+        <input type="checkbox" id="auto-refresh" checked>
+        <span>Auto-refresh</span>
+      </label>
+      <span id="status" class="status">
+        <span class="status-dot"></span><span class="status-text">Connecting</span>
+      </span>
+    </div>
+  </header>
+
+  <main class="page">
+    <!-- KPI summary -->
+    <section class="kpi-row">
+      <div class="kpi-card">
+        <span class="kpi-label">Total inflow</span>
+        <span class="kpi-value" id="kpi-inflow" style="color:var(--success)">—</span>
+        <span class="kpi-sub">money buying tokens</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Total outflow</span>
+        <span class="kpi-value" id="kpi-outflow" style="color:var(--danger)">—</span>
+        <span class="kpi-sub">money selling tokens</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Net flow</span>
+        <span class="kpi-value" id="kpi-net">—</span>
+        <span class="kpi-sub" id="kpi-net-sub">inflow − outflow</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Tokens active</span>
+        <span class="kpi-value" id="kpi-tokens">—</span>
+        <span class="kpi-sub" id="kpi-range">—</span>
+      </div>
+    </section>
+
+    <!-- Toolbar -->
+    <section class="toolbar">
+      <div class="segmented granularity">
+        <button data-granularity="hour" class="active">Hourly</button>
+        <button data-granularity="day">Daily</button>
+      </div>
+      <div class="segmented time-range">
+        <button data-range="24">24H</button>
+        <button data-range="168" class="active">7D</button>
+        <button data-range="720">30D</button>
+        <button data-range="2160">90D</button>
+        <button data-range="0">All</button>
+      </div>
+      <div class="date-range">
+        <input type="date" id="date-from" title="From (overrides preset)">
+        <span class="arrow">→</span>
+        <input type="date" id="date-to" title="To">
+        <button id="date-apply" class="btn">Apply</button>
+        <button id="date-clear" class="btn ghost">Auto</button>
+      </div>
+      <label class="switch" title="Log-compress bar lengths so small tokens stay visible next to USDT/WETH">
+        <input type="checkbox" id="log-scale" checked>
+        <span>Log scale</span>
+      </label>
+    </section>
+
+    <!-- Diverging flow chart -->
+    <section class="card chart-card">
+      <div class="card-head">
+        <h3>Top 20 token flows <span class="muted">— by gross USD volume</span></h3>
+        <span class="card-hint">
+          <span class="legend-chip"><span class="dot in"></span>inflow (bought)</span>
+          <span class="legend-chip"><span class="dot out"></span>outflow (sold)</span>
+        </span>
+      </div>
+      <div class="chart-wrap tall"><canvas id="flows-chart"></canvas></div>
+    </section>
+
+    <!-- Per-token drill-down -->
+    <section id="token-detail" class="card detail-card hidden">
+      <div class="card-head">
+        <div class="pool-info">
+          <span id="token-symbol"></span>
+          <span id="token-net" class="tag"></span>
+          <span id="token-address" class="addr"></span>
+        </div>
+        <button id="close-detail" class="btn ghost">✕ Close</button>
+      </div>
+      <div class="chart-wrap sm" style="padding:16px 18px"><canvas id="token-trend-chart"></canvas></div>
+      <div class="tx-section">
+        <div class="tx-head">
+          <button id="tx-toggle" class="btn">▸ Show transactions</button>
+          <span class="muted" id="tx-hint">individual swaps in the selected range (newest first)</span>
+        </div>
+        <div id="tx-body" class="tx-body hidden">
+          <div class="table-scroll">
+            <table id="tx-table">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Sold (in)</th>
+                  <th>Bought (out)</th>
+                  <th>Tx</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Detail table -->
+    <section class="card table-card">
+      <div class="card-head">
+        <h3>Flow detail <span class="muted">— click a row for the trend</span></h3>
+      </div>
+      <div class="table-scroll">
+        <table id="flows-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Token</th>
+              <th class="num">Inflow</th>
+              <th class="num">Outflow</th>
+              <th class="num">Net</th>
+              <th class="num">Direction</th>
+              <th class="num">Buys</th>
+              <th class="num">Sells</th>
+              <th class="num">Swaps</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/flows.js"></script>
+</body>
+</html>

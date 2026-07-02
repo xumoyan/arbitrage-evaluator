@@ -472,14 +472,26 @@ async function getLogsChunked(provider, filter, fromBlock, toBlock, chunkBlocks)
   while (start <= end) {
     const stop = Math.min(end, start + chunkBlocks - 1)
     try {
-      const chunk = await provider.getLogs({ ...filter, fromBlock: start, toBlock: stop })
-      logs.push(...chunk)
+      // Use raw eth_getLogs so `address` may be an array of pool addresses
+      // (ethers v5 provider.getLogs only accepts a single address and would
+      // otherwise try to ENS-resolve the array). Re-format raw logs back into
+      // ethers Log objects so downstream numeric fields are preserved.
+      const raw = await provider.send('eth_getLogs', [{
+        address: filter.address,
+        topics: filter.topics,
+        fromBlock: '0x' + Number(start).toString(16),
+        toBlock: '0x' + Number(stop).toString(16)
+      }])
+      // Append without spreading: `push(...bigArray)` passes each element as a
+      // function argument and overflows the call stack ("Maximum call stack
+      // size exceeded") once a chunk returns enough logs (high-volume windows).
+      for (const log of raw) logs.push(provider.formatter.filterLog(log))
       start = stop + 1
     } catch (error) {
       if (chunkBlocks <= 1000) throw error
       const smaller = Math.max(1000, Math.floor(chunkBlocks / 2))
       const nested = await getLogsChunked(provider, filter, start, stop, smaller)
-      logs.push(...nested)
+      for (const log of nested) logs.push(log)
       start = stop + 1
     }
   }
@@ -1887,6 +1899,8 @@ module.exports = {
   parseUnits,
   formatUnits,
   topicAddress,
+  normalizeBaseAsset,
+  resolveMainstreamTokens,
   CHAIN_DEFAULTS,
   V2_PAIR_ABI,
   V2_FACTORY_ABI,

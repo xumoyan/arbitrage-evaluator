@@ -11,7 +11,9 @@
 # endpoints in .env are LAN addresses and are reachable without host networking.
 #
 # Pipeline: analytics-init backfills prices + historical pool data once, then
-# analytics-collector keeps it current hourly and analytics-server serves :3000.
+# analytics-collector keeps it current hourly. stake-init/stake-collector do the
+# same for ETH/TRON staking history when DATABASE_UNSTAKE_URL is configured.
+# analytics-server serves :3000 from the local PostgreSQL tables.
 
 x-pg-host: &pg-host
   PG_HOST: host.docker.internal
@@ -84,11 +86,92 @@ services:
         echo "Token-flow collector starting — catches up from FLOW_START_ISO, then hourly"
         node bin/collect-token-flows.js --loop
 
+  # Fills ERC20 symbol/decimals for newly-seen tokens from the EVM node so the
+  # dashboard shows real symbols and human amounts. Loops every ~10 min.
+  token-enricher:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Token enricher starting — fills symbol/decimals from the node"
+        node bin/enrich-tokens.js --loop
+
+  # One-shot: copy ETH/TRON stake, unstake, and withdrawal history from the
+  # chaincloud-fe unstake database into the local analytics PostgreSQL schema.
+  stake-init:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: "no"
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-lc"]
+    command:
+      - |
+        set -e
+        if [ -z "$${DATABASE_UNSTAKE_URL:-}" ]; then
+          echo "DATABASE_UNSTAKE_URL is not set; skipping staking history sync"
+          exit 0
+        fi
+        START="$${STAKE_START_ISO:-}"
+        if [ -z "$$START" ]; then START="$${BACKFILL_START_ISO:-2026-01-01T00:00:00Z}"; fi
+        CHAINS="$${STAKE_CHAINS:-eth,tron}"
+        BATCH_DAYS="$${STAKE_BATCH_DAYS:-14}"
+        FULL_REFRESH=""
+        if [ "$${STAKE_FULL_REFRESH:-false}" = "true" ]; then FULL_REFRESH="--full-refresh"; fi
+        echo "=== Syncing staking history from $$START for $$CHAINS ==="
+        node bin/sync-stake-history.js --chains "$$CHAINS" --from "$$START" --batch-days "$$BATCH_DAYS" $$FULL_REFRESH
+        echo "=== Staking history sync complete ==="
+
+  # Hourly: refresh the recent staking window after the initial catch-up.
+  stake-collector:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    depends_on:
+      stake-init:
+        condition: service_completed_successfully
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        if [ -z "$${DATABASE_UNSTAKE_URL:-}" ]; then
+          echo "DATABASE_UNSTAKE_URL is not set; staking collector disabled"
+          tail -f /dev/null
+        fi
+        echo "Staking collector starting — refreshes recent ETH/TRON stake, unstake, and withdrawal history hourly"
+        CHAINS="$${STAKE_CHAINS:-eth,tron}"
+        BATCH_DAYS="$${STAKE_BATCH_DAYS:-14}"
+        INTERVAL="$${STAKE_SYNC_INTERVAL_SECONDS:-3600}"
+        while true; do
+          echo "=== $$(date -u '+%Y-%m-%dT%H:%M:%SZ') staking sync pass ==="
+          RECENT=$$(date -u -d '3 days ago' '+%Y-%m-%dT00:00:00Z' 2>/dev/null || date -u -v-3d '+%Y-%m-%dT00:00:00Z')
+          node bin/sync-stake-history.js --chains "$$CHAINS" --from "$$RECENT" --batch-days "$$BATCH_DAYS" || true
+          echo "=== staking pass complete, sleeping $$INTERVAL seconds ==="
+          sleep "$$INTERVAL"
+        done
+
   analytics-server:
     image: node:20-bookworm-slim
     working_dir: /workspace/arbitrage-evaluator
     restart: unless-stopped
     extra_hosts: *host-gateway
+    depends_on:
+      stake-init:
+        condition: service_completed_successfully
     environment: *pg-host
     ports:
       - "3000:3000"

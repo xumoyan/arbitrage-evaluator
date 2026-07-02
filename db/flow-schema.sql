@@ -60,11 +60,14 @@ CREATE TABLE IF NOT EXISTS tokens (
   first_seen_hour  TIMESTAMPTZ,
   last_seen_hour   TIMESTAMPTZ,
   total_swap_count BIGINT NOT NULL DEFAULT 0,
+  metadata_checked_at TIMESTAMPTZ,    -- last on-chain symbol/decimals lookup (NULL = never)
   created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   PRIMARY KEY (token_address, chain_id)
 );
 CREATE INDEX IF NOT EXISTS idx_tokens_last_seen ON tokens (last_seen_hour);
+-- Backfill for pre-existing deployments (no-op if the column already exists).
+ALTER TABLE tokens ADD COLUMN IF NOT EXISTS metadata_checked_at TIMESTAMPTZ;
 
 -- ── flow_collector_state: incremental checkpoint ─────────────────────────
 CREATE TABLE IF NOT EXISTS flow_collector_state (

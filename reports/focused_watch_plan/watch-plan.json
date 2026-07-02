@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-15T09:28:32.443Z",
+  "generatedAt": "2026-06-25T07:04:32.962Z",
   "inputs": {
     "account": "TCeKLAgA3mQhrWLtLZJHBiFXbcnh55qrcV",
     "router": "TQqgNg13s2DjvXhW1ky4v6TsR8wZGvb7Y4",
@@ -994,7 +994,7 @@
     }
   },
   "catalog": {
-    "generatedAt": "2026-06-15T09:28:32.443Z",
+    "generatedAt": "2026-06-25T07:04:32.962Z",
     "source": {
       "method": "historical-profitable-token-pairs",
       "analysis": "/workspace/arbitrage-evaluator/reports/sample100_slow/analysis.json",

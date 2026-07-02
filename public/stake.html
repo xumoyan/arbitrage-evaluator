@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staking Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Fira+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark"></span>
+      <h1>Staking Analytics</h1>
+    </div>
+    <nav class="nav">
+      <a href="/">Pools</a>
+      <a href="/flows.html">Token Flows</a>
+      <a href="/stake.html" class="active">Staking</a>
+    </nav>
+    <div class="topbar-right">
+      <label class="switch" title="Refresh data every 60s">
+        <input type="checkbox" id="auto-refresh" checked>
+        <span>Auto-refresh</span>
+      </label>
+      <span id="status" class="status">
+        <span class="status-dot"></span><span class="status-text">Connecting</span>
+      </span>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="kpi-row">
+      <div class="kpi-card">
+        <span class="kpi-label">Total stake</span>
+        <span class="kpi-value" id="kpi-stake">—</span>
+        <span class="kpi-sub" id="kpi-stake-sub">—</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Total unstake</span>
+        <span class="kpi-value accent" id="kpi-unstake">—</span>
+        <span class="kpi-sub" id="kpi-unstake-sub">—</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Total withdrawn</span>
+        <span class="kpi-value" id="kpi-withdrawn">—</span>
+        <span class="kpi-sub" id="kpi-withdrawn-sub">—</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Data through</span>
+        <span class="kpi-value" id="kpi-through">—</span>
+        <span class="kpi-sub" id="kpi-range">—</span>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <div class="segmented chain-tabs">
+        <button data-chain="tron" class="active">TRON</button>
+        <button data-chain="eth">ETH</button>
+      </div>
+      <div class="segmented time-range">
+        <button data-range="7">7D</button>
+        <button data-range="30" class="active">30D</button>
+        <button data-range="365">1Y</button>
+        <button data-range="ytd">YTD</button>
+        <button data-range="all">All</button>
+      </div>
+      <div class="date-range">
+        <input type="date" id="date-from" title="From (UTC)">
+        <span class="arrow">→</span>
+        <input type="date" id="date-to" title="To (UTC)">
+        <button id="date-apply" class="btn">Apply</button>
+        <button id="date-clear" class="btn ghost">Auto</button>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="log-scale" checked>
+        <span>Log amount</span>
+      </label>
+    </section>
+
+    <section class="card chart-card">
+      <div class="card-head">
+        <h3>Stake / Unstake / Withdrawal <span class="muted">— daily amounts vs price</span></h3>
+        <span class="card-hint" id="chart-hint">click a point to inspect that UTC day</span>
+      </div>
+      <div class="chart-wrap"><canvas id="stake-chart"></canvas></div>
+    </section>
+
+    <section class="card table-card">
+      <div class="card-head stake-card-head">
+        <div>
+          <h3>Transaction detail <span class="muted" id="detail-subtitle">— grouped</span></h3>
+        </div>
+        <div class="stake-actions">
+          <div class="segmented action-tabs">
+            <button data-action="stake" class="active">Stake</button>
+            <button data-action="unstake">Unstake</button>
+            <button data-action="withdrawal">Withdrawal</button>
+          </div>
+          <div class="segmented view-tabs">
+            <button data-view="grouped" class="active">Grouped</button>
+            <button data-view="raw">Raw</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="stake-detail-toolbar">
+        <input type="text" id="address-filter" placeholder="Filter address, tx hash, or source key">
+        <button id="address-apply" class="btn">Search</button>
+        <button id="address-clear" class="btn ghost">Clear</button>
+        <span class="muted" id="detail-count">—</span>
+        <span class="toolbar-spacer"></span>
+        <button id="export-csv" class="btn">CSV</button>
+        <button id="export-json" class="btn ghost">JSON</button>
+      </div>
+
+      <div id="grouped-view" class="stake-view">
+        <div class="table-scroll">
+          <table id="stake-groups-table" class="data-table">
+            <thead>
+              <tr>
+                <th>Group</th>
+                <th class="num">Amount</th>
+                <th class="num">Txs</th>
+                <th>Window</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="raw-view" class="stake-view hidden">
+        <div class="table-scroll">
+          <table id="stake-raw-table" class="data-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Tx / Source</th>
+                <th>Participant</th>
+                <th>Withdrawal</th>
+                <th>Deposit</th>
+                <th class="num">Amount</th>
+                <th>Meta</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="pager">
+        <button id="prev-page" class="btn ghost">Prev</button>
+        <span id="page-indicator" class="muted">Page 1</span>
+        <button id="next-page" class="btn ghost">Next</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="/stake.js"></script>
+</body>
+</html>

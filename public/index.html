@@ -3,86 +3,161 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pool Analytics Dashboard</title>
+  <title>Pool Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Fira+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Pool Analytics</h1>
-    <div class="controls">
-      <select id="pool-selector">
-        <option value="">Select a pool...</option>
-      </select>
-      <div class="time-range">
-        <button data-range="1">1H</button>
-        <button data-range="4">4H</button>
-        <button data-range="24" class="active">24H</button>
-        <button data-range="168">7D</button>
-        <button data-range="720">30D</button>
-      </div>
-      <label class="auto-refresh">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark"></span>
+      <h1>Pool Analytics</h1>
+    </div>
+    <nav class="nav">
+      <a href="/" class="active">Pools</a>
+      <a href="/flows.html">Token Flows</a>
+      <a href="/stake.html">Staking</a>
+    </nav>
+    <div class="topbar-right">
+      <label class="switch" title="Refresh data every 60s">
         <input type="checkbox" id="auto-refresh" checked>
-        Auto-refresh (60s)
+        <span>Auto-refresh</span>
       </label>
-      <span id="status" class="status">Disconnected</span>
+      <span id="status" class="status">
+        <span class="status-dot"></span><span class="status-text">Connecting</span>
+      </span>
     </div>
   </header>
 
-  <div id="pool-info" class="pool-info hidden">
-    <span id="pool-pair"></span>
-    <span id="pool-protocol"></span>
-    <span id="pool-fee"></span>
-    <span id="pool-address"></span>
-  </div>
-
-  <div class="charts-grid">
-    <div class="chart-card">
-      <h3>Volume</h3>
-      <canvas id="volume-chart"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3>Price (OHLC)</h3>
-      <canvas id="price-chart"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3>TVL</h3>
-      <canvas id="tvl-chart"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3>Net Flow</h3>
-      <canvas id="flow-chart"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3>Swap Count</h3>
-      <canvas id="swap-count-chart"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3>Quantitative Signals</h3>
-      <div id="signals-panel" class="signals-panel">
-        <p class="placeholder">Select a pool to view signals</p>
+  <main class="page">
+    <!-- KPI summary -->
+    <section class="kpi-row">
+      <div class="kpi-card">
+        <span class="kpi-label">Total TVL</span>
+        <span class="kpi-value" id="kpi-tvl">—</span>
+        <span class="kpi-sub" id="kpi-tvl-sub">across all pools</span>
       </div>
-    </div>
-  </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Pools tracked</span>
+        <span class="kpi-value" id="kpi-pools">—</span>
+        <span class="kpi-sub">unique pools</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">ETH / USDT</span>
+        <span class="kpi-value accent" id="kpi-eth">—</span>
+        <span class="kpi-sub">Binance spot</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Data through</span>
+        <span class="kpi-value" id="kpi-through">—</span>
+        <span class="kpi-sub" id="kpi-range">—</span>
+      </div>
+    </section>
 
-  <div id="pools-overview" class="pools-overview">
-    <h2>All Pools Overview</h2>
-    <table id="pools-table">
-      <thead>
-        <tr>
-          <th>Pool</th>
-          <th>Protocol</th>
-          <th>Pair</th>
-          <th>Fee</th>
-          <th>Last Price</th>
-          <th>Swap Count</th>
-          <th>Volume (token0)</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
+    <!-- Toolbar -->
+    <section class="toolbar">
+      <div class="segmented time-range">
+        <button data-range="24">24H</button>
+        <button data-range="168">7D</button>
+        <button data-range="720">30D</button>
+        <button data-range="2160">90D</button>
+        <button data-range="0" class="active">All</button>
+      </div>
+      <div class="date-range">
+        <input type="date" id="date-from" title="From (overrides preset)">
+        <span class="arrow">→</span>
+        <input type="date" id="date-to" title="To">
+        <button id="date-apply" class="btn">Apply</button>
+        <button id="date-clear" class="btn ghost">Auto</button>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="log-scale" checked>
+        <span>Log scale</span>
+      </label>
+    </section>
+
+    <!-- Main combined chart -->
+    <section class="card chart-card">
+      <div class="card-head">
+        <h3>TVL <span class="muted">(USD)</span> vs ETH/USDT price</h3>
+        <span class="card-hint">hover for all lines at a timestamp</span>
+      </div>
+      <div class="chart-wrap"><canvas id="combined-chart"></canvas></div>
+    </section>
+
+    <!-- Line picker -->
+    <section class="card picker-card">
+      <div class="card-head">
+        <h3>Lines <span class="muted">— <span id="picker-count">0</span> shown</span></h3>
+        <div class="segmented">
+          <button id="picker-top3">Top 3</button>
+          <button id="picker-top10">Top 10</button>
+          <button id="picker-none">Clear</button>
+        </div>
+      </div>
+      <div id="picker-list" class="picker-list"></div>
+    </section>
+
+    <!-- Per-pool drill-down -->
+    <section id="pool-detail" class="card detail-card hidden">
+      <div class="card-head">
+        <div class="pool-info">
+          <span id="pool-pair"></span>
+          <span id="pool-protocol" class="tag"></span>
+          <span id="pool-fee" class="muted"></span>
+          <span id="pool-address" class="addr"></span>
+        </div>
+        <button id="close-detail" class="btn ghost">✕ Close</button>
+      </div>
+      <div class="charts-grid">
+        <div class="sub-card">
+          <h4>Volume</h4>
+          <div class="chart-wrap sm"><canvas id="volume-chart"></canvas></div>
+        </div>
+        <div class="sub-card">
+          <h4>Net Flow</h4>
+          <div class="chart-wrap sm"><canvas id="flow-chart"></canvas></div>
+        </div>
+        <div class="sub-card">
+          <h4>Swap Count</h4>
+          <div class="chart-wrap sm"><canvas id="swap-count-chart"></canvas></div>
+        </div>
+        <div class="sub-card">
+          <h4>Signals</h4>
+          <div id="signals-panel" class="signals-panel">
+            <p class="placeholder">No signals available</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pools table -->
+    <section class="card table-card">
+      <div class="card-head">
+        <h3>All pools <span class="muted">— click a row for detail</span></h3>
+      </div>
+      <div class="table-scroll">
+        <table id="pools-table">
+          <thead>
+            <tr>
+              <th>Pool</th>
+              <th>Protocol</th>
+              <th>Pair</th>
+              <th>Fee</th>
+              <th class="num">Last Price</th>
+              <th class="num">Swaps</th>
+              <th class="num">Volume (t0)</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
 
   <script src="/app.js"></script>
 </body>
