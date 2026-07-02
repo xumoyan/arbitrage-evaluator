@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Addresses</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Fira+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark"></span>
+      <h1>Smart Addresses</h1>
+    </div>
+    <nav class="nav">
+      <a href="/">Pools</a>
+      <a href="/flows.html">Token Flows</a>
+      <a href="/stake.html">Staking</a>
+      <a href="/lending.html">Lending</a>
+      <a href="/smart.html" class="active">Smart Money</a>
+      <a href="/strategy.html">Strategy</a>
+    </nav>
+    <div class="topbar-right">
+      <span id="status" class="status">
+        <span class="status-dot"></span><span class="status-text">Connecting</span>
+      </span>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="card table-card">
+      <div class="card-head">
+        <h3>Leaderboard <span class="muted">— marked performance of large swaps; click a row for its recent activity</span></h3>
+      </div>
+      <div class="table-scroll">
+        <table id="leader-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Address</th>
+              <th class="num">Score</th>
+              <th class="num">Avg return</th>
+              <th class="num">Win rate</th>
+              <th class="num">Trades (scored)</th>
+              <th class="num">Marked PnL</th>
+              <th class="num">Volume</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card table-card">
+      <div class="card-head">
+        <h3 id="events-title">Watchlist activity <span class="muted">— newest first</span></h3>
+      </div>
+      <div class="table-scroll">
+        <table id="events-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Address</th>
+              <th>DEX</th>
+              <th>Sold</th>
+              <th>Bought</th>
+              <th class="num">USD</th>
+              <th>Tx</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/smart.js"></script>
+</body>
+</html>

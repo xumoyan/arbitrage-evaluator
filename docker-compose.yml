@@ -86,6 +86,80 @@ services:
         echo "Token-flow collector starting — catches up from FLOW_START_ISO, then hourly"
         node quant/collectors/collect-token-flows.js --loop
 
+  # Per-tx swap detail (>= SWAP_DETAIL_MIN_USD) with exact timestamps and
+  # trader addresses — feeds event studies and smart-address tracking.
+  swap-detail-collector:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Swap-detail collector starting — per-tx swaps >= \$$SWAP_DETAIL_MIN_USD"
+        node quant/collectors/collect-swap-details.js --loop
+
+  # AAVE v3 (ETH) + JustLend (TRON) supply/borrow/repay/withdraw/liquidation
+  # events. Liquidations are the highest-signal rows for the strategies.
+  lending-collector:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Lending collector starting — AAVE v3 + JustLend"
+        node quant/collectors/collect-lending-events.js --loop
+
+  # Re-scores trader addresses from swap_details, then mirrors new activity
+  # from the top scorers into smart_address_events. Alternates every 10 min.
+  smart-address-tracker:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Smart-address tracker starting — score + watch every 10 min"
+        while true; do
+          node quant/collectors/track-smart-addresses.js || true
+          node quant/collectors/track-smart-addresses.js --watch || true
+          sleep 600
+        done
+
+  # Paper-trading run of the flow-momentum strategy (params from the June
+  # sweep). Positions are in-memory: a restart flattens the book but keeps the
+  # equity history under the same run id.
+  strategy-live:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "flow-momentum paper trading starting"
+        node quant/strategy/flow-momentum.js --live --run-id flowmom_live_v1 \
+          --min-volume-usd 1000000 --hold-hours 6
+
   # Fills ERC20 symbol/decimals for newly-seen tokens from the EVM node so the
   # dashboard shows real symbols and human amounts. Loops every ~10 min.
   token-enricher:

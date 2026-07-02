@@ -22,6 +22,7 @@
     "strategy": "node quant/strategy/flow-momentum.js",
     "collect-swap-details": "node quant/collectors/collect-swap-details.js",
     "collect-lending": "node quant/collectors/collect-lending-events.js",
+    "track-smart": "node quant/collectors/track-smart-addresses.js",
     "test": "node --test 'test/**/*.test.js'"
   },
   "engines": {

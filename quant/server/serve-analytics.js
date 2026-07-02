@@ -584,6 +584,33 @@ async function handleApiRequest(pathname, searchParams, pgPool, res) {
     })
   }
 
+  // ── smart addresses ──────────────────────────────────────────────────────
+  if (pathname === '/api/smart/list') {
+    const limit = Math.min(Math.max(Number(searchParams.get('limit') || '50'), 1), 500)
+    const r = await pgPool.query(`
+      SELECT address, window_days, horizon_hours, trade_count, scored_count,
+             win_count, win_rate, avg_return, total_pnl_usd, volume_usd, score, computed_at
+      FROM smart_addresses ORDER BY score DESC LIMIT $1
+    `, [limit])
+    return jsonResponse(res, { count: r.rows.length, addresses: r.rows })
+  }
+
+  if (pathname === '/api/smart/events') {
+    const limit = Math.min(Math.max(Number(searchParams.get('limit') || '100'), 1), 1000)
+    const address = (searchParams.get('address') || '').toLowerCase()
+    const where = ['1=1']
+    const params = []
+    let i = 1
+    if (address) { where.push(`address = $${i++}`); params.push(address) }
+    const r = await pgPool.query(`
+      SELECT address, tx_hash, block_time, dex, token_in, token_out, amount_usd, score_at_time
+      FROM smart_address_events
+      WHERE ${where.join(' AND ')}
+      ORDER BY block_time DESC LIMIT $${i}
+    `, [...params, limit])
+    return jsonResponse(res, { count: r.rows.length, events: r.rows })
+  }
+
   // ── lending / liquidation ────────────────────────────────────────────────
   if (pathname === '/api/lending/summary') {
     const chain = searchParams.get('chain') || ''
