@@ -584,6 +584,59 @@ async function handleApiRequest(pathname, searchParams, pgPool, res) {
     })
   }
 
+  // ── strategy simulation (backtest + paper trading) ──────────────────────
+  if (pathname === '/api/strategy/runs') {
+    const r = await pgPool.query(`
+      SELECT run_id, strategy, mode, params, from_hour, to_hour, status,
+             initial_capital, final_equity, total_return, max_drawdown,
+             trade_count, win_rate, started_at, updated_at
+      FROM strategy_runs ORDER BY started_at DESC LIMIT 100
+    `)
+    return jsonResponse(res, { count: r.rows.length, runs: r.rows })
+  }
+
+  if (pathname === '/api/strategy/equity') {
+    const runId = searchParams.get('run') || ''
+    if (!runId) return jsonResponse(res, { error: 'run required' }, 400)
+    const r = await pgPool.query(`
+      SELECT hour_start AS t, equity_usd, cash_usd, positions_value_usd, open_positions
+      FROM sim_equity_hourly WHERE run_id = $1 ORDER BY hour_start ASC
+    `, [runId])
+    return jsonResponse(res, {
+      run: runId,
+      count: r.rows.length,
+      points: r.rows.map(x => ({
+        t: x.t,
+        equity: Number(x.equity_usd),
+        cash: Number(x.cash_usd),
+        positionsValue: Number(x.positions_value_usd),
+        openPositions: Number(x.open_positions)
+      }))
+    })
+  }
+
+  if (pathname === '/api/strategy/trades') {
+    const runId = searchParams.get('run') || ''
+    if (!runId) return jsonResponse(res, { error: 'run required' }, 400)
+    const limit = Math.min(Math.max(Number(searchParams.get('limit') || '200'), 1), 2000)
+    const r = await pgPool.query(`
+      SELECT token_address, symbol, side, hour_start, price, qty_raw,
+             notional_usd, fee_usd, pnl_usd, reason
+      FROM sim_trades WHERE run_id = $1 ORDER BY hour_start DESC, id DESC LIMIT $2
+    `, [runId, limit])
+    return jsonResponse(res, { run: runId, count: r.rows.length, trades: r.rows })
+  }
+
+  if (pathname === '/api/strategy/positions') {
+    const runId = searchParams.get('run') || ''
+    if (!runId) return jsonResponse(res, { error: 'run required' }, 400)
+    const r = await pgPool.query(`
+      SELECT token_address, symbol, opened_hour, entry_price, qty_raw, cost_usd, close_after
+      FROM sim_positions WHERE run_id = $1 ORDER BY opened_hour DESC
+    `, [runId])
+    return jsonResponse(res, { run: runId, count: r.rows.length, positions: r.rows })
+  }
+
   if (pathname === '/api/signals') {
     const result = await pgPool.query(`
       SELECT DISTINCT ON (pool) *

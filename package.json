@@ -19,6 +19,7 @@
     "serve-analytics": "node quant/server/serve-analytics.js",
     "collect-flows": "node quant/collectors/collect-token-flows.js",
     "enrich-tokens": "node quant/collectors/enrich-tokens.js",
+    "strategy": "node quant/strategy/flow-momentum.js",
     "test": "node --test 'test/**/*.test.js'"
   },
   "engines": {

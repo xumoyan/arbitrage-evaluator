@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strategy Sim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Fira+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark"></span>
+      <h1>Strategy Sim</h1>
+    </div>
+    <nav class="nav">
+      <a href="/">Pools</a>
+      <a href="/flows.html">Token Flows</a>
+      <a href="/stake.html">Staking</a>
+      <a href="/strategy.html" class="active">Strategy</a>
+    </nav>
+    <div class="topbar-right">
+      <label class="switch" title="Refresh data every 60s">
+        <input type="checkbox" id="auto-refresh" checked>
+        <span>Auto-refresh</span>
+      </label>
+      <span id="status" class="status">
+        <span class="status-dot"></span><span class="status-text">Connecting</span>
+      </span>
+    </div>
+  </header>
+
+  <main class="page">
+    <!-- Run picker + KPI summary -->
+    <section class="toolbar">
+      <label class="muted" for="run-select" style="align-self:center">Run</label>
+      <select id="run-select" class="btn" style="min-width:280px"></select>
+    </section>
+
+    <section class="kpi-row">
+      <div class="kpi-card">
+        <span class="kpi-label">Total return</span>
+        <span class="kpi-value" id="kpi-return">—</span>
+        <span class="kpi-sub" id="kpi-capital">—</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Max drawdown</span>
+        <span class="kpi-value" id="kpi-dd" style="color:var(--danger)">—</span>
+        <span class="kpi-sub">peak → trough</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Trades / win rate</span>
+        <span class="kpi-value" id="kpi-trades">—</span>
+        <span class="kpi-sub" id="kpi-mode">—</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Params</span>
+        <span class="kpi-value" id="kpi-params" style="font-size:14px">—</span>
+        <span class="kpi-sub" id="kpi-window">—</span>
+      </div>
+    </section>
+
+    <!-- Equity curve -->
+    <section class="card chart-card">
+      <div class="card-head">
+        <h3>Equity curve <span class="muted">— hourly NAV</span></h3>
+      </div>
+      <div class="chart-wrap tall"><canvas id="equity-chart"></canvas></div>
+    </section>
+
+    <!-- Open positions (live runs) -->
+    <section class="card table-card" id="positions-card">
+      <div class="card-head"><h3>Open positions</h3></div>
+      <div class="table-scroll">
+        <table id="positions-table">
+          <thead>
+            <tr>
+              <th>Token</th>
+              <th>Opened</th>
+              <th class="num">Entry price</th>
+              <th class="num">Cost</th>
+              <th>Close after</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Trades -->
+    <section class="card table-card">
+      <div class="card-head"><h3>Trades <span class="muted">— newest first</span></h3></div>
+      <div class="table-scroll">
+        <table id="trades-table">
+          <thead>
+            <tr>
+              <th>Hour</th>
+              <th>Token</th>
+              <th>Side</th>
+              <th class="num">Notional</th>
+              <th class="num">Fee</th>
+              <th class="num">PnL</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/strategy.js"></script>
+</body>
+</html>
