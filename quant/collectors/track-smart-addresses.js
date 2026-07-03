@@ -24,6 +24,7 @@ function parseArgs(argv) {
     minTrades: Number(process.env.SMART_MIN_TRADES || 5),
     minScore: Number(process.env.SMART_MIN_SCORE || 0),
     topN: Number(process.env.SMART_TOP_N || 50),
+    sinceDays: Number(process.env.SMART_WATCH_SINCE_DAYS || 2),
     watch: false,
     loop: false
   }
@@ -34,6 +35,7 @@ function parseArgs(argv) {
     else if (v === '--min-trades') a.minTrades = Number(argv[++i])
     else if (v === '--min-score') a.minScore = Number(argv[++i])
     else if (v === '--top-n') a.topN = Number(argv[++i])
+    else if (v === '--since-days') a.sinceDays = Number(argv[++i])
     else if (v === '--chain-id') a.chainId = Number(argv[++i])
     else if (v === '--watch') a.watch = true
     else if (v === '--loop') a.loop = true
@@ -57,6 +59,11 @@ Options:
   --min-score <x>       Watchlist score floor (default: 0)
   --top-n <n>           Watchlist size (default: 50)
   --watch               Feed smart_address_events from the current watchlist
+  --since-days <n>      How far back --watch mirrors swap_details (default: 2).
+                        Use a large value once after a swap_details backfill to
+                        seed historical events. Caveat: score_at_time is the
+                        CURRENT score, so deep-history events carry look-ahead
+                        bias — fine for the live feed, flag it in backtests.
   --loop                Repeat every 10 minutes (both modes)
 `)
 }
@@ -158,9 +165,9 @@ async function watchOnce(pool, a) {
       ORDER BY score DESC LIMIT $5
     ) s ON s.address = sd.tx_from
     WHERE sd.chain_id = $1
-      AND sd.block_time >= NOW() - interval '2 days'
+      AND sd.block_time >= NOW() - make_interval(days => $6::int)
     ON CONFLICT (chain_id, address, tx_hash) DO NOTHING
-  `, [a.chainId, a.windowDays, a.horizonHours, a.minScore, a.topN])
+  `, [a.chainId, a.windowDays, a.horizonHours, a.minScore, a.topN, a.sinceDays])
   return res.rowCount
 }
 

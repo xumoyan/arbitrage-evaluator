@@ -37,6 +37,8 @@
   </header>
 
   <main class="page">
+    <section data-progress-domain="strategy"></section>
+
     <!-- Run picker + KPI summary -->
     <section class="toolbar">
       <label class="muted" for="run-select" style="align-self:center">Run</label>
@@ -63,6 +65,40 @@
         <span class="kpi-label">Params</span>
         <span class="kpi-value" id="kpi-params" style="font-size:14px">—</span>
         <span class="kpi-sub" id="kpi-window">—</span>
+      </div>
+    </section>
+
+    <!-- 当前所选 run 的策略说明（每个策略各自的说明，随 Run 切换） -->
+    <section class="card strategy-doc" id="run-doc" style="display:none">
+      <div class="card-head">
+        <h3 id="run-doc-title">策略说明</h3>
+        <span class="card-hint">随所选 Run 切换</span>
+      </div>
+      <div class="doc-body" id="run-doc-body"></div>
+    </section>
+
+    <!-- 所有 run 横向对比：根据模拟数据寻找最优策略 -->
+    <section class="card table-card">
+      <div class="card-head">
+        <h3>策略对比 <span class="muted">— 按收益排序，点击行切换 Run</span></h3>
+      </div>
+      <div class="table-scroll">
+        <table id="compare-table">
+          <thead>
+            <tr>
+              <th>Run</th>
+              <th>策略</th>
+              <th>模式</th>
+              <th class="num">收益</th>
+              <th class="num">最大回撤</th>
+              <th class="num">交易数</th>
+              <th class="num">胜率</th>
+              <th>窗口</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
     </section>
 
@@ -113,8 +149,15 @@
         </table>
       </div>
     </section>
+
+    <!-- 策略目录：全部策略各自的完整说明 -->
+    <details class="card strategy-doc" id="catalog-panel">
+      <summary>📚 策略目录 — 每个策略的思路 / 买入 / 卖出 / 数据源（点击展开）</summary>
+      <div class="doc-body" id="catalog-body">加载中…</div>
+    </details>
   </main>
 
+  <script src="/progress.js"></script>
   <script src="/strategy.js"></script>
 </body>
 </html>

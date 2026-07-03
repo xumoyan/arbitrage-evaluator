@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS sim_trades (
   notional_usd  NUMERIC NOT NULL,
   fee_usd       NUMERIC NOT NULL DEFAULT 0,
   pnl_usd       NUMERIC,                    -- filled on sells (net of both fees)
-  reason        TEXT                        -- entry | hold_expiry | stale_price | final
+  reason        TEXT                        -- entry | hold_expiry | stale_price | take_profit | stop_loss | final
 );
 CREATE INDEX IF NOT EXISTS idx_sim_trades_run  ON sim_trades (run_id, hour_start);
 

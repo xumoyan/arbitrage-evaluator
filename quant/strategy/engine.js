@@ -179,29 +179,54 @@ async function stepHour(pool, pf, hour, cfg, selectTargets, persist) {
     pf.pendingBuys = stillPending
   }
 
-  // 2. close expired positions at hour-H VWAP (stale fallback if quiet hour).
-  // Exit price is clamped to entry * maxGainRatio: a thin token whose VWAP
+  // Shared hour-H VWAP for every open position (stale fallback allowed), reused
+  // by take-profit/stop-loss, hold-expiry, and mark-to-market so the DB is hit
+  // once. Exit price is clamped to entry * maxGainRatio: a thin token whose VWAP
   // "pumps" 100x is wash-trading noise a real fill would never capture.
-  const expired = pf.positions.filter(p => p.closeAfter.getTime() <= hour.getTime())
-  if (expired.length) {
-    const prices = await vwapAt(pool, { chainId, hour, tokens: expired.map(p => p.token), staleHours: cfg.staleHours })
-    for (const p of expired) {
-      let px = prices.get(p.token) ?? p.entryPrice // last resort: flat exit
-      const cap = p.entryPrice * (cfg.maxGainRatio || 10)
-      if (px > cap) px = cap
-      const gross = p.qtyRaw * px
-      const fee = gross * cfg.feeBps / 10000
-      const proceeds = gross - fee
-      const pnl = proceeds - p.costUsd
-      pf.cash += proceeds
-      pf.positions = pf.positions.filter(x => x !== p)
-      pf.closedTrades++
-      if (pnl > 0) pf.wins++
-      if (persist) await recordTrade(pool, runId, { token: p.token, symbol: p.symbol, side: 'sell', hour, price: px, qtyRaw: p.qtyRaw, notionalUsd: gross, feeUsd: fee, pnlUsd: pnl, reason: prices.has(p.token) ? 'hold_expiry' : 'stale_price' })
+  const markPrices = pf.positions.length
+    ? await vwapAt(pool, { chainId, hour, tokens: pf.positions.map(p => p.token), staleHours: cfg.staleHours })
+    : new Map()
+  const capOf = (p) => p.entryPrice * (cfg.maxGainRatio || 10)
+
+  // Close one position at hour-H VWAP (clamped) and book the trade + PnL.
+  const closeAt = async (p, reason) => {
+    let px = markPrices.get(p.token) ?? p.entryPrice // last resort: flat exit
+    const cap = capOf(p)
+    if (px > cap) px = cap
+    const gross = p.qtyRaw * px
+    const fee = gross * cfg.feeBps / 10000
+    const proceeds = gross - fee
+    const pnl = proceeds - p.costUsd
+    pf.cash += proceeds
+    pf.positions = pf.positions.filter(x => x !== p)
+    pf.closedTrades++
+    if (pnl > 0) pf.wins++
+    if (persist) await recordTrade(pool, runId, { token: p.token, symbol: p.symbol, side: 'sell', hour, price: px, qtyRaw: p.qtyRaw, notionalUsd: gross, feeUsd: fee, pnlUsd: pnl, reason })
+  }
+
+  // 2. take-profit / stop-loss (opt-in). Checked before hold-expiry so a target
+  // or stop hit this hour exits now instead of waiting out the remaining hold.
+  // Disabled (0) by default, so runs without these params behave exactly as
+  // before. TP is capped by maxGainRatio just like any other exit.
+  const tp = cfg.takeProfitPct > 0 ? cfg.takeProfitPct / 100 : 0
+  const sl = cfg.stopLossPct > 0 ? cfg.stopLossPct / 100 : 0
+  if (tp || sl) {
+    for (const p of [...pf.positions]) {
+      if (p.closeAfter.getTime() <= hour.getTime()) continue // left to hold-expiry
+      const px = markPrices.get(p.token)
+      if (px == null) continue
+      if (tp && px >= p.entryPrice * (1 + tp)) { await closeAt(p, 'take_profit'); continue }
+      if (sl && px <= p.entryPrice * (1 - sl)) await closeAt(p, 'stop_loss')
     }
   }
 
-  // 3. new signals -> queue buys (filled at H+1)
+  // 3. close expired positions at hour-H VWAP (stale fallback if quiet hour).
+  const expired = pf.positions.filter(p => p.closeAfter.getTime() <= hour.getTime())
+  for (const p of expired) {
+    await closeAt(p, markPrices.has(p.token) ? 'hold_expiry' : 'stale_price')
+  }
+
+  // 4. new signals -> queue buys (filled at H+1)
   const slotsFree = cfg.topK - pf.positions.length - pf.pendingBuys.length
   if (slotsFree > 0 && pf.cash > cfg.capital * 0.01) {
     const targets = await selectTargets({ pool, chainId, hour, cfg })
@@ -215,14 +240,10 @@ async function stepHour(pool, pf, hour, cfg, selectTargets, persist) {
     }
   }
 
-  // 4. mark to market (same gain clamp as exits, keeps the NAV curve honest)
+  // 5. mark to market (same gain clamp as exits, keeps the NAV curve honest)
   let positionsValue = 0
-  if (pf.positions.length) {
-    const prices = await vwapAt(pool, { chainId, hour, tokens: pf.positions.map(p => p.token), staleHours: cfg.staleHours })
-    for (const p of pf.positions) {
-      const cap = p.entryPrice * (cfg.maxGainRatio || 10)
-      positionsValue += p.qtyRaw * Math.min(prices.get(p.token) ?? p.entryPrice, cap)
-    }
+  for (const p of pf.positions) {
+    positionsValue += p.qtyRaw * Math.min(markPrices.get(p.token) ?? p.entryPrice, capOf(p))
   }
   const equity = pf.cash + positionsValue
   if (equity > pf.peak) pf.peak = equity

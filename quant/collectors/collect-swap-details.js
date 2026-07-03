@@ -30,7 +30,15 @@ function parseArgs(argv) {
     batchHours: 6,
     maxHours: 0,
     loop: false,
-    backfill: false
+    backfill: false,
+    fillHistory: true,
+    // In --loop mode, each cycle first catches forward up to now, then chips
+    // this many batches of history backward toward startIso before re-checking
+    // forward. Short pause between cycles while history remains; normal poll
+    // once history is complete.
+    historyBatchesPerCycle: Number(process.env.SWAP_DETAIL_HISTORY_BATCHES || 30),
+    historyPauseMs: Number(process.env.SWAP_DETAIL_HISTORY_PAUSE_MS || 500),
+    pollMs: Number(process.env.SWAP_DETAIL_POLL_MS || 10 * 60 * 1000)
   }
   for (let i = 0; i < argv.length; i++) {
     const v = argv[i]
@@ -40,9 +48,11 @@ function parseArgs(argv) {
     else if (v === '--max-usd') a.maxUsd = Number(argv[++i])
     else if (v === '--batch-hours') a.batchHours = Number(argv[++i])
     else if (v === '--max-hours') a.maxHours = Number(argv[++i])
+    else if (v === '--history-batches') a.historyBatchesPerCycle = Number(argv[++i])
     else if (v === '--chain-id') a.chainId = Number(argv[++i])
     else if (v === '--loop') a.loop = true
     else if (v === '--once') a.loop = false
+    else if (v === '--no-history') a.fillHistory = false
     else if (v === '--backfill') a.backfill = true
     else if (v === '--help' || v === '-h') { printHelp(); process.exit(0) }
   }
@@ -56,16 +66,28 @@ Usage: node quant/collectors/collect-swap-details.js [options]
 Stores per-tx swap detail (>= --min-usd) from the parsed ClickHouse history
 into Postgres swap_details. Incremental with an hour watermark.
 
+--loop is bidirectional: each cycle catches FORWARD up to now (new data), then
+fills HISTORY backward toward --start-iso, until history is complete — after
+which it only polls forward. So a plain (re)start fills everything and settles
+into latest-only; no separate --backfill step needed.
+
 Options:
-  --start-iso <iso>    First hour on first run (env: SWAP_DETAIL_START_ISO)
+  --start-iso <iso>    History target: fill backward down to here (env:
+                       SWAP_DETAIL_START_ISO). On a fresh DB, collection anchors
+                       at "now" and fills history backward toward this date.
   --end-iso <iso>      Stop hour (default: now, or start_floor with --backfill)
   --min-usd <n>        USD floor per swap (env: SWAP_DETAIL_MIN_USD, default 1000)
   --max-usd <n>        USD sanity cap; drops parse garbage (default 50000000)
   --batch-hours <n>    Hours per ClickHouse query (default: 6)
-  --max-hours <n>      Cap hours processed this run (0 = unlimited)
-  --backfill           Fill [--start-iso, --end-iso||start_floor) behind the
-                       watermark; idempotent, rerun-safe
-  --loop               Keep polling for new complete hours
+  --history-batches <n> Backward batches per cycle before re-checking forward
+                       (env: SWAP_DETAIL_HISTORY_BATCHES, default 30)
+  --max-hours <n>      Cap hours processed this run (0 = unlimited; --backfill/--once)
+  --no-history         --loop only polls forward (skip backward history fill)
+  --backfill           One-shot: fill [--start-iso, --end-iso||start_floor)
+                       behind the watermark; idempotent, rerun-safe
+  --once               Single forward pass then exit
+  --loop               Bidirectional: forward to now + history backward, then
+                       forward-only once history is done
 `)
 }
 
@@ -204,6 +226,86 @@ async function ensureSchema(pool) {
   await pool.query(sql)
 }
 
+// On a fresh DB, anchor BOTH frontiers at the current hour: forward has nothing
+// to do and history fills backward toward startIso. No-op once a row exists, so
+// existing watermarks (a partially-filled deployment) are preserved.
+async function ensureAnchored(pool, chainId, minUsd) {
+  const nowIso = new Date(floorToHour(Date.now())).toISOString()
+  await pool.query(`
+    INSERT INTO swap_detail_state (chain_id, last_processed_hour, start_floor, min_usd, updated_at)
+    VALUES ($1, $2::timestamptz, $2::timestamptz, $3, NOW())
+    ON CONFLICT (chain_id) DO NOTHING
+  `, [chainId, nowIso, minUsd])
+}
+
+// Advance only the forward watermark (leaves start_floor to the history fill).
+async function advanceForward(pool, chainId, lastHourIso, minUsd) {
+  await pool.query(`
+    UPDATE swap_detail_state
+    SET last_processed_hour = $2::timestamptz, min_usd = $3, updated_at = NOW()
+    WHERE chain_id = $1
+  `, [chainId, lastHourIso, minUsd])
+}
+
+// Forward: process newly completed hours from the watermark up to now.
+async function forwardCatchUp(pool, args) {
+  const state = await getState(pool, args.chainId)
+  const ceil = args.endIso ? floorToHour(new Date(args.endIso).getTime()) : floorToHour(Date.now())
+  let cursor = state && state.last_processed_hour
+    ? new Date(state.last_processed_hour).getTime() + HOUR_MS
+    : floorToHour(Date.now())
+  while (cursor < ceil) {
+    const batchEnd = Math.min(cursor + args.batchHours * HOUR_MS, ceil)
+    const n = await withRetry(
+      () => processBatch(pool, args, cursor, batchEnd), `fwd ${toChDateTime(new Date(cursor))}`)
+    await advanceForward(pool, args.chainId, new Date(batchEnd - HOUR_MS).toISOString(), args.minUsd)
+    console.log(`fwd ${toChDateTime(new Date(cursor))} → ${toChDateTime(new Date(batchEnd))} (${n} swaps kept)`)
+    cursor = batchEnd
+  }
+}
+
+// History: process one batch backward from start_floor toward targetStartMs.
+// Returns { done } true once start_floor has reached the target.
+async function backfillStep(pool, args, targetStartMs) {
+  const state = await getState(pool, args.chainId)
+  const floorMs = state && state.start_floor
+    ? floorToHour(new Date(state.start_floor).getTime())
+    : floorToHour(Date.now())
+  if (floorMs <= targetStartMs) return { done: true }
+  const batchStart = Math.max(targetStartMs, floorMs - args.batchHours * HOUR_MS)
+  const n = await withRetry(
+    () => processBatch(pool, args, batchStart, floorMs), `hist ${toChDateTime(new Date(batchStart))}`)
+  await lowerStartFloor(pool, args.chainId, new Date(batchStart).toISOString())
+  console.log(`hist ${toChDateTime(new Date(batchStart))} → ${toChDateTime(new Date(floorMs))} (${n} swaps kept)`)
+  return { done: batchStart <= targetStartMs }
+}
+
+// Bidirectional loop: forward to now every cycle, plus a bounded chunk of
+// history backward, until history reaches startIso — then forward-only polling.
+async function loop(pool, args) {
+  const targetStartMs = floorToHour(new Date(args.startIso).getTime())
+  let historyDone = !args.fillHistory
+  for (;;) {
+    try {
+      await ensureAnchored(pool, args.chainId, args.minUsd)
+      await forwardCatchUp(pool, args)
+      if (args.fillHistory && !historyDone) {
+        for (let b = 0; b < args.historyBatchesPerCycle; b++) {
+          const r = await backfillStep(pool, args, targetStartMs)
+          if (r.done) {
+            historyDone = true
+            console.log(`History backfill complete (reached ${args.startIso}) — forward-only from here.`)
+            break
+          }
+        }
+      }
+    } catch (err) {
+      console.error('pass failed:', err.message)
+    }
+    await sleep(historyDone ? args.pollMs : args.historyPauseMs)
+  }
+}
+
 async function runOnce(pool, args) {
   const state = await getState(pool, args.chainId)
   const startFloorMs = floorToHour(new Date(args.startIso).getTime())
@@ -259,19 +361,23 @@ async function main() {
   try {
     await ensureSchema(pool)
     if (args.loop) {
-      for (;;) {
-        await runOnce(pool, args).catch(err => console.error('pass failed:', err.message))
-        await sleep(10 * 60 * 1000)
-      }
+      await loop(pool, args)          // bidirectional; never returns
     } else {
-      await runOnce(pool, args)
+      await runOnce(pool, args)        // --once (forward pass) or --backfill
     }
   } finally {
     if (!args.loop) await pool.end().catch(() => {})
   }
 }
 
-main().catch(err => {
-  console.error(err)
-  process.exit(1)
-})
+if (require.main === module) {
+  main().catch(err => {
+    console.error(err)
+    process.exit(1)
+  })
+}
+
+module.exports = {
+  parseArgs, ensureAnchored, advanceForward, forwardCatchUp,
+  backfillStep, loop, getState, floorToHour
+}

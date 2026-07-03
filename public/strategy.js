@@ -3,6 +3,7 @@
 const state = {
   runs: [],
   selectedRun: null,
+  catalog: null,       // per-strategy Chinese docs from /api/strategy/catalog
   charts: {},
   refreshTimer: null,
   autoRefresh: true
@@ -157,11 +158,77 @@ function renderTrades(trades) {
   }
 }
 
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]))
+}
+
+function docHtml(doc) {
+  const row = (k, v) => `<h4>${k}</h4><p>${escapeHtml(v)}</p>`
+  return row('思路', doc.idea) + row('买入', doc.entry) + row('卖出', doc.exit) +
+    row('数据源', doc.dataSource) + row('数据就绪度', doc.readiness)
+}
+
+// Per-strategy doc panel: shows the doc for the SELECTED run's strategy.
+function renderRunDoc(run) {
+  const panel = document.getElementById('run-doc')
+  const meta = state.catalog && state.catalog[run.strategy]
+  if (!meta) { panel.style.display = 'none'; return }
+  panel.style.display = ''
+  document.getElementById('run-doc-title').innerHTML =
+    `📖 ${escapeHtml(meta.title)} <span class="muted">· ${escapeHtml(run.strategy)}</span>`
+  document.getElementById('run-doc-body').innerHTML = docHtml(meta.doc)
+}
+
+// Full catalog: every strategy's own doc, for browsing before running one.
+function renderCatalog() {
+  if (!state.catalog) return
+  const parts = []
+  for (const meta of Object.values(state.catalog)) {
+    parts.push(`<h4 style="font-size:14px;margin-top:22px">▸ ${escapeHtml(meta.title)} <span class="muted">· ${escapeHtml(meta.name)}</span></h4>`)
+    parts.push(docHtml(meta.doc))
+  }
+  document.getElementById('catalog-body').innerHTML = parts.join('')
+}
+
+// Comparison table across all runs, best return first — the "find the optimal
+// strategy from simulated data" view.
+function renderCompare() {
+  const tbody = document.querySelector('#compare-table tbody')
+  tbody.innerHTML = ''
+  const rows = [...state.runs].sort((a, b) => {
+    const ra = a.total_return == null ? -Infinity : Number(a.total_return)
+    const rb = b.total_return == null ? -Infinity : Number(b.total_return)
+    return rb - ra
+  })
+  for (const r of rows) {
+    const meta = state.catalog && state.catalog[r.strategy]
+    const ret = r.total_return == null ? null : Number(r.total_return)
+    const tr = document.createElement('tr')
+    tr.style.cursor = 'pointer'
+    if (r.run_id === state.selectedRun) tr.style.background = 'var(--primary-soft)'
+    tr.innerHTML = `
+      <td class="addr">${escapeHtml(r.run_id)}</td>
+      <td>${meta ? escapeHtml(meta.title) : escapeHtml(r.strategy)}</td>
+      <td class="muted">${escapeHtml(r.mode)}</td>
+      <td class="num" style="color:${ret == null ? '' : ret >= 0 ? 'var(--success)' : 'var(--danger)'}">${formatPct(ret)}</td>
+      <td class="num">${r.max_drawdown != null ? '-' + (Number(r.max_drawdown) * 100).toFixed(2) + '%' : '—'}</td>
+      <td class="num">${r.trade_count ?? '—'}</td>
+      <td class="num">${r.win_rate != null ? (Number(r.win_rate) * 100).toFixed(1) + '%' : '—'}</td>
+      <td class="muted">${r.from_hour ? r.from_hour.slice(0, 10) : '—'} → ${r.to_hour ? r.to_hour.slice(0, 10) : '—'}</td>
+      <td class="muted">${escapeHtml(r.status)}</td>`
+    tr.addEventListener('click', () => loadRun(r.run_id))
+    tbody.appendChild(tr)
+  }
+}
+
 async function loadRun(runId) {
   state.selectedRun = runId
   const run = state.runs.find(r => r.run_id === runId)
   if (!run) return
+  document.getElementById('run-select').value = runId
   renderKpis(run)
+  renderRunDoc(run)
+  renderCompare()
   const [equity, trades, positions] = await Promise.all([
     api(`strategy/equity?run=${encodeURIComponent(runId)}`),
     api(`strategy/trades?run=${encodeURIComponent(runId)}&limit=300`),
@@ -174,10 +241,18 @@ async function loadRun(runId) {
 
 async function refresh() {
   try {
+    if (!state.catalog) {
+      try {
+        const cat = await api('strategy/catalog')
+        state.catalog = cat.strategies
+        renderCatalog()
+      } catch { /* older server without catalog endpoint */ }
+    }
     const data = await api('strategy/runs')
     state.runs = data.runs
     setStatus(true)
     renderRunPicker()
+    renderCompare()
     const target = state.selectedRun && state.runs.some(r => r.run_id === state.selectedRun)
       ? state.selectedRun
       : (state.runs[0] && state.runs[0].run_id)

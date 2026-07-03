@@ -660,6 +660,13 @@ async function handleApiRequest(pathname, searchParams, pgPool, res) {
   }
 
   // ── strategy simulation (backtest + paper trading) ──────────────────────
+  // Per-strategy Chinese docs straight from the registry, so the dashboard
+  // always shows the doc matching the code that actually ran.
+  if (pathname === '/api/strategy/catalog') {
+    const { catalog } = require('../strategy/strategies')
+    return jsonResponse(res, { strategies: catalog() })
+  }
+
   if (pathname === '/api/strategy/runs') {
     const r = await pgPool.query(`
       SELECT run_id, strategy, mode, params, from_hour, to_hour, status,
@@ -710,6 +717,17 @@ async function handleApiRequest(pathname, searchParams, pgPool, res) {
       FROM sim_positions WHERE run_id = $1 ORDER BY opened_hour DESC
     `, [runId])
     return jsonResponse(res, { run: runId, count: r.rows.length, positions: r.rows })
+  }
+
+  // ── data-run progress per dashboard section ──────────────────────────────
+  // Reports, for each domain, the covered time window, row counts, and any
+  // "missing" gaps (unenriched tokens, never-synced sources) so the UI can show
+  // how far each pipeline has run and what data is still absent. `?domain=` runs
+  // just one domain's queries; omitting it returns all six.
+  if (pathname === '/api/progress') {
+    const domain = searchParams.get('domain') || ''
+    const progress = await computeProgress(pgPool, domain)
+    return jsonResponse(res, { progress })
   }
 
   if (pathname === '/api/signals') {
@@ -829,6 +847,132 @@ function computeSignals(analytics) {
   return signals
 }
 
+// Builds the per-domain data-run progress payload consumed by /api/progress.
+// Every query is wrapped so a missing table (e.g. a pipeline never deployed)
+// degrades to an "empty" section instead of failing the whole request.
+async function computeProgress(pgPool, only) {
+  const safe = async (sql, params = []) => {
+    try { return (await pgPool.query(sql, params)).rows } catch { return [] }
+  }
+  const one = async (sql, params = []) => (await safe(sql, params))[0] || {}
+  const num = (v) => (v == null ? null : Number(v))
+  const iso = (v) => (v == null ? null : new Date(v).toISOString())
+
+  const builders = {
+    // Pools / 池子分析
+    pools: async () => {
+      const a = await one(`SELECT MIN(bucket_start) earliest, MAX(bucket_end) latest,
+        COUNT(*)::bigint rows, COUNT(DISTINCT pool)::int pools FROM pool_analytics`)
+      const cat = await one('SELECT COUNT(*)::int cataloged FROM pool_catalog')
+      const px = await one(`SELECT MAX(hour_start) latest, COUNT(DISTINCT symbol)::int symbols
+        FROM token_prices_hourly`)
+      const cataloged = num(cat.cataloged) || 0
+      const withData = num(a.pools) || 0
+      return {
+        title: '池子分析 · Pools', live: true,
+        earliest: iso(a.earliest), latest: iso(a.latest), rows: num(a.rows),
+        metrics: [
+          { label: '已发现池子', value: cataloged },
+          { label: '有分析数据的池子', value: withData, warn: cataloged > 0 && withData < cataloged },
+          { label: '价格覆盖代币', value: num(px.symbols) || 0 },
+          { label: '价格数据至', value: iso(px.latest) || '—' }
+        ]
+      }
+    },
+    // Token Flows / 资金流
+    flows: async () => {
+      const a = await one(`SELECT MIN(hour_start) earliest, MAX(hour_start) latest,
+        COUNT(*)::bigint rows, COUNT(DISTINCT token_address)::int tokens FROM token_flow_hourly`)
+      const st = await one(`SELECT start_floor, last_processed_hour, total_tokens
+        FROM flow_collector_state ORDER BY chain_id LIMIT 1`)
+      const tk = await one(`SELECT COUNT(*)::int total,
+        COUNT(*) FILTER (WHERE symbol IS NULL)::int missing_symbol,
+        COUNT(*) FILTER (WHERE metadata_checked_at IS NULL)::int never_checked FROM tokens`)
+      const missing = num(tk.missing_symbol) || 0
+      return {
+        title: '资金流 · Token Flows', live: true,
+        earliest: iso(st.start_floor) || iso(a.earliest),
+        latest: iso(st.last_processed_hour) || iso(a.latest),
+        rows: num(a.rows),
+        metrics: [
+          { label: '追踪代币', value: num(a.tokens) || 0 },
+          { label: '未识别代币(缺symbol)', value: missing, warn: missing > 0 },
+          { label: '从未查过元数据', value: num(tk.never_checked) || 0, warn: (num(tk.never_checked) || 0) > 0 }
+        ],
+        note: missing > 0 ? '未识别代币需运行 enrich-tokens 补齐 symbol/decimals' : null
+      }
+    },
+    // Staking / 质押
+    staking: async () => {
+      const a = await one(`SELECT MIN(day_start) earliest, MAX(day_start) latest,
+        COUNT(*)::bigint rows FROM stake_transactions`)
+      const chains = await safe(`SELECT chain, COUNT(*)::bigint rows, MAX(day_start) latest
+        FROM stake_transactions GROUP BY chain ORDER BY chain`)
+      const sources = await safe('SELECT source_name, last_to, row_count FROM stake_sync_state')
+      const metrics = chains.map(c => ({ label: `${c.chain} 记录`, value: num(c.rows) }))
+      metrics.push({ label: '已同步数据源', value: sources.length })
+      return {
+        title: '质押 · Staking', live: false,
+        earliest: iso(a.earliest), latest: iso(a.latest), rows: num(a.rows), metrics
+      }
+    },
+    // Lending / 借贷 & 清算
+    lending: async () => {
+      const a = await one(`SELECT MIN(block_time) earliest, MAX(block_time) latest,
+        COUNT(*)::bigint rows FROM lending_events`)
+      const chains = await safe(`SELECT chain, COUNT(*)::bigint rows, MAX(block_time) latest,
+        COUNT(*) FILTER (WHERE action = 'liquidation')::bigint liqs
+        FROM lending_events GROUP BY chain ORDER BY chain`)
+      const metrics = []
+      for (const c of chains) {
+        metrics.push({ label: `${c.chain} 事件`, value: num(c.rows) })
+        metrics.push({ label: `${c.chain} 清算`, value: num(c.liqs) })
+      }
+      return {
+        title: '借贷/清算 · Lending', live: true,
+        earliest: iso(a.earliest), latest: iso(a.latest), rows: num(a.rows), metrics
+      }
+    },
+    // Smart Money / 聪明钱
+    smart: async () => {
+      const s = await one('SELECT COUNT(*)::int addresses, MAX(computed_at) latest FROM smart_addresses')
+      const e = await one(`SELECT MIN(block_time) earliest, MAX(block_time) latest, COUNT(*)::bigint rows
+        FROM smart_address_events`)
+      return {
+        title: '聪明钱 · Smart Money', live: false,
+        earliest: iso(e.earliest), latest: iso(e.latest), rows: num(e.rows),
+        metrics: [
+          { label: '评分地址数', value: num(s.addresses) || 0 },
+          { label: '评分更新至', value: iso(s.latest) || '—' }
+        ]
+      }
+    },
+    // Strategy / 策略回测
+    strategy: async () => {
+      const r = await one(`SELECT COUNT(*)::int runs, MAX(started_at) latest,
+        COUNT(*) FILTER (WHERE status = 'running')::int running,
+        COUNT(*) FILTER (WHERE status = 'done')::int done,
+        COUNT(*) FILTER (WHERE status = 'error')::int errored FROM strategy_runs`)
+      const errored = num(r.errored) || 0
+      return {
+        title: '策略回测 · Strategy', live: false,
+        earliest: null, latest: iso(r.latest), rows: num(r.runs),
+        metrics: [
+          { label: '总运行数', value: num(r.runs) || 0 },
+          { label: '进行中', value: num(r.running) || 0 },
+          { label: '已完成', value: num(r.done) || 0 },
+          { label: '失败', value: errored, warn: errored > 0 }
+        ]
+      }
+    }
+  }
+
+  const keys = only && builders[only] ? [only] : Object.keys(builders)
+  const out = {}
+  for (const k of keys) out[k] = { key: k, ...(await builders[k]()) }
+  return out
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2))
   if (!args.pgUrl) { console.error('Error: --pg-url or PG_URL required'); process.exit(1) }
@@ -875,4 +1019,4 @@ if (require.main === module) {
   main()
 }
 
-module.exports = { computeSignals, formatAnalyticsRow }
+module.exports = { computeSignals, formatAnalyticsRow, computeProgress }
