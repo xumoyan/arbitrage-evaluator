@@ -52,6 +52,7 @@ function parseArgs(argv) {
     recordRawEvents: process.env.COLLECTOR_RECORD_RAW_EVENTS === 'true',
     fromBlock: '',
     toBlock: '',
+    backfill: false,
     pgUrl: buildPgUrl(),
     pgSchema: process.env.PG_SCHEMA || 'pool_analytics',
     v2Factory: '',
@@ -87,6 +88,7 @@ function parseArgs(argv) {
     else if (arg === '--record-raw-events') args.recordRawEvents = true
     else if (arg === '--from-block') args.fromBlock = next()
     else if (arg === '--to-block') args.toBlock = next()
+    else if (arg === '--backfill') args.backfill = true
     else if (arg === '--pg-url') args.pgUrl = next()
     else if (arg === '--pg-schema') args.pgSchema = next()
     else if (arg === '--v2-factory') args.v2Factory = next()
@@ -128,6 +130,8 @@ Options:
                               columns empty. (env: COLLECTOR_TVL_ONLY=true)
   --record-raw-events         Also store raw swap events to PG
   --from-block <n>            Override start block (first run only)
+  --backfill                  Honor --from-block behind the checkpoint and never
+                              regress the forward frontier (historical windows)
   --to-block <n>              Stop at this block instead of chain head (backfill windows)
   --pg-schema <name>          PostgreSQL schema (env: PG_SCHEMA, default: pool_analytics)
   --parser-root <path>        Path to transaction-parser project
@@ -189,13 +193,17 @@ async function getLastProcessedBlock(pgPool, chainId) {
   return res.rows.length > 0 ? res.rows[0].last_processed_block : 0
 }
 
-async function updateCollectorState(pgPool, chainId, block, bucketEnd, poolCount, totalBuckets, totalEvents) {
+async function updateCollectorState(pgPool, chainId, block, bucketEnd, poolCount, totalBuckets, totalEvents, backfill = false) {
+  // A backfill window processes blocks BEHIND the forward frontier; it must never
+  // regress last_processed_block / last_bucket_end, so guard both with GREATEST.
+  const blockExpr = backfill ? 'GREATEST(collector_state.last_processed_block, EXCLUDED.last_processed_block)' : 'EXCLUDED.last_processed_block'
+  const bucketExpr = backfill ? 'GREATEST(collector_state.last_bucket_end, EXCLUDED.last_bucket_end)' : 'EXCLUDED.last_bucket_end'
   await pgPool.query(`
     INSERT INTO collector_state (chain_id, last_processed_block, last_bucket_end, pool_count, total_buckets, total_events, updated_at)
     VALUES ($1, $2, $3, $4, $5, $6, NOW())
     ON CONFLICT (chain_id) DO UPDATE SET
-      last_processed_block = $2,
-      last_bucket_end = $3,
+      last_processed_block = ${blockExpr},
+      last_bucket_end = ${bucketExpr},
       pool_count = $4,
       total_buckets = $5,
       total_events = $6,
@@ -928,7 +936,12 @@ async function main() {
 
   const lastBlock = await getLastProcessedBlock(pgPool, chainId)
   let fromBlock
-  if (lastBlock > 0) {
+  if (args.backfill && args.fromBlock) {
+    // Historical backfill: honor the explicit window and never touch the forward
+    // checkpoint. Buckets are UNIQUE-upserted, so overlaps are idempotent.
+    fromBlock = Number(args.fromBlock)
+    console.log(`Backfill window from --from-block: ${fromBlock} (checkpoint ${lastBlock} left intact)`)
+  } else if (lastBlock > 0) {
     fromBlock = lastBlock + 1
     console.log(`Resuming from PG checkpoint: block ${lastBlock} → starting at ${fromBlock}`)
   } else if (args.fromBlock) {
@@ -1101,7 +1114,7 @@ async function main() {
     }
   }
 
-  await updateCollectorState(pgPool, chainId, currentBlock, new Date().toISOString(), catalog.pools.length, totalBuckets, swapEvents.length)
+  await updateCollectorState(pgPool, chainId, currentBlock, new Date().toISOString(), catalog.pools.length, totalBuckets, swapEvents.length, args.backfill)
 
   console.log(`\nDone: ${totalBuckets} grid rows written, ${swapEvents.length} swap events, blocks ${fromBlock}→${currentBlock}`)
 

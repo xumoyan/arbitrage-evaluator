@@ -75,10 +75,7 @@ function fmtUsd(n) {
   return '$' + num.toFixed(num < 1 ? 4 : 2)
 }
 
-function shortAddr(addr) {
-  if (!addr) return '—'
-  return `${addr.slice(0, 6)}...${addr.slice(-4)}`
-}
+// shortAddr/copyBtn come from util.js (shared by every page).
 
 function esc(value) {
   if (value === null || value === undefined) return ''
@@ -89,12 +86,6 @@ function esc(value) {
     '"': '&quot;',
     "'": '&#39;'
   })[ch])
-}
-
-function copyBtn(text) {
-  if (!text) return ''
-  const safe = esc(text)
-  return `<button class="copy-btn" data-copy="${safe}" title="Copy ${safe}">⧉</button>`
 }
 
 function explorerLink(type, value) {
@@ -486,20 +477,6 @@ function download(url) {
   a.click()
   a.remove()
 }
-
-document.addEventListener('click', async e => {
-  const b = e.target.closest('.copy-btn')
-  if (!b) return
-  e.stopPropagation()
-  e.preventDefault()
-  try {
-    await navigator.clipboard.writeText(b.dataset.copy)
-    const old = b.textContent
-    b.textContent = '✓'
-    b.classList.add('copied')
-    setTimeout(() => { b.textContent = old; b.classList.remove('copied') }, 1000)
-  } catch (err) { console.error(err) }
-})
 
 document.addEventListener('DOMContentLoaded', async () => {
   await refreshAll()

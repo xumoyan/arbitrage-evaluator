@@ -3,7 +3,7 @@
 const state = {
   pools: [],
   selectedPool: null,
-  timeRangeHours: 0, // 0 = all time
+  timeRangeHours: 168, // default: last 7 days (0 = all time)
   customFrom: '',
   customTo: '',
   charts: {},
@@ -129,28 +129,7 @@ function formatUsd(n) {
   return '$' + num.toFixed(0)
 }
 
-function shortAddr(addr) {
-  if (!addr) return ''
-  return `${addr.slice(0, 6)}...${addr.slice(-4)}`
-}
-
-function copyBtn(text) {
-  return `<button class="copy-btn" data-copy="${text}" title="Copy ${text}">⧉</button>`
-}
-
-// Copy-to-clipboard for any .copy-btn (delegated).
-document.addEventListener('click', async e => {
-  const b = e.target.closest('.copy-btn')
-  if (!b) return
-  e.stopPropagation()
-  e.preventDefault()
-  try {
-    await navigator.clipboard.writeText(b.dataset.copy)
-    const o = b.textContent
-    b.textContent = '✓'; b.classList.add('copied')
-    setTimeout(() => { b.textContent = o; b.classList.remove('copied') }, 1000)
-  } catch (err) { console.error('copy failed', err) }
-})
+// shortAddr/copyBtn come from util.js (shared by every page).
 
 function formatNumber(n) {
   if (n === null || n === undefined) return '-'
@@ -544,7 +523,7 @@ function renderSignals(signals, poolAddress) {
     }
     return `<tr>
       <td>${s.type.replace(/_/g, ' ')}</td>
-      <td>${s.pool ? shortAddr(s.pool) : '-'}</td>
+      <td class="addr">${s.pool ? addrCell(s.pool) : '-'}</td>
       <td class="${cls}">${value}</td>
     </tr>`
   })
@@ -629,11 +608,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('date-clear').addEventListener('click', () => {
     state.customFrom = ''
     state.customTo = ''
-    state.timeRangeHours = 0
+    state.timeRangeHours = 168
     document.getElementById('date-from').value = ''
     document.getElementById('date-to').value = ''
     document.querySelectorAll('.time-range button').forEach(b => b.classList.remove('active'))
-    document.querySelector('.time-range button[data-range="0"]').classList.add('active')
+    document.querySelector('.time-range button[data-range="168"]').classList.add('active')
     refreshCombined()
   })
 

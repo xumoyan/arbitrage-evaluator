@@ -8,13 +8,23 @@
 //   CLICKHOUSE_DEFI_ETH_HOST / _USER / _PASSWORD   raw ETH logs (eth_defi)
 //   CLICKHOUSE_DEFI_TRX_HOST / _USER / _PASSWORD   raw TRON logs (trx_defi)
 
+// Default per-query timeout — a hung ClickHouse socket must not freeze
+// collectors forever (see quant/lib/clickhouse.js).
+const DEFAULT_TIMEOUT_MS = Number(process.env.CLICKHOUSE_TIMEOUT_MS) > 0
+  ? Number(process.env.CLICKHOUSE_TIMEOUT_MS)
+  : 600000
+
 function makeClient({ host, user, password }) {
   if (!host) throw new Error('ClickHouse host is required')
   const base = host.replace(/\/+$/, '')
   return {
     async query(sql, { signal } = {}) {
       const url = `${base}/?user=${encodeURIComponent(user || 'default')}&password=${encodeURIComponent(password || '')}`
-      const res = await fetch(url, { method: 'POST', body: sql + '\nFORMAT JSON', signal })
+      const res = await fetch(url, {
+        method: 'POST',
+        body: sql + '\nFORMAT JSON',
+        signal: signal || AbortSignal.timeout(DEFAULT_TIMEOUT_MS)
+      })
       if (!res.ok) {
         const body = await res.text().catch(() => '')
         throw new Error(`ClickHouse ${res.status}: ${body.slice(0, 500)}`)

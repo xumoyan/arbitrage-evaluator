@@ -264,17 +264,38 @@ async function handleApiRequest(pathname, searchParams, pgPool, res) {
     const to = searchParams.get('to') || ''
     const refSymbol = (searchParams.get('ref') || 'WETH').toUpperCase()
 
-    let query = `
+    // Adaptive granularity: hourly points for windows up to 14 days, one point
+    // per day (last bucket of the day) beyond that. Keeps an all-time query at
+    // ~500 points per pool instead of 10k+, which the chart can't render.
+    let fromMs = from ? Date.parse(from) : NaN
+    if (Number.isNaN(fromMs)) {
+      const minRes = await pgPool.query('SELECT MIN(bucket_start) AS m FROM pool_analytics')
+      fromMs = minRes.rows[0]?.m ? new Date(minRes.rows[0].m).getTime() : Date.now()
+    }
+    const toMs = to && !Number.isNaN(Date.parse(to)) ? Date.parse(to) : Date.now()
+    const daily = toMs - fromMs > 14 * 86400e3
+
+    const params = []
+    let paramIdx = 1
+    let rangeSql = ''
+    if (from) { rangeSql += ` AND bucket_start >= $${paramIdx++}`; params.push(from) }
+    if (to) { rangeSql += ` AND bucket_start <= $${paramIdx++}`; params.push(to) }
+
+    const query = daily ? `
+      SELECT DISTINCT ON (pool, date_trunc('day', bucket_start))
+             pool, protocol, token0_symbol, token1_symbol, fee_ppm,
+             date_trunc('day', bucket_start) AS bucket_start,
+             tvl_usd, tvl_token0_usd, tvl_token1_usd, price_close
+      FROM pool_analytics
+      WHERE 1=1 ${rangeSql}
+      ORDER BY pool, date_trunc('day', bucket_start) ASC, bucket_start DESC
+    ` : `
       SELECT pool, protocol, token0_symbol, token1_symbol, fee_ppm,
              bucket_start, tvl_usd, tvl_token0_usd, tvl_token1_usd, price_close
       FROM pool_analytics
-      WHERE 1=1
+      WHERE 1=1 ${rangeSql}
+      ORDER BY pool, bucket_start ASC
     `
-    const params = []
-    let paramIdx = 1
-    if (from) { query += ` AND bucket_start >= $${paramIdx++}`; params.push(from) }
-    if (to) { query += ` AND bucket_start <= $${paramIdx++}`; params.push(to) }
-    query += ' ORDER BY pool, bucket_start ASC'
 
     const result = await pgPool.query(query, params)
 
@@ -310,16 +331,24 @@ async function handleApiRequest(pathname, searchParams, pgPool, res) {
       })
     }
 
-    // Reference market price (Binance) for the same window — single series.
-    let refQuery = `
-      SELECT hour_start, usd_price FROM token_prices_hourly
-      WHERE symbol = $1
-    `
+    // Reference market price (Binance) for the same window — single series,
+    // downsampled to daily alongside the pools.
     const refParams = [refSymbol]
     let refIdx = 2
-    if (from) { refQuery += ` AND hour_start >= $${refIdx++}`; refParams.push(from) }
-    if (to) { refQuery += ` AND hour_start <= $${refIdx++}`; refParams.push(to) }
-    refQuery += ' ORDER BY hour_start ASC'
+    let refRange = ''
+    if (from) { refRange += ` AND hour_start >= $${refIdx++}`; refParams.push(from) }
+    if (to) { refRange += ` AND hour_start <= $${refIdx++}`; refParams.push(to) }
+    const refQuery = daily ? `
+      SELECT DISTINCT ON (date_trunc('day', hour_start))
+             date_trunc('day', hour_start) AS hour_start, usd_price
+      FROM token_prices_hourly
+      WHERE symbol = $1 ${refRange}
+      ORDER BY date_trunc('day', hour_start) ASC, hour_start DESC
+    ` : `
+      SELECT hour_start, usd_price FROM token_prices_hourly
+      WHERE symbol = $1 ${refRange}
+      ORDER BY hour_start ASC
+    `
     const refRes = await pgPool.query(refQuery, refParams)
     const refPrice = {
       symbol: refSymbol,
@@ -330,7 +359,7 @@ async function handleApiRequest(pathname, searchParams, pgPool, res) {
     }
 
     const pools = Array.from(byPool.values())
-    return jsonResponse(res, { from, to, count: pools.length, pools, refPrice })
+    return jsonResponse(res, { from, to, granularity: daily ? 'day' : 'hour', count: pools.length, pools, refPrice })
   }
 
   if (pathname === '/api/summary') {
@@ -588,9 +617,16 @@ async function handleApiRequest(pathname, searchParams, pgPool, res) {
   if (pathname === '/api/smart/list') {
     const limit = Math.min(Math.max(Number(searchParams.get('limit') || '50'), 1), 500)
     const r = await pgPool.query(`
-      SELECT address, window_days, horizon_hours, trade_count, scored_count,
-             win_count, win_rate, avg_return, total_pnl_usd, volume_usd, score, computed_at
-      FROM smart_addresses ORDER BY score DESC LIMIT $1
+      SELECT s.address, s.window_days, s.horizon_hours, s.trade_count, s.scored_count,
+             s.win_count, s.win_rate, s.avg_return, s.total_pnl_usd, s.volume_usd, s.score, s.computed_at,
+             lbl.name_tag, lbl.labels
+      FROM smart_addresses s
+      LEFT JOIN LATERAL (
+        SELECT MIN(al.name_tag) AS name_tag, STRING_AGG(DISTINCT al.label, ', ') AS labels
+        FROM address_labels al
+        WHERE al.chain_id = s.chain_id AND al.address = s.address
+      ) lbl ON TRUE
+      ORDER BY s.score DESC LIMIT $1
     `, [limit])
     return jsonResponse(res, { count: r.rows.length, addresses: r.rows })
   }
@@ -673,6 +709,35 @@ async function handleApiRequest(pathname, searchParams, pgPool, res) {
              initial_capital, final_equity, total_return, max_drawdown,
              trade_count, win_rate, started_at, updated_at
       FROM strategy_runs ORDER BY started_at DESC LIMIT 100
+    `)
+    return jsonResponse(res, { count: r.rows.length, runs: r.rows })
+  }
+
+  // Live paper-trading overview: one row per live run with current equity,
+  // running max drawdown, closed-trade stats and the last processed hour —
+  // computed server-side so the dashboard needs a single call.
+  if (pathname === '/api/strategy/live') {
+    const r = await pgPool.query(`
+      SELECT r.run_id, r.strategy, r.status, r.initial_capital, r.params, r.started_at,
+             eq.hour_start AS last_hour, eq.equity_usd, eq.cash_usd, eq.open_positions,
+             dd.max_dd, tr.trades, tr.wins
+      FROM strategy_runs r
+      LEFT JOIN LATERAL (
+        SELECT hour_start, equity_usd, cash_usd, open_positions
+        FROM sim_equity_hourly e WHERE e.run_id = r.run_id
+        ORDER BY hour_start DESC LIMIT 1) eq ON TRUE
+      LEFT JOIN LATERAL (
+        SELECT COALESCE(MAX((peak - equity_usd) / NULLIF(peak, 0)), 0) AS max_dd
+        FROM (SELECT equity_usd, MAX(equity_usd) OVER (ORDER BY hour_start) AS peak
+              FROM sim_equity_hourly e WHERE e.run_id = r.run_id) t) dd ON TRUE
+      LEFT JOIN LATERAL (
+        SELECT COUNT(*) FILTER (WHERE side = 'sell')::int AS trades,
+               COUNT(*) FILTER (WHERE side = 'sell' AND pnl_usd > 0)::int AS wins
+        FROM sim_trades s WHERE s.run_id = r.run_id) tr ON TRUE
+      WHERE r.mode = 'live'
+        AND (eq.hour_start IS NULL OR eq.hour_start > NOW() - interval '30 days')
+        AND r.status = 'running'
+      ORDER BY r.started_at ASC
     `)
     return jsonResponse(res, { count: r.rows.length, runs: r.rows })
   }

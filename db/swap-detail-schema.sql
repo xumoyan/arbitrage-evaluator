@@ -22,6 +22,12 @@ CREATE TABLE IF NOT EXISTS swap_details (
   created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   PRIMARY KEY (chain_id, tx_hash)
 );
+-- Gas cost of the swap tx (cost-model input). Collected inline for new rows;
+-- backfill-swap-gas.js fills history. gas_cost_usd = used * price / 1e18 * ETH.
+ALTER TABLE swap_details ADD COLUMN IF NOT EXISTS gas_used      NUMERIC;
+ALTER TABLE swap_details ADD COLUMN IF NOT EXISTS gas_price_wei NUMERIC;
+ALTER TABLE swap_details ADD COLUMN IF NOT EXISTS gas_cost_usd  NUMERIC;
+
 CREATE INDEX IF NOT EXISTS idx_swap_details_time    ON swap_details (block_time);
 CREATE INDEX IF NOT EXISTS idx_swap_details_from    ON swap_details (tx_from, block_time);
 CREATE INDEX IF NOT EXISTS idx_swap_details_tok_in  ON swap_details (token_in, block_time);

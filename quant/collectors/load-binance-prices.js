@@ -115,8 +115,64 @@ function fetchCsv(pair, interval, kind, label, tmpDir) {
   return fs.existsSync(csvPath) ? csvPath : null
 }
 
+// REST klines mirrors, tried in order. data-api.binance.vision is the public
+// market-data mirror (no auth, market data only); the api*.binance.com hosts
+// are equivalent fallbacks. Unlike the archive zips (daily files publish the
+// NEXT day, so the newest ~24h simply don't exist there), REST serves up to
+// the in-progress hour — it's what closes the gap the dashboards showed.
+const REST_HOSTS = [
+  'https://data-api.binance.vision',
+  'https://api.binance.com',
+  'https://api1.binance.com'
+]
+
+// Uses global fetch (not curl): the docker collector runs in node:20-slim,
+// which ships neither curl nor unzip — spawnSync('curl') silently returned
+// nothing there and majors' prices froze while stables (pinned $1) kept
+// advancing max(hour_start).
+async function fetchRestKlines(pair, interval, startMs, endMs) {
+  const qs = `symbol=${pair}&interval=${interval}&startTime=${startMs}&endTime=${endMs}&limit=1000`
+  for (const host of REST_HOSTS) {
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        const res = await fetch(`${host}/api/v3/klines?${qs}`, { signal: AbortSignal.timeout(30000) })
+        if (res.ok) return await res.json()
+      } catch { /* try next attempt/host */ }
+    }
+  }
+  return null
+}
+
+// Fill hours missing from `hourMap` (zip archives) via the REST API.
+async function fillFromRest(pair, interval, hourMap, startTs, endTs) {
+  const missing = []
+  for (let h = startTs; h <= endTs; h += 3600) if (!hourMap.has(h)) missing.push(h)
+  if (!missing.length) return 0
+  let filled = 0
+  // Chunk contiguous ranges into <=1000-kline REST calls.
+  let i = 0
+  while (i < missing.length) {
+    const from = missing[i]
+    let j = i
+    while (j + 1 < missing.length && missing[j + 1] - from < 1000 * 3600) j++
+    const to = missing[j]
+    const kl = await fetchRestKlines(pair, interval, from * 1000, to * 1000 + 3599_000)
+    if (Array.isArray(kl)) {
+      for (const k of kl) {
+        const sec = toSeconds(k[0])
+        const hour = sec - (sec % 3600)
+        if (hour < startTs || hour > endTs || hourMap.has(hour)) continue
+        hourMap.set(hour, { close: String(k[4]), vol: k[7] != null ? String(k[7]) : null, tbuy: k[10] != null ? String(k[10]) : null })
+        filled++
+      }
+    }
+    i = j + 1
+  }
+  return filled
+}
+
 // Build hour(sec) -> close price map for a pair across [startTs, endTs].
-function loadPairHourMap(pair, interval, startTs, endTs, tmpDir) {
+async function loadPairHourMap(pair, interval, startTs, endTs, tmpDir) {
   const hourMap = new Map()
   const now = new Date()
   const curY = now.getUTCFullYear(); const curM = now.getUTCMonth() + 1
@@ -129,7 +185,8 @@ function loadPairHourMap(pair, interval, startTs, endTs, tmpDir) {
       const sec = toSeconds(cols[0])
       const hour = sec - (sec % 3600)
       if (hour < startTs || hour > endTs) continue
-      hourMap.set(hour, cols[4]) // close
+      // close, quote-asset volume (~USD for *USDT pairs), taker-buy quote vol
+      hourMap.set(hour, { close: cols[4], vol: cols[7] || null, tbuy: cols[10] || null })
     }
   }
   for (const { y, m } of ymList(startTs, endTs)) {
@@ -151,6 +208,10 @@ function loadPairHourMap(pair, interval, startTs, endTs, tmpDir) {
       if (csv) ingest(csv)
     }
   }
+  // Archives can't cover the newest ~24h (daily zips publish next day) and a
+  // failed zip download used to become a permanent hole — REST fills both.
+  const filled = await fillFromRest(pair, interval, hourMap, startTs, endTs)
+  if (filled) process.stdout.write(`(+${filled} via REST) `)
   return hourMap
 }
 
@@ -173,15 +234,17 @@ async function upsertPrices(pgPool, rows) {
     const params = []
     let idx = 1
     for (const r of batch) {
-      values.push(`($${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++})`)
-      params.push(r.token, r.symbol, r.pair, new Date(r.hour * 1000).toISOString(), r.price, r.source)
+      values.push(`($${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++})`)
+      params.push(r.token, r.symbol, r.pair, new Date(r.hour * 1000).toISOString(), r.price, r.source, r.volUsd ?? null, r.tbuyUsd ?? null)
     }
     await pgPool.query(`
-      INSERT INTO token_prices_hourly (token_address, symbol, binance_pair, hour_start, usd_price, source)
+      INSERT INTO token_prices_hourly (token_address, symbol, binance_pair, hour_start, usd_price, source, volume_usd, taker_buy_usd)
       VALUES ${values.join(', ')}
       ON CONFLICT (token_address, hour_start) DO UPDATE SET
         symbol = EXCLUDED.symbol, binance_pair = EXCLUDED.binance_pair,
-        usd_price = EXCLUDED.usd_price, source = EXCLUDED.source
+        usd_price = EXCLUDED.usd_price, source = EXCLUDED.source,
+        volume_usd = COALESCE(EXCLUDED.volume_usd, token_prices_hourly.volume_usd),
+        taker_buy_usd = COALESCE(EXCLUDED.taker_buy_usd, token_prices_hourly.taker_buy_usd)
     `, params)
   }
 }
@@ -205,6 +268,8 @@ async function main() {
   const pgPool = new pg.Pool({ connectionString: args.pgUrl })
   await pgPool.query(`SET search_path TO ${args.pgSchema}`)
   pgPool.on('connect', c => c.query(`SET search_path TO ${args.pgSchema}`))
+  // volume_usd / taker_buy_usd columns (+ derivatives tables) — idempotent.
+  await pgPool.query(fs.readFileSync(path.join(__dirname, '..', '..', 'db', 'derivatives-schema.sql'), 'utf8'))
 
   // Cache pair downloads (BTCUSDT etc. shared across tokens is rare but cheap).
   const pairCache = new Map()
@@ -223,12 +288,12 @@ async function main() {
     } else {
       if (!pairCache.has(rule.pair)) {
         process.stdout.write(`  ${rule.symbol} (${rule.pair}): downloading... `)
-        pairCache.set(rule.pair, loadPairHourMap(rule.pair, args.interval, startHour, endHour, args.tmpDir))
+        pairCache.set(rule.pair, await loadPairHourMap(rule.pair, args.interval, startHour, endHour, args.tmpDir))
         console.log(`${pairCache.get(rule.pair).size} hourly closes`)
       }
       const hourMap = pairCache.get(rule.pair)
-      for (const [hour, close] of hourMap) {
-        rows.push({ token, symbol: rule.symbol, pair: rule.pair, hour, price: close, source: 'binance' })
+      for (const [hour, c] of hourMap) {
+        rows.push({ token, symbol: rule.symbol, pair: rule.pair, hour, price: c.close, volUsd: c.vol, tbuyUsd: c.tbuy, source: 'binance' })
       }
     }
     await upsertPrices(pgPool, rows)

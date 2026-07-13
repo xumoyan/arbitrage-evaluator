@@ -11,11 +11,14 @@ test('toChDateTime formats a Date as UTC ClickHouse DateTime', () => {
 test('buildEdgeQuery embeds bounds, dedups by Hash, filters Uniswap.Swap', () => {
   const sql = buildEdgeQuery('2026-01-01 00:00:00', '2026-01-02 00:00:00')
   assert.match(sql, /GROUP BY Hash/)
-  assert.match(sql, /ParseSummary = 'Uniswap\.Swap'/)
+  assert.match(sql, /ParseSummary IN \('Uniswap\.Swap'\)/)
   assert.match(sql, /TxReceiptStatus = 1/)
   assert.match(sql, /CreatedAt >= toDateTime\('2026-01-01 00:00:00'\)/)
   assert.match(sql, /CreatedAt <  toDateTime\('2026-01-02 00:00:00'\)/)
   assert.match(sql, /toStartOfHour/)
-  assert.match(sql, /JSONExtractString\(ParseOutput, 'tokenIn'\)/)
-  assert.match(sql, /JSONExtractString\(ParseOutput, 'tokenOut'\)/)
+  // Three-level fallback: ParseOutput when present, transfer reconstruction
+  // from distributed_histories, then ParseInput bounds.
+  assert.match(sql, /eth\.distributed_histories/)
+  assert.match(sql, /JSONExtractString\(ParseOutput, 'amountIn'\)/)
+  assert.match(sql, /JSONExtractString\(ParseInput, 'amountOutMin'\)/)
 })

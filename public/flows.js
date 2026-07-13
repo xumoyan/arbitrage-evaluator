@@ -67,17 +67,10 @@ function formatTokenAmount(raw, decimals) {
   return '0'
 }
 
-function shortAddr(addr) {
-  if (!addr) return ''
-  return `${addr.slice(0, 6)}...${addr.slice(-4)}`
-}
+// shortAddr/copyBtn come from util.js (shared by every page).
 
 function tokenLabel(t) {
   return t.symbol || shortAddr(t.address)
-}
-
-function copyBtn(text) {
-  return `<button class="copy-btn" data-copy="${text}" title="Copy ${text}">⧉</button>`
 }
 
 // Symmetric-log transform so a single huge token (USDT/WETH) doesn't flatten the
@@ -353,7 +346,7 @@ async function loadTransactions() {
     tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text-3);padding:16px">No transactions in range</td></tr>'
     return
   }
-  const leg = (l, raw) => `${formatTokenAmount(raw, l.decimals)} <span class="sym">${l.symbol || shortAddr(l.address)}</span>`
+  const leg = (l, raw) => `${formatTokenAmount(raw, l.decimals)} <span class="sym">${l.symbol || addrCell(l.address)}</span>`
   tbody.innerHTML = data.transactions.map(tx => {
     const time = new Date(tx.ts).toLocaleString()
     return `<tr>
@@ -388,20 +381,6 @@ function clearCustomDates() {
   document.getElementById('date-from').value = ''
   document.getElementById('date-to').value = ''
 }
-
-// Copy-to-clipboard for any .copy-btn (delegated; works across both pages).
-document.addEventListener('click', async e => {
-  const b = e.target.closest('.copy-btn')
-  if (!b) return
-  e.stopPropagation()
-  e.preventDefault()
-  try {
-    await navigator.clipboard.writeText(b.dataset.copy)
-    const o = b.textContent
-    b.textContent = '✓'; b.classList.add('copied')
-    setTimeout(() => { b.textContent = o; b.classList.remove('copied') }, 1000)
-  } catch (err) { console.error('copy failed', err) }
-})
 
 document.addEventListener('DOMContentLoaded', async () => {
   await refreshAll()

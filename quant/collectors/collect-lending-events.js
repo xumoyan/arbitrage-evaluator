@@ -48,6 +48,11 @@ function parseArgs(argv) {
     maxHours: 0,
     loop: false,
     backfill: false,
+    // Bidirectional --loop: fill forward to now AND backward toward startIso.
+    fillHistory: true,
+    historyBatchesPerCycle: Number(process.env.LENDING_HISTORY_BATCHES || 30),
+    historyPauseMs: Number(process.env.LENDING_HISTORY_PAUSE_MS || 500),
+    pollMs: Number(process.env.LENDING_POLL_MS || 10 * 60 * 1000),
     contractParserRoot: process.env.CONTRACT_PARSER_ROOT || DEFAULT_CONTRACT_PARSER_ROOT
   }
   for (let i = 0; i < argv.length; i++) {
@@ -60,6 +65,8 @@ function parseArgs(argv) {
     else if (v === '--loop') a.loop = true
     else if (v === '--once') a.loop = false
     else if (v === '--backfill') a.backfill = true
+    else if (v === '--no-history') a.fillHistory = false
+    else if (v === '--history-batches') a.historyBatchesPerCycle = Number(argv[++i])
     else if (v === '--contract-parser-root') a.contractParserRoot = argv[++i]
     else if (v === '--help' || v === '-h') { printHelp(); process.exit(0) }
   }
@@ -80,7 +87,12 @@ Options:
   --batch-hours <n>            Hours per ClickHouse query (default: 24)
   --max-hours <n>              Cap hours processed this run (0 = unlimited)
   --backfill                   Fill behind the watermark; idempotent
-  --loop                       Keep polling for new complete hours
+  --loop                       Bidirectional: catch up forward to now AND fill
+                               history backward toward --start-iso, then poll
+                               forward-only once history is complete.
+  --no-history                 In --loop, skip the backward history fill
+  --history-batches <n>        History batches per --loop cycle (env:
+                               LENDING_HISTORY_BATCHES, default 30)
   --contract-parser-root <p>   AI-ContractParser checkout (env: CONTRACT_PARSER_ROOT)
 `)
 }
@@ -348,6 +360,85 @@ async function runChain(pool, args, chain, ctx) {
   return hoursDone
 }
 
+// Seed both frontiers at the current hour on a fresh chain so the bidirectional
+// loop starts current (forward stays live) and fills history backward from now.
+async function ensureAnchored(pool, chain) {
+  const nowIso = new Date(floorToHour(Date.now())).toISOString()
+  await pool.query(`
+    INSERT INTO lending_sync_state (chain, last_processed_hour, start_floor, updated_at)
+    VALUES ($1, $2::timestamptz, $2::timestamptz, NOW())
+    ON CONFLICT (chain) DO NOTHING
+  `, [chain, nowIso])
+}
+
+// Forward: process newly completed hours from the watermark up to now.
+async function forwardCatchUp(pool, args, chain, ctx) {
+  const state = await getState(pool, chain)
+  const ceil = args.endIso ? floorToHour(new Date(args.endIso).getTime()) : floorToHour(Date.now())
+  let cursor = state && state.last_processed_hour
+    ? new Date(state.last_processed_hour).getTime() + HOUR_MS
+    : floorToHour(Date.now())
+  while (cursor < ceil) {
+    const batchEnd = Math.min(cursor + args.batchHours * HOUR_MS, ceil)
+    const start = cursor
+    const n = await withRetry(
+      () => processBatch(pool, args, chain, ctx, start, batchEnd), `[${chain}] fwd ${toChDateTime(new Date(start))}`)
+    // COALESCE keeps the existing start_floor (set by ensureAnchored); the
+    // passed value is only used if start_floor were somehow null.
+    await advanceState(pool, chain, new Date(batchEnd - HOUR_MS).toISOString(), new Date(floorToHour(Date.now())).toISOString())
+    console.log(`[${chain}] fwd ${toChDateTime(new Date(start))} → ${toChDateTime(new Date(batchEnd))} (${n} events)`)
+    cursor = batchEnd
+  }
+}
+
+// History: process one batch backward from start_floor toward targetStartMs.
+// Returns { done } true once start_floor has reached the target.
+async function backfillStep(pool, args, chain, ctx, targetStartMs) {
+  const state = await getState(pool, chain)
+  const floorMs = state && state.start_floor
+    ? floorToHour(new Date(state.start_floor).getTime())
+    : floorToHour(Date.now())
+  if (floorMs <= targetStartMs) return { done: true }
+  const batchStart = Math.max(targetStartMs, floorMs - args.batchHours * HOUR_MS)
+  const n = await withRetry(
+    () => processBatch(pool, args, chain, ctx, batchStart, floorMs), `[${chain}] hist ${toChDateTime(new Date(batchStart))}`)
+  await lowerStartFloor(pool, chain, new Date(batchStart).toISOString())
+  console.log(`[${chain}] hist ${toChDateTime(new Date(batchStart))} → ${toChDateTime(new Date(floorMs))} (${n} events)`)
+  return { done: batchStart <= targetStartMs }
+}
+
+// Bidirectional loop across all chains: forward to now every cycle, plus a
+// bounded chunk of history backward, until every chain reaches startIso — then
+// forward-only polling.
+async function bidirectionalLoop(pool, args, contexts) {
+  const targetStartMs = floorToHour(new Date(args.startIso).getTime())
+  const historyDone = {}
+  for (const chain of args.chains) historyDone[chain] = !args.fillHistory
+  for (;;) {
+    for (const chain of args.chains) {
+      const ctx = contexts[chain]
+      try {
+        await ensureAnchored(pool, chain)
+        await forwardCatchUp(pool, args, chain, ctx)
+        if (args.fillHistory && !historyDone[chain]) {
+          for (let b = 0; b < args.historyBatchesPerCycle; b++) {
+            const r = await backfillStep(pool, args, chain, ctx, targetStartMs)
+            if (r.done) {
+              historyDone[chain] = true
+              console.log(`[${chain}] history backfill complete (reached ${args.startIso}) — forward-only from here.`)
+              break
+            }
+          }
+        }
+      } catch (err) {
+        console.error(`[${chain}] pass failed:`, err.message)
+      }
+    }
+    const allDone = args.chains.every(c => historyDone[c])
+    await sleep(allDone ? args.pollMs : args.historyPauseMs)
+  }
+}
+
 function buildTronContext(args) {
   const defsByTopic0 = loadEventDefs(args.contractParserRoot, 'justlend',
     Object.keys(JUSTLEND_ACTIONS))
@@ -372,13 +463,7 @@ async function main() {
   try {
     await ensureSchema(pool)
     if (args.loop) {
-      for (;;) {
-        for (const chain of args.chains) {
-          await runChain(pool, args, chain, contexts[chain]).catch(err =>
-            console.error(`[${chain}] pass failed:`, err.message))
-        }
-        await sleep(10 * 60 * 1000)
-      }
+      await bidirectionalLoop(pool, args, contexts)
     } else {
       for (const chain of args.chains) await runChain(pool, args, chain, contexts[chain])
     }
@@ -387,7 +472,14 @@ async function main() {
   }
 }
 
-main().catch(err => {
-  console.error(err)
-  process.exit(1)
-})
+if (require.main === module) {
+  main().catch(err => {
+    console.error(err)
+    process.exit(1)
+  })
+}
+
+module.exports = {
+  parseArgs, floorToHour, getState, ensureAnchored, forwardCatchUp,
+  backfillStep, bidirectionalLoop, runChain
+}

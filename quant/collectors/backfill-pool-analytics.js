@@ -20,6 +20,7 @@ function parseArgs(argv) {
     parserRoot: DEFAULT_PARSER_ROOT,
     rpc: process.env.EVM_RPC_URL || process.env.ETH_RPC_URL || '',
     startIso: process.env.BACKFILL_START_ISO || '2026-01-01T00:00:00Z',
+    endIso: process.env.BACKFILL_END_ISO || '',
     windowHours: Number(process.env.BACKFILL_WINDOW_HOURS) || 48,
     outDir: 'reports/analytics',
     bucketSeconds: Number(process.env.COLLECTOR_BUCKET_SECONDS) || 3600,
@@ -31,6 +32,7 @@ function parseArgs(argv) {
     if (arg === '--rpc') args.rpc = next()
     else if (arg === '--parser-root') args.parserRoot = next()
     else if (arg === '--start-iso') args.startIso = next()
+    else if (arg === '--end-iso') args.endIso = next()
     else if (arg === '--window-hours') args.windowHours = Number(next())
     else if (arg === '--out-dir') args.outDir = next()
     else if (arg === '--bucket-seconds') args.bucketSeconds = Number(next())
@@ -51,6 +53,8 @@ hour-aligned windows, calling collect-pool-analytics.js per window.
 Options:
   --rpc <url>            EVM RPC endpoint (env: EVM_RPC_URL)
   --start-iso <iso>      Backfill start, ISO-8601 UTC (default: 2026-01-01T00:00:00Z)
+  --end-iso <iso>        Backfill ceiling, ISO-8601 UTC (default: chain head).
+                         Use to fill a bounded gap without re-walking to head.
   --window-hours <n>     Hours per window (default: 48)
   --out-dir <dir>        Collector out-dir (default: reports/analytics)
   --bucket-seconds <n>   Bucket size, must match collector (default: 3600)
@@ -92,10 +96,26 @@ async function main() {
   // Snap start down to a bucket boundary.
   startTs = startTs - (startTs % args.bucketSeconds)
 
-  if (startTs >= headBlock.timestamp) { console.log('Start time is at/after chain head; nothing to backfill.'); return }
+  // Ceiling: chain head by default, or --end-iso (snapped to a bucket boundary)
+  // so a bounded gap can be filled without re-walking all the way to head.
+  let endTs = headBlock.timestamp
+  let endBlock = head
+  if (args.endIso) {
+    let e = Math.floor(new Date(args.endIso).getTime() / 1000)
+    if (!Number.isFinite(e)) { console.error(`Invalid --end-iso: ${args.endIso}`); process.exit(1) }
+    e = e - (e % args.bucketSeconds)
+    if (e < headBlock.timestamp) {
+      endTs = e
+      // Last block strictly before endTs, so the final bucket ends at endTs and
+      // never overlaps/splits a bucket already collected at/after endTs.
+      endBlock = Math.max(1, (await blockAtOrAfter(provider, endTs, 1, head)) - 1)
+    }
+  }
 
-  const startBlock = await blockAtOrAfter(provider, startTs, 1, head)
-  console.log(`Backfill: start ${new Date(startTs * 1000).toISOString()} (block ${startBlock}) -> head ${head} (${new Date(headBlock.timestamp * 1000).toISOString()})`)
+  if (startTs >= endTs) { console.log('Start time is at/after the backfill ceiling; nothing to backfill.'); return }
+
+  const startBlock = await blockAtOrAfter(provider, startTs, 1, endBlock)
+  console.log(`Backfill: start ${new Date(startTs * 1000).toISOString()} (block ${startBlock}) -> end ${new Date(endTs * 1000).toISOString()} (block ${endBlock})`)
   console.log(`Window: ${args.windowHours}h, out-dir ${args.outDir}`)
 
   const windowSeconds = args.windowHours * 3600
@@ -103,17 +123,17 @@ async function main() {
   let boundaryTs = startTs + windowSeconds
   let windowIdx = 0
 
-  while (fromBlock <= head) {
+  while (fromBlock <= endBlock) {
     let toBlock
-    if (boundaryTs >= headBlock.timestamp) {
-      toBlock = head
+    if (boundaryTs >= endTs) {
+      toBlock = endBlock
     } else {
       // Window ends just before the block that starts the next hour-aligned boundary,
       // so every bucket in [fromBlock, toBlock] is complete within this window.
-      const boundaryBlock = await blockAtOrAfter(provider, boundaryTs, fromBlock, head)
+      const boundaryBlock = await blockAtOrAfter(provider, boundaryTs, fromBlock, endBlock)
       toBlock = Math.max(fromBlock, boundaryBlock - 1)
     }
-    if (toBlock > head) toBlock = head
+    if (toBlock > endBlock) toBlock = endBlock
 
     windowIdx++
     const label = `[window ${windowIdx}] blocks ${fromBlock} -> ${toBlock} (up to ${new Date(boundaryTs * 1000).toISOString()})`
@@ -122,6 +142,7 @@ async function main() {
     const collectorArgs = [
       path.resolve(__dirname, 'collect-pool-analytics.js'),
       '--out-dir', args.outDir,
+      '--backfill',
       '--from-block', String(fromBlock),
       '--to-block', String(toBlock),
       ...args.passthrough
@@ -134,7 +155,7 @@ async function main() {
 
     fromBlock = toBlock + 1
     boundaryTs += windowSeconds
-    if (toBlock >= head) break
+    if (toBlock >= endBlock) break
   }
 
   console.log('\nBackfill complete.')

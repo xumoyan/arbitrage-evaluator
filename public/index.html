@@ -66,10 +66,10 @@
     <section class="toolbar">
       <div class="segmented time-range">
         <button data-range="24">24H</button>
-        <button data-range="168">7D</button>
+        <button data-range="168" class="active">7D</button>
         <button data-range="720">30D</button>
         <button data-range="2160">90D</button>
-        <button data-range="0" class="active">All</button>
+        <button data-range="0">All</button>
       </div>
       <div class="date-range">
         <input type="date" id="date-from" title="From (overrides preset)">
@@ -163,6 +163,7 @@
     </section>
   </main>
 
+  <script src="/util.js"></script>
   <script src="/progress.js"></script>
   <script src="/app.js"></script>
 </body>

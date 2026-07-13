@@ -39,6 +39,16 @@
   <main class="page">
     <section data-progress-domain="strategy"></section>
 
+    <!-- 实时模拟总览：所有 live run 并排对比 -->
+    <section class="card" id="live-card" style="display:none">
+      <div class="card-head">
+        <h3>🔴 实时模拟 <span class="muted">— 同一实时数据上并行运行，点击卡片查看明细</span></h3>
+        <span class="card-hint" id="live-updated"></span>
+      </div>
+      <div id="live-cards" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px"></div>
+      <div class="chart-wrap tall"><canvas id="live-chart"></canvas></div>
+    </section>
+
     <!-- Run picker + KPI summary -->
     <section class="toolbar">
       <label class="muted" for="run-select" style="align-self:center">Run</label>
@@ -80,7 +90,8 @@
     <!-- 所有 run 横向对比：根据模拟数据寻找最优策略 -->
     <section class="card table-card">
       <div class="card-head">
-        <h3>策略对比 <span class="muted">— 按收益排序，点击行切换 Run</span></h3>
+        <h3>策略对比 <span class="muted">— 点击行切换 Run。不同时长的收益不可直接比，先选窗口再看排名</span></h3>
+        <div id="compare-filters" style="display:flex;gap:6px"></div>
       </div>
       <div class="table-scroll">
         <table id="compare-table">
@@ -93,6 +104,7 @@
               <th class="num">最大回撤</th>
               <th class="num">交易数</th>
               <th class="num">胜率</th>
+              <th class="num">时长</th>
               <th>窗口</th>
               <th>状态</th>
             </tr>
@@ -157,6 +169,7 @@
     </details>
   </main>
 
+  <script src="/util.js"></script>
   <script src="/progress.js"></script>
   <script src="/strategy.js"></script>
 </body>

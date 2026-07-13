@@ -35,7 +35,7 @@ function formatUsd(n) {
   return `$${body}`
 }
 
-function shortAddr(a) { return a ? `${a.slice(0, 6)}…${a.slice(-4)}` : '—' }
+// shortAddr/copyBtn/addrCell come from util.js (shared by every page).
 
 function rangeParams() {
   if (!state.rangeDays) return ''
@@ -104,11 +104,11 @@ function renderLiquidations(rows) {
     tr.innerHTML = `
       <td>${r.block_time ? r.block_time.replace('T', ' ').slice(0, 16) : '—'}</td>
       <td>${r.chain}</td>
-      <td class="addr">${shortAddr(r.user_address)}</td>
-      <td class="addr">${shortAddr(r.liquidator)}</td>
-      <td>${r.asset_symbol || shortAddr(r.asset)}</td>
+      <td class="addr">${addrCell(r.user_address)}</td>
+      <td class="addr">${addrCell(r.liquidator)}</td>
+      <td>${r.asset_symbol ? `${r.asset_symbol}${copyBtn(r.asset)}` : addrCell(r.asset)}</td>
       <td class="num">${r.amount_usd == null ? '—' : formatUsd(r.amount_usd)}</td>
-      <td class="addr">${shortAddr(r.tx_hash)}</td>`
+      <td class="addr">${addrCell(r.tx_hash)}</td>`
     tbody.appendChild(tr)
   }
 }

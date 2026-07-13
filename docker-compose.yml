@@ -43,6 +43,28 @@ services:
         node quant/collectors/backfill-pool-analytics.js --start-iso "$$START" -- --concurrency 12 --rpc-retries 2 --tvl-only
         echo "=== Backfill complete ==="
 
+  # Every 15 min: refresh the recent CEX price tail (REST fills the newest
+  # hours the archive zips can't cover — the ref-price line on the pools page
+  # and trade-majors live pricing both read token_prices_hourly).
+  price-collector:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Price collector starting — refreshes last 2 days every 15 min"
+        while true; do
+          RECENT=$$(date -u -d '2 days ago' '+%Y-%m-%dT00:00:00Z' 2>/dev/null || date -u -v-2d '+%Y-%m-%dT00:00:00Z')
+          node quant/collectors/load-binance-prices.js --start-iso "$$RECENT" || true
+          sleep 900
+        done
+
   # Hourly: refresh recent prices, then collect the latest incremental window.
   analytics-collector:
     image: node:20-bookworm-slim
@@ -141,9 +163,78 @@ services:
           sleep 600
         done
 
-  # Paper-trading run of the flow-momentum strategy (params from the June
-  # sweep). Positions are in-memory: a restart flattens the book but keeps the
-  # equity history under the same run id.
+  # Daily refresh of address labels from two sources: the internal chain_cloud
+  # ClickHouse dictionary (79M-row KYA set, enriched only for our own traders)
+  # and eth-labels.com. Both feed address_labels: deny list for smart scoring
+  # + identity display on the smart dashboard.
+  address-labels-collector:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Address-labels collector starting — daily chain-cloud + eth-labels refresh"
+        while true; do
+          node quant/collectors/collect-chain-cloud-labels.js || true
+          node quant/collectors/collect-address-labels.js || true
+          sleep 86400
+        done
+
+  # Exchange netflow: hourly hot-wallet transfer aggregation (token_cex_flow_
+  # hourly) + weekly hot-wallet rediscovery against the chain_cloud dictionary.
+  cex-flow-collector:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "CEX-flow collector starting — hourly netflow + weekly wallet refresh"
+        M=/tmp/cex-addr-refreshed
+        while true; do
+          if [ ! -f "$$M" ] || [ -n "$$(find $$M -mtime +7)" ]; then
+            node quant/collectors/collect-cex-addresses.js && touch "$$M" || true
+          fi
+          node quant/collectors/collect-cex-flows.js || true
+          sleep 900
+        done
+
+  # Binance USDT-M funding rates (full history, incremental) + open interest
+  # (30d retention upstream — this accumulates it forward).
+  derivatives-collector:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Derivatives collector starting — funding rates + open interest"
+        while true; do
+          node quant/collectors/collect-derivatives.js || true
+          sleep 3600
+        done
+
+  # Paper-trading run of the Step1-recommended config (volume-surge signals,
+  # majors-only execution, real cost model). With a stable --run-id the run
+  # resumes cash/positions from PG on restart, so laptop reboots and overnight
+  # WireGuard drops pause it rather than reset it; missed hours are replayed
+  # once the flow collector catches up.
   strategy-live:
     image: node:20-bookworm-slim
     working_dir: /workspace/arbitrage-evaluator
@@ -156,9 +247,79 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
-        echo "flow-momentum paper trading starting"
-        node quant/strategy/flow-momentum.js --live --run-id flowmom_live_v1 \
-          --min-volume-usd 1000000 --hold-hours 6
+        echo "volume-surge majors paper trading starting"
+        node quant/strategy/run-strategy.js --strategy volume-surge --live \
+          --run-id volsurge_majors_live_v1 --trade-majors --cost-model
+
+  # Parallel live paper-trading of the other top Step1 strategies plus the
+  # pure-price-momentum benchmark, so forward data ranks them side by side on
+  # the dashboard. Same resume semantics as strategy-live (stable run ids).
+  strategy-live-composite:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "composite-score majors paper trading starting"
+        node quant/strategy/run-strategy.js --strategy composite-score --live \
+          --run-id composite_majors_live_v1 --trade-majors --cost-model
+
+  strategy-live-buypressure:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "buy-pressure majors paper trading starting"
+        node quant/strategy/run-strategy.js --strategy buy-pressure --live \
+          --run-id buypressure_majors_live_v1 --trade-majors --cost-model
+
+  strategy-live-flowmom:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "flow-momentum majors paper trading starting"
+        node quant/strategy/run-strategy.js --strategy flow-momentum --live \
+          --run-id flowmom_majors_live_v2 --trade-majors --cost-model
+
+  # Pure price momentum, no on-chain gate — the live control group: the gap
+  # between this and the flow-gated runs is the live measure of the flow
+  # signal's value.
+  strategy-live-tsmom:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "ts-momentum benchmark paper trading starting"
+        node quant/strategy/run-strategy.js --strategy ts-momentum --live \
+          --run-id tsmom_live_v1 --cost-model
 
   # Fills ERC20 symbol/decimals for newly-seen tokens from the EVM node so the
   # dashboard shows real symbols and human amounts. Loops every ~10 min.
@@ -176,6 +337,42 @@ services:
       - |
         echo "Token enricher starting — fills symbol/decimals from the node"
         node quant/collectors/enrich-tokens.js --loop
+
+  # DefiLlama macro history (chain TVL, stablecoin supply, DEX volume) into
+  # defi_tvl_daily / stablecoin_supply_daily / dex_volume_daily. Each pass is a
+  # full-history refresh; free, keyless API.
+  market-data-collector:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "DefiLlama collector starting — TVL/stables/DEX volume every 6h"
+        node quant/collectors/collect-defillama.js --loop
+
+  # CoinGecko fundamentals (mcap, FDV, supply, categories) for the traded
+  # token universe, most-traded first. Free-tier paced; COINGECKO_API_KEY in
+  # .env speeds it up. Long tail fills in gradually across cycles.
+  token-metadata-collector:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "CoinGecko token-metadata collector starting"
+        node quant/collectors/collect-token-metadata.js --loop
 
   # One-shot: copy ETH/TRON stake, unstake, and withdrawal history from the
   # chaincloud-fe unstake database into the local analytics PostgreSQL schema.

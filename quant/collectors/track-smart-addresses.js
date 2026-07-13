@@ -71,8 +71,12 @@ Options:
 const sleep = (ms) => new Promise(r => setTimeout(r, ms))
 
 async function ensureSchema(pool) {
-  const sql = fs.readFileSync(path.resolve(__dirname, '..', '..', 'db', 'smart-address-schema.sql'), 'utf8')
-  await pool.query(sql)
+  // address-labels-schema too: scoring's deny-list check needs the table to
+  // exist even before collect-address-labels.js has ever run (empty = no-op).
+  for (const f of ['smart-address-schema.sql', 'address-labels-schema.sql']) {
+    const sql = fs.readFileSync(path.resolve(__dirname, '..', '..', 'db', f), 'utf8')
+    await pool.query(sql)
+  }
 }
 
 // Score every trader over the window. Buys only (token_out side), marked at
@@ -90,6 +94,12 @@ async function scoreAddresses(pool, a) {
         AND sd.block_time >= NOW() - make_interval(days => $2::int)
         AND sd.tx_from IS NOT NULL
         AND COALESCE(t.is_anchor, FALSE) = FALSE
+        -- deny-listed entities (CEX hot wallets, bridges, MEV bots, exploiters
+        -- per address_labels) are routers of other people's money, not traders
+        AND NOT EXISTS (
+          SELECT 1 FROM address_labels al
+          WHERE al.chain_id = sd.chain_id AND al.address = sd.tx_from AND al.deny
+        )
     ),
     marked AS (
       SELECT b.tx_from, b.amount_usd,

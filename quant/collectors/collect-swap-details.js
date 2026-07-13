@@ -12,9 +12,9 @@
 //   node quant/collectors/collect-swap-details.js --backfill --start-iso 2024-01-01T00:00:00Z
 
 const path = require('path')
-const { query, toChDateTime } = require('../lib/clickhouse')
+const { query, toChDateTime, buildResolvedSwapsSql } = require('../lib/clickhouse')
 const { edgeUsd } = require('../lib/flow-aggregate')
-const { normalizeToken } = require('../lib/flow-anchors')
+const { normalizeToken, WETH } = require('../lib/flow-anchors')
 const store = require('../lib/flow-store')
 
 const HOUR_MS = 3600 * 1000
@@ -105,26 +105,11 @@ async function withRetry(fn, label, attempts = 4) {
   }
 }
 
+// Shared resolver: ParseOutput when present, otherwise reconstructed from
+// transfer rows / ParseInput (see quant/lib/clickhouse.js) — keeps details
+// flowing while the upstream parser writes empty ParseOutput.
 function buildDetailQuery(floorCh, ceilCh) {
-  const list = Object.keys(SUMMARIES).map(s => `'${s}'`).join(',')
-  return `
-SELECT
-  Hash                                                              AS hash,
-  any(CreatedAt)                                                    AS ts,
-  any(BlockNumber)                                                  AS block_number,
-  lower(any(TxFrom))                                                AS tx_from,
-  lower(any(TxTo))                                                  AS tx_to,
-  any(ParseSummary)                                                 AS summary,
-  lower(any(JSONExtractString(ParseOutput, 'tokenIn')))             AS token_in,
-  lower(any(JSONExtractString(ParseOutput, 'tokenOut')))            AS token_out,
-  any(toFloat64OrZero(JSONExtractString(ParseOutput, 'amountIn')))  AS amount_in,
-  any(toFloat64OrZero(JSONExtractString(ParseOutput, 'amountOut'))) AS amount_out
-FROM eth.distributed_history_categories
-WHERE ParseSummary IN (${list})
-  AND TxReceiptStatus = 1
-  AND CreatedAt >= toDateTime('${floorCh}')
-  AND CreatedAt <  toDateTime('${ceilCh}')
-GROUP BY Hash`.trim()
+  return buildResolvedSwapsSql(floorCh, ceilCh, Object.keys(SUMMARIES))
 }
 
 async function insertDetails(pool, chainId, rows) {
@@ -137,14 +122,16 @@ async function insertDetails(pool, chainId, rows) {
     const params = []
     let idx = 1
     for (const r of batch) {
-      values.push(`($${idx++},$${idx++},$${idx++},$${idx++}::timestamptz,$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++})`)
+      values.push(`($${idx++},$${idx++},$${idx++},$${idx++}::timestamptz,$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++})`)
       params.push(chainId, r.hash, r.blockNumber, r.ts, r.txFrom, r.txTo, r.dex,
-        r.tokenIn, r.tokenOut, r.amountIn, r.amountOut, r.amountUsd)
+        r.tokenIn, r.tokenOut, r.amountIn, r.amountOut, r.amountUsd,
+        r.gasUsed, r.gasPriceWei, r.gasCostUsd)
     }
     const res = await pool.query(`
       INSERT INTO swap_details
         (chain_id, tx_hash, block_number, block_time, tx_from, tx_to, dex,
-         token_in, token_out, amount_in, amount_out, amount_usd)
+         token_in, token_out, amount_in, amount_out, amount_usd,
+         gas_used, gas_price_wei, gas_cost_usd)
       VALUES ${values.join(',')}
       ON CONFLICT (chain_id, tx_hash) DO NOTHING
     `, params)
@@ -171,9 +158,12 @@ async function processBatch(pool, args, batchStartMs, batchEndMs) {
   const keep = []
   for (const [hourMs, hourRows] of byHour) {
     const priceAt = await store.loadAnchorPrices(pool, new Date(hourMs).toISOString())
+    const ethUsd = priceAt(WETH)
     for (const r of hourRows) {
       const usd = edgeUsd(r, priceAt)
       if (usd == null || usd < args.minUsd || usd > args.maxUsd) continue
+      const gasUsed = Number(r.gas_used) > 0 ? Number(r.gas_used) : null
+      const gasPriceWei = Number(r.gas_price) > 0 ? Number(r.gas_price) : null
       keep.push({
         hash: r.hash,
         blockNumber: Number(r.block_number) || null,
@@ -185,7 +175,11 @@ async function processBatch(pool, args, batchStartMs, batchEndMs) {
         tokenOut: normalizeToken(r.token_out),
         amountIn: r.amount_in,
         amountOut: r.amount_out,
-        amountUsd: usd
+        amountUsd: usd,
+        gasUsed,
+        gasPriceWei,
+        gasCostUsd: gasUsed && gasPriceWei && ethUsd
+          ? gasUsed * gasPriceWei / 1e18 * ethUsd : null
       })
     }
   }

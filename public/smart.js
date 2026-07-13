@@ -33,7 +33,7 @@ function formatPct(x) {
   return `${n >= 0 ? '+' : ''}${(n * 100).toFixed(1)}%`
 }
 
-function shortAddr(a) { return a ? `${a.slice(0, 6)}…${a.slice(-4)}` : '—' }
+// shortAddr/copyBtn/addrCell come from util.js (shared by every page).
 
 function renderLeaderboard(rows) {
   const tbody = document.querySelector('#leader-table tbody')
@@ -44,14 +44,17 @@ function renderLeaderboard(rows) {
     const ret = Number(r.avg_return)
     tr.innerHTML = `
       <td>${i + 1}</td>
-      <td class="addr">${r.address}</td>
+      <td class="addr">${r.address}${copyBtn(r.address)}${r.name_tag ? `<br><span class="muted" title="${escAttr(r.labels || '')}">${r.name_tag}</span>` : ''}</td>
       <td class="num">${Number(r.score).toFixed(3)}</td>
       <td class="num" style="color:${ret >= 0 ? 'var(--success)' : 'var(--danger)'}">${formatPct(ret)}</td>
       <td class="num">${r.win_rate == null ? '—' : (Number(r.win_rate) * 100).toFixed(0) + '%'}</td>
       <td class="num">${r.trade_count} (${r.scored_count})</td>
       <td class="num">${formatUsd(r.total_pnl_usd, true)}</td>
       <td class="num">${formatUsd(r.volume_usd)}</td>`
-    tr.addEventListener('click', () => loadEvents(r.address))
+    tr.addEventListener('click', e => {
+      if (e.target.closest('.copy-btn')) return
+      loadEvents(r.address)
+    })
     tbody.appendChild(tr)
   })
 }
@@ -63,12 +66,12 @@ function renderEvents(rows) {
     const tr = document.createElement('tr')
     tr.innerHTML = `
       <td>${r.block_time ? r.block_time.replace('T', ' ').slice(0, 16) : '—'}</td>
-      <td class="addr">${shortAddr(r.address)}</td>
+      <td class="addr">${addrCell(r.address)}</td>
       <td>${r.dex || '—'}</td>
-      <td class="addr">${shortAddr(r.token_in)}</td>
-      <td class="addr">${shortAddr(r.token_out)}</td>
+      <td class="addr">${addrCell(r.token_in)}</td>
+      <td class="addr">${addrCell(r.token_out)}</td>
       <td class="num">${formatUsd(r.amount_usd)}</td>
-      <td class="addr">${shortAddr(r.tx_hash)}</td>`
+      <td class="addr">${addrCell(r.tx_hash)}</td>`
     tbody.appendChild(tr)
   }
 }
@@ -76,7 +79,7 @@ function renderEvents(rows) {
 async function loadEvents(address) {
   state.selectedAddress = address || ''
   document.getElementById('events-title').innerHTML = address
-    ? `Activity of <span class="addr">${address}</span> <span class="muted">— newest first</span>`
+    ? `Activity of <span class="addr">${address}${copyBtn(address)}</span> <span class="muted">— newest first</span>`
     : 'Watchlist activity <span class="muted">— newest first</span>'
   const q = address ? `smart/events?address=${encodeURIComponent(address)}&limit=100` : 'smart/events?limit=100'
   const data = await api(q)
