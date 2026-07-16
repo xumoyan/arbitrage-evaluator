@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS lending_events (
 CREATE INDEX IF NOT EXISTS idx_lending_time    ON lending_events (block_time);
 CREATE INDEX IF NOT EXISTS idx_lending_proto   ON lending_events (protocol, action, block_time);
 CREATE INDEX IF NOT EXISTS idx_lending_user    ON lending_events (user_address, block_time);
+CREATE INDEX IF NOT EXISTS idx_lending_liquidator ON lending_events (liquidator, block_time DESC) WHERE action = 'liquidation';
 
 -- ── lending_sync_state: incremental checkpoint per chain ─────────────────
 CREATE TABLE IF NOT EXISTS lending_sync_state (

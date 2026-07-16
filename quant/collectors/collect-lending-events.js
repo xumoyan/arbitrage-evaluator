@@ -2,7 +2,9 @@
 'use strict'
 
 // Lending/liquidation event collector.
-//   ETH  / AAVE v3 : parsed rows (ParseSummary AAVE.*) from the history ClickHouse
+//   ETH  / AAVE v3 : detected from the transfer ledger (eth.distributed_histories)
+//                    via quant/lib/aave-ledger — the parser tags only ~60% of
+//                    AAVE txs and its ParseOutput broke on 2026-07-05
 //   TRON / JustLend: raw trx_defi.rrmt_logs filtered by jToken address + topic0,
 //                    decoded via AI-ContractParser event definitions
 // Both write normalized rows into Postgres lending_events with an hour
@@ -16,19 +18,12 @@ const path = require('path')
 const { query: chQuery, toChDateTime } = require('../lib/clickhouse')
 const { defiTrx } = require('../lib/defi-clickhouse')
 const { decodeLog, loadEventDefs, loadContracts } = require('../lib/log-decoder')
-const { getAnchor, normalizeToken } = require('../lib/flow-anchors')
+const { getAnchor } = require('../lib/flow-anchors')
+const aave = require('../lib/aave-ledger')
 const store = require('../lib/flow-store')
 
 const HOUR_MS = 3600 * 1000
 const DEFAULT_CONTRACT_PARSER_ROOT = path.resolve(__dirname, '..', '..', '..', 'AI-ContractParser')
-
-const AAVE_ACTIONS = {
-  'AAVE.Deposit': 'supply',
-  'AAVE.Withdraw': 'withdraw',
-  'AAVE.Borrow': 'borrow',
-  'AAVE.Repay': 'repay',
-  'AAVE.Liquidate': 'liquidation'
-}
 const JUSTLEND_ACTIONS = {
   Mint: 'supply',
   Redeem: 'withdraw',
@@ -110,56 +105,56 @@ async function withRetry(fn, label, attempts = 4) {
   }
 }
 
-// ── ETH / AAVE v3 (parsed history table) ──────────────────────────────────
+// ── ETH / AAVE v3 (transfer-ledger detection) ─────────────────────────────
 
-function buildAaveQuery(floorCh, ceilCh) {
-  const list = Object.keys(AAVE_ACTIONS).map(s => `'${s}'`).join(',')
-  return `
-SELECT
-  Hash                 AS hash,
-  any(CreatedAt)       AS ts,
-  any(BlockNumber)     AS block_number,
-  any(ParseSummary)    AS summary,
-  any(ParseOutput)     AS output
-FROM eth.distributed_history_categories
-WHERE ParseSummary IN (${list})
-  AND TxReceiptStatus = 1
-  AND CreatedAt >= toDateTime('${floorCh}')
-  AND CreatedAt <  toDateTime('${ceilCh}')
-GROUP BY Hash`.trim()
+// Underlying symbols/decimals for USD valuation: anchors first (stables $1),
+// dictionary_tokens for the rest of the reserves.
+async function loadTokenMeta(reserves) {
+  const meta = new Map()
+  for (const r of reserves) {
+    const a = getAnchor(r.underlying)
+    if (a) meta.set(r.underlying, { symbol: a.symbol, decimals: a.decimals, stable: a.stable })
+  }
+  const missing = reserves.map(r => r.underlying).filter(u => !meta.has(u))
+  if (missing.length) {
+    const rows = await chQuery(`
+      SELECT lower(Address) AS addr, any(Symbol) AS sym, any(Decimals) AS dec
+      FROM eth.dictionary_tokens
+      WHERE lower(Address) IN (${missing.map(m => `'${m}'`).join(',')})
+      GROUP BY addr`)
+    for (const row of rows) {
+      meta.set(row.addr, { symbol: row.sym || null, decimals: Number(row.dec) || 18, stable: false })
+    }
+  }
+  return meta
 }
 
-function mapAaveRow(r, priceAtByHour) {
-  let out
-  try { out = JSON.parse(r.output || '{}') } catch { return null }
-  const action = AAVE_ACTIONS[r.summary]
-  if (!action) return null
-  const tsMs = new Date(r.ts.replace(' ', 'T') + 'Z').getTime()
-  const asset = normalizeToken(action === 'liquidation' ? out.debt : out.asset)
-  const amountRaw = Number(action === 'liquidation' ? out.debtToCover : out.amount) || null
-  const anchor = asset ? getAnchor(asset) : null
+function mapAaveEvent(e, ctx, priceAtByHour) {
+  const tsMs = new Date(e.ts.replace(' ', 'T') + 'Z').getTime()
+  const meta = ctx.tokenMeta.get(e.asset) || null
+  const anchor = getAnchor(e.asset)
   let amountUsd = null
-  if (anchor && amountRaw != null) {
-    const px = anchor.stable ? 1 : priceAtByHour(floorToHour(tsMs))(asset)
-    if (px != null) amountUsd = amountRaw / Math.pow(10, anchor.decimals) * px
+  if (meta) {
+    const px = anchor && anchor.stable ? 1 : priceAtByHour(floorToHour(tsMs))(e.asset)
+    if (px != null) amountUsd = Number(e.amount) / Math.pow(10, meta.decimals) * px
   }
   return {
     chain: 'eth',
     protocol: 'aave-v3',
-    action,
-    txHash: r.hash,
-    logKey: '',
+    action: e.action,
+    txHash: e.hash,
+    logKey: e.serial,
     blockTime: new Date(tsMs).toISOString(),
-    blockNumber: Number(r.block_number) || null,
-    user: (out.onBehalfOf || out.user || out.from || '').toLowerCase() || null,
-    asset,
-    assetSymbol: anchor ? anchor.symbol : null,
-    amountRaw,
+    blockNumber: e.block,
+    user: e.user || null,
+    asset: e.asset,
+    assetSymbol: meta ? meta.symbol : null,
+    amountRaw: String(e.amount),
     amountUsd,
-    liquidator: action === 'liquidation' ? (out.from || '').toLowerCase() || null : null,
-    collateralAsset: action === 'liquidation' ? normalizeToken(out.collateral) : null,
-    debtToCover: action === 'liquidation' ? Number(out.debtToCover) || null : null,
-    collateralAmount: action === 'liquidation' ? Number(out.collateralAmount) || null : null,
+    liquidator: e.liquidator || null,
+    collateralAsset: e.collateralAsset || null,
+    debtToCover: e.action === 'liquidation' ? String(e.amount) : null,
+    collateralAmount: e.collateralAmount != null ? String(e.collateralAmount) : null,
     extra: null
   }
 }
@@ -301,10 +296,13 @@ async function processBatch(pool, args, chain, ctx, batchStartMs, batchEndMs) {
   const ceilCh = toChDateTime(new Date(batchEndMs))
   let rows = []
   if (chain === 'eth') {
-    const raw = await chQuery(buildAaveQuery(floorCh, ceilCh))
-    const hours = new Set(raw.map(r => floorToHour(new Date(r.ts.replace(' ', 'T') + 'Z').getTime())))
+    const flows = await chQuery(aave.aaveFlowQuery(ctx.maps, floorCh, ceilCh))
+    const tokenOps = await chQuery(aave.aaveTokenOpsQuery(ctx.maps, floorCh, ceilCh))
+    const transfers = aave.dedupeTransfers([...flows, ...tokenOps])
+    const events = aave.classifyAaveEvents(transfers, ctx.maps)
+    const hours = new Set(events.map(e => floorToHour(new Date(e.ts.replace(' ', 'T') + 'Z').getTime())))
     const priceAtByHour = await ctx.pricer(hours)
-    rows = raw.map(r => mapAaveRow(r, priceAtByHour)).filter(Boolean)
+    rows = events.map(e => mapAaveEvent(e, ctx, priceAtByHour))
   } else {
     const raw = await ctx.trxClient.query(
       buildJustlendQuery(ctx.jtokenAddresses, ctx.topic0s, floorCh, ceilCh))
@@ -458,7 +456,15 @@ async function main() {
   const args = parseArgs(process.argv.slice(2))
   const { pool } = store.connect()
   const contexts = {}
-  if (args.chains.includes('eth')) contexts.eth = { pricer: makeHourPricer(pool) }
+  if (args.chains.includes('eth')) {
+    const reserves = await aave.loadReserves()
+    contexts.eth = {
+      pricer: makeHourPricer(pool),
+      maps: aave.buildMaps(reserves),
+      tokenMeta: await loadTokenMeta(reserves)
+    }
+    console.log(`[eth] aave-v3: ${reserves.length} reserves, ${contexts.eth.tokenMeta.size} token metas`)
+  }
   if (args.chains.includes('tron')) contexts.tron = buildTronContext(args)
   try {
     await ensureSchema(pool)

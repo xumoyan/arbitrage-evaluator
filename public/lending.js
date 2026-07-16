@@ -4,7 +4,7 @@ const state = { chain: '', rangeDays: 30, chart: null }
 
 const TEXT2 = '#9aa6be'
 const GRID = 'rgba(43, 53, 80, 0.45)'
-const COLORS = { borrow: '#f59e0b', repay: '#60a5fa', supply: '#34d399', withdraw: '#f87171', liquidation: '#e11d48' }
+const COLORS = { borrow: '#f59e0b', repay: '#60a5fa', supply: '#34d399', withdraw: '#f87171', liquidation: '#e11d48', flashloan: '#a78bfa' }
 
 if (window.Chart) {
   Chart.defaults.font.family = "'Fira Sans', sans-serif"

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Address Analysis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Fira+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark"></span>
+      <h1>Address Analysis</h1>
+    </div>
+    <nav class="nav">
+      <a href="/">Pools</a>
+      <a href="/flows.html">Token Flows</a>
+      <a href="/stake.html">Staking</a>
+      <a href="/lending.html">Lending</a>
+      <a href="/smart.html">Smart Money</a>
+      <a href="/addresses.html" class="active">Addresses</a>
+      <a href="/strategy.html">Strategy</a>
+    </nav>
+    <div class="topbar-right">
+      <span id="status" class="status">
+        <span class="status-dot"></span><span class="status-text">Connecting</span>
+      </span>
+    </div>
+  </header>
+
+  <main class="page">
+    <!-- ── search any address ─────────────────────────────────────────── -->
+    <section class="toolbar">
+      <input id="addr-input" type="text" placeholder="粘贴任意地址 0x… 查看画像 (lending + swaps + stake + labels)"
+             style="flex:1;min-width:320px;background:var(--bg-alt,#12182b);color:inherit;border:1px solid var(--border,#2b3550);border-radius:8px;padding:8px 12px;font-family:'Fira Code',monospace;font-size:13px">
+      <button id="addr-go" class="segmented" style="padding:8px 18px;cursor:pointer">分析</button>
+    </section>
+
+    <!-- ── lending watchlist ──────────────────────────────────────────── -->
+    <section class="card table-card">
+      <div class="card-head">
+        <h3>借贷值得关注的地址 <span class="muted">— AAVE v3 · 点击行下钻地址画像</span></h3>
+        <div class="segmented time-range" id="wl-range">
+          <button data-days="1">24H</button>
+          <button data-days="7" class="active">7D</button>
+          <button data-days="30">30D</button>
+          <button data-days="90">90D</button>
+        </div>
+      </div>
+      <div class="segmented" id="wl-dims" style="margin:8px 0;flex-wrap:wrap">
+        <button data-dim="borrowers" class="active">大额借款</button>
+        <button data-dim="net_up">净加杠杆</button>
+        <button data-dim="net_down">净去杠杆</button>
+        <button data-dim="suppliers">大额存入</button>
+        <button data-dim="withdrawers">大额撤出</button>
+        <button data-dim="liquidated">被清算</button>
+        <button data-dim="liquidators">清算人</button>
+        <button data-dim="flashloaners">闪电贷</button>
+      </div>
+      <p class="muted" id="wl-desc" style="margin:4px 0 10px"></p>
+      <div class="table-scroll">
+        <table id="wl-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Address / 标签</th>
+              <th class="num">USD</th>
+              <th class="num">Events</th>
+              <th>Assets</th>
+              <th class="num">Smart score</th>
+              <th>Last seen</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── address profile (drill-down target) ────────────────────────── -->
+    <section class="card" id="profile-card" style="display:none">
+      <div class="card-head">
+        <h3 id="profile-title">地址画像</h3>
+      </div>
+      <div id="profile-identity" style="margin-bottom:10px"></div>
+      <section class="kpi-row" id="profile-kpis"></section>
+      <div class="chart-wrap sm"><canvas id="profile-chart"></canvas></div>
+
+      <div class="card-head" style="margin-top:16px"><h3>借贷行为 <span class="muted">— 按资产汇总 + 最近事件</span></h3></div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <div class="table-scroll" style="flex:1;min-width:300px;max-height:320px">
+          <table id="profile-lending-assets">
+            <thead><tr><th>Action</th><th>Asset</th><th class="num">Events</th><th class="num">USD</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="table-scroll" style="flex:2;min-width:380px;max-height:320px">
+          <table id="profile-lending-events">
+            <thead><tr><th>Time</th><th>Action</th><th>Asset</th><th class="num">USD</th><th>Tx</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card-head" style="margin-top:16px"><h3>DEX 交易行为 <span class="muted">— 按代币的买/卖画像 + 最近大额 swap（收录 ≥ 采集下限）</span></h3></div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <div class="table-scroll" style="flex:1;min-width:340px;max-height:320px">
+          <table id="profile-tokens">
+            <thead><tr><th>Token</th><th class="num">买入笔数</th><th class="num">买入 USD</th><th class="num">卖出笔数</th><th class="num">卖出 USD</th><th class="num">净 USD</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="table-scroll" style="flex:2;min-width:380px;max-height:320px">
+          <table id="profile-swaps">
+            <thead><tr><th>Time</th><th>DEX</th><th>Sold</th><th>Bought</th><th class="num">USD</th><th>Tx</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card-head" style="margin-top:16px"><h3>质押行为</h3></div>
+      <div class="table-scroll" style="max-height:220px">
+        <table id="profile-stake">
+          <thead><tr><th>Chain</th><th>Action</th><th class="num">Events</th><th class="num">Amount</th><th>First</th><th>Last</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── stake entities ─────────────────────────────────────────────── -->
+    <section class="card table-card">
+      <div class="card-head">
+        <h3>质押实体行为 <span class="muted">— 按地址标签聚合到实体 · 点击行看实体明细</span></h3>
+        <div style="display:flex;gap:8px">
+          <div class="segmented" id="ent-chain">
+            <button data-chain="eth" class="active">ETH</button>
+            <button data-chain="tron">TRON</button>
+          </div>
+          <div class="segmented time-range" id="ent-range">
+            <button data-days="7">7D</button>
+            <button data-days="30" class="active">30D</button>
+            <button data-days="90">90D</button>
+          </div>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table id="ent-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Entity</th>
+              <th class="num">地址数</th>
+              <th class="num">Stake</th>
+              <th class="num">Unstake</th>
+              <th class="num">Withdrawn</th>
+              <th class="num">净变化 (stake−withdraw)</th>
+              <th class="num">Txs</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card table-card" id="ent-detail" style="display:none">
+      <div class="card-head"><h3 id="ent-detail-title">实体明细</h3></div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <div class="table-scroll" style="flex:1;min-width:340px;max-height:360px">
+          <table id="ent-members">
+            <thead><tr><th>Address</th><th>Label</th><th class="num">Stake</th><th class="num">Unstake</th><th class="num">Withdrawn</th><th class="num">Txs</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="table-scroll" style="flex:1;min-width:380px;max-height:360px">
+          <table id="ent-txs">
+            <thead><tr><th>Time</th><th>Action</th><th class="num">Amount</th><th>Address</th><th>Tx</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/util.js"></script>
+  <script src="/progress.js"></script>
+  <script src="/addresses.js"></script>
+</body>
+</html>

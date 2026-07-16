@@ -56,6 +56,41 @@ function formatPct(x) {
 // shortAddr/copyBtn/addrCell come from util.js (shared by every page).
 function tokenLabel(t) { return t.symbol || shortAddr(t.token_address) }
 
+// Token price per human unit: memecoins go to 1e-8, majors to 1e5 — pick
+// precision by magnitude. Falls back to the raw per-base-unit price
+// (exponential) when the token's decimals are unknown.
+function formatPrice(humanPrice, rawPrice) {
+  const n = Number(humanPrice)
+  if (Number.isFinite(n) && n > 0) {
+    if (n >= 1000) return '$' + n.toLocaleString('en-US', { maximumFractionDigits: 2 })
+    if (n >= 1) return '$' + n.toFixed(4)
+    if (n >= 0.001) return '$' + n.toFixed(6)
+    return '$' + n.toPrecision(4)
+  }
+  const r = Number(rawPrice)
+  return Number.isFinite(r) && r > 0 ? `$${r.toExponential(3)}/raw` : '—'
+}
+
+// Exact dollars for the trade/position tables — reconciliation needs
+// price × qty ≈ notional to check out, so no K/M abbreviation here.
+function formatUsdExact(n, signed = false) {
+  const num = Number(n)
+  if (!Number.isFinite(num)) return '—'
+  const sign = num < 0 ? '-' : (signed ? '+' : '')
+  return `${sign}$${Math.abs(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+}
+
+function formatQty(humanQty) {
+  const n = Number(humanQty)
+  if (!Number.isFinite(n)) return '—'
+  const a = Math.abs(n)
+  if (a >= 1e9) return (n / 1e9).toFixed(2) + 'B'
+  if (a >= 1e6) return (n / 1e6).toFixed(2) + 'M'
+  if (a >= 1e3) return n.toLocaleString('en-US', { maximumFractionDigits: 1 })
+  if (a >= 1) return n.toFixed(4)
+  return n.toPrecision(4)
+}
+
 // ── 实时模拟总览 ────────────────────────────────────────────────────────────
 function hoursBehind(iso) {
   if (!iso) return null
@@ -215,12 +250,17 @@ function renderPositions(positions) {
   tbody.innerHTML = ''
   document.getElementById('positions-card').style.display = positions.length ? '' : 'none'
   for (const p of positions) {
+    const mv = p.market_value_usd == null ? null : Number(p.market_value_usd)
+    const upnl = mv == null ? null : mv - Number(p.cost_usd)
     const tr = document.createElement('tr')
     tr.innerHTML = `
       <td>${tokenLabel(p)} <span class="addr">${addrCell(p.token_address)}</span></td>
       <td>${p.opened_hour ? p.opened_hour.replace('T', ' ').slice(0, 16) : '—'}</td>
-      <td class="num">${Number(p.entry_price).toExponential(3)}</td>
-      <td class="num">${formatUsd(p.cost_usd)}</td>
+      <td class="num">${formatPrice(p.entry_price_usd, p.entry_price)}</td>
+      <td class="num">${formatQty(p.qty)}</td>
+      <td class="num">${formatUsdExact(p.cost_usd)}</td>
+      <td class="num">${formatPrice(p.last_price_usd, p.last_price)}</td>
+      <td class="num" style="color:${upnl == null ? '' : upnl >= 0 ? 'var(--success)' : 'var(--danger)'}">${mv == null ? '—' : `${formatUsdExact(mv)} / ${formatUsdExact(upnl, true)}`}</td>
       <td>${p.close_after ? p.close_after.replace('T', ' ').slice(0, 16) : '—'}</td>`
     tbody.appendChild(tr)
   }
@@ -236,9 +276,11 @@ function renderTrades(trades) {
       <td>${t.hour_start ? t.hour_start.replace('T', ' ').slice(0, 16) : '—'}</td>
       <td>${tokenLabel(t)} <span class="addr">${addrCell(t.token_address)}</span></td>
       <td style="color:${t.side === 'buy' ? 'var(--success)' : 'var(--danger)'}">${t.side}</td>
-      <td class="num">${formatUsd(t.notional_usd)}</td>
-      <td class="num">${formatUsd(t.fee_usd)}</td>
-      <td class="num" style="color:${pnl == null ? '' : pnl >= 0 ? 'var(--success)' : 'var(--danger)'}">${pnl == null ? '—' : formatUsd(pnl, true)}</td>
+      <td class="num">${formatPrice(t.price_usd, t.price)}</td>
+      <td class="num">${formatQty(t.qty)}</td>
+      <td class="num">${formatUsdExact(t.notional_usd)}</td>
+      <td class="num">${formatUsdExact(t.fee_usd)}</td>
+      <td class="num" style="color:${pnl == null ? '' : pnl >= 0 ? 'var(--success)' : 'var(--danger)'}">${pnl == null ? '—' : formatUsdExact(pnl, true)}</td>
       <td class="muted">${t.reason || ''}</td>`
     tbody.appendChild(tr)
   }

@@ -70,7 +70,17 @@ async function fetchToken(platform, address, apiKey) {
   const headers = { accept: 'application/json' }
   if (apiKey) headers['x-cg-demo-api-key'] = apiKey
   for (let attempt = 1; ; attempt++) {
-    const res = await fetch(url, { headers })
+    let res
+    try {
+      res = await fetch(url, { headers, signal: AbortSignal.timeout(30_000) })
+    } catch {
+      // Network-level failure (DNS blip, reset, timeout). A rejected fetch
+      // here used to abort the entire pass; retry, then skip the token (no
+      // row written) so it's picked up again next pass.
+      if (attempt >= 5) return { status: 'skip' }
+      await sleep(15_000 * attempt)
+      continue
+    }
     if (res.status === 404) return { status: 'not_found' }
     if (res.status === 429 || res.status >= 500) {
       if (attempt >= 5) return { status: 'error' }
@@ -143,6 +153,7 @@ async function runOnce(pool, a) {
   let ok = 0, notFound = 0, errors = 0
   for (const address of addresses) {
     const { status, meta } = await fetchToken(platform, address, a.apiKey)
+    if (status === 'skip') { errors++; await sleep(a.intervalMs); continue }
     await upsert(pool, a.chainId, address, status, meta)
     if (status === 'ok') ok++
     else if (status === 'not_found') notFound++

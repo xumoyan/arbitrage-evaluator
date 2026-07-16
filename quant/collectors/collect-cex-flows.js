@@ -150,10 +150,12 @@ async function main() {
       const nowCut = floorHour(Date.now() - a.lagMinutes * 60000) // completed hours only
       let last = await getState(pool, a.chainId)
       // First run without state: start 48h back so the strategy has context.
-      let from = last ? addHours(new Date(last), 1) : addHours(nowCut, -48)
-      // Reprocess the previous hour too — late-arriving rows, upsert is idempotent.
-      if (last) from = addHours(from, -1)
-      if (from.getTime() < nowCut.getTime()) {
+      const next = last ? addHours(new Date(last), 1) : addHours(nowCut, -48)
+      // Only scan ClickHouse when a new complete hour exists — the 15-min
+      // poll otherwise redoes the same hour 3-4x for nothing.
+      if (next.getTime() < nowCut.getTime()) {
+        // Reprocess the previous hour too — late-arriving rows, upsert is idempotent.
+        const from = last ? addHours(next, -1) : next
         const n = await processWindow(pool, a, cexList, from, nowCut)
         await setState(pool, a.chainId, addHours(nowCut, -1))
         console.log(`${new Date().toISOString()} processed ${from.toISOString()} → ${nowCut.toISOString()} (${n} token-hours)`)

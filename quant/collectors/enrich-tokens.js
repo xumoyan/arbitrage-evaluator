@@ -114,7 +114,20 @@ async function main() {
 
       let updated = 0, named = 0
       for (let i = 0; i < rows.length; i += args.batch) {
-        const slice = rows.slice(i, i + args.batch)
+        // A single malformed token_address (ethers treats it as an ENS name)
+        // fails the whole multicall encode — filter those out and mark them
+        // checked so they don't poison every future batch.
+        const slice = []
+        for (const r of rows.slice(i, i + args.batch)) {
+          if (/^0x[0-9a-fA-F]{40}$/.test(r.token_address)) { slice.push(r); continue }
+          console.error(`  skip malformed address ${JSON.stringify(r.token_address)}`)
+          await pool.query(
+            `UPDATE tokens SET metadata_checked_at = NOW(), updated_at = NOW()
+             WHERE chain_id=$1 AND token_address=$2`,
+            [args.chainId, r.token_address]
+          ).catch(() => {})
+        }
+        if (!slice.length) continue
         const calls = []
         for (const r of slice) {
           calls.push({ target: r.token_address, callData: SEL_DECIMALS })

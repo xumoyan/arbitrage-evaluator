@@ -86,10 +86,38 @@ async function syncFunding(pool, symbol, startIso) {
   return total
 }
 
+async function upsertOi(pool, symbol, rows) {
+  const values = []
+  const qp = []
+  let i = 1
+  for (const r of rows) {
+    const ts = Number(r.timestamp)
+    values.push(`($${i++}, $${i++}, $${i++}, $${i++})`)
+    qp.push(symbol, new Date(ts - (ts % 3600000)).toISOString(), Number(r.sumOpenInterest), Number(r.sumOpenInterestValue))
+  }
+  if (!values.length) return 0
+  await pool.query(`
+    INSERT INTO open_interest_hourly (symbol, hour_start, oi_base, oi_usd)
+    VALUES ${values.join(',')}
+    ON CONFLICT (symbol, hour_start) DO UPDATE SET oi_base = EXCLUDED.oi_base, oi_usd = EXCLUDED.oi_usd
+  `, qp)
+  return rows.length
+}
+
 async function syncOpenInterest(pool, symbol) {
-  // The endpoint rejects startTime near the edge of its ~30d retention, so
-  // page backward with endTime instead: newest 500 hours first, then older
-  // chunks until the API runs dry. Each pass re-covers recent hours (upsert).
+  // Incremental: with data already stored, only the missing tail is fetched
+  // (+2h overlap for upstream revisions) — one small request per pass instead
+  // of re-downloading the full ~30d window every hour.
+  const last = await pool.query('SELECT max(hour_start) AS t FROM open_interest_hourly WHERE symbol = $1', [symbol])
+  const lastMs = last.rows[0].t ? new Date(last.rows[0].t).getTime() : null
+  const gapHours = lastMs ? Math.ceil((Date.now() - lastMs) / 3600000) + 2 : null
+  if (gapHours !== null && gapHours <= 500) {
+    const rows = await fapiGet('/futures/data/openInterestHist', { symbol, period: '1h', limit: gapHours })
+    return Array.isArray(rows) ? upsertOi(pool, symbol, rows) : 0
+  }
+  // Bootstrap (or a >500h hole): the endpoint rejects startTime near the edge
+  // of its ~30d retention, so page backward with endTime instead: newest 500
+  // hours first, then older chunks until the API runs dry.
   let endTime = null
   let total = 0
   for (let page = 0; page < 4; page++) {
@@ -103,20 +131,7 @@ async function syncOpenInterest(pool, symbol) {
       break // older pages past retention just error out — done
     }
     if (!Array.isArray(rows) || rows.length === 0) break
-    const values = []
-    const qp = []
-    let i = 1
-    for (const r of rows) {
-      const ts = Number(r.timestamp)
-      values.push(`($${i++}, $${i++}, $${i++}, $${i++})`)
-      qp.push(symbol, new Date(ts - (ts % 3600000)).toISOString(), Number(r.sumOpenInterest), Number(r.sumOpenInterestValue))
-    }
-    await pool.query(`
-      INSERT INTO open_interest_hourly (symbol, hour_start, oi_base, oi_usd)
-      VALUES ${values.join(',')}
-      ON CONFLICT (symbol, hour_start) DO UPDATE SET oi_base = EXCLUDED.oi_base, oi_usd = EXCLUDED.oi_usd
-    `, qp)
-    total += rows.length
+    total += await upsertOi(pool, symbol, rows)
     endTime = Number(rows[0].timestamp) - 1
     if (rows.length < 500) break
     await sleep(300)

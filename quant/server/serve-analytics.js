@@ -695,6 +695,283 @@ async function handleApiRequest(pathname, searchParams, pgPool, res) {
     return jsonResponse(res, { count: r.rows.length, liquidations: r.rows })
   }
 
+  // ── address drill-down: macro watchlists → per-address behavior ─────────
+  // Ranked lending addresses per dimension over a window. Every dimension
+  // returns the same row shape (address + metrics + entity label + smart
+  // score) so the UI renders them uniformly and cross-references domains.
+  if (pathname === '/api/address/watchlist') {
+    const days = Math.min(Math.max(Number(searchParams.get('days') || '7'), 1), 365)
+    const limit = Math.min(Math.max(Number(searchParams.get('limit') || '15'), 1), 100)
+
+    const enrich = (inner) => `
+      SELECT d.*, lbl.name_tag, lbl.labels, COALESCE(lbl.deny, FALSE) AS deny, sm.smart_score
+      FROM (${inner}) d
+      LEFT JOIN LATERAL (
+        SELECT MIN(al.name_tag) AS name_tag, STRING_AGG(DISTINCT al.label, ', ') AS labels,
+               BOOL_OR(al.deny) AS deny
+        FROM address_labels al WHERE al.chain_id = 1 AND al.address = d.address
+      ) lbl ON TRUE
+      LEFT JOIN LATERAL (
+        SELECT MAX(s.score) AS smart_score FROM smart_addresses s
+        WHERE s.chain_id = 1 AND s.address = d.address
+      ) sm ON TRUE`
+    const run = async (inner) => (await pgPool.query(enrich(inner), [days, limit])).rows
+
+    const byAction = (action, addrCol = 'user_address') => `
+      SELECT ${addrCol} AS address, COUNT(*)::int AS events, SUM(amount_usd) AS usd,
+             STRING_AGG(DISTINCT asset_symbol, ', ') AS assets, MAX(block_time) AS last_seen
+      FROM lending_events
+      WHERE chain = 'eth' AND action = '${action}'
+        AND block_time >= NOW() - make_interval(days => $1::int)
+        AND ${addrCol} IS NOT NULL
+      GROUP BY 1 ORDER BY SUM(amount_usd) DESC NULLS LAST LIMIT $2`
+
+    // Net leverage change = borrow − repay: who is building (or unwinding)
+    // debt fastest. Sign-ordered both ways so the UI can show both ends.
+    const netBorrow = (dir) => `
+      SELECT user_address AS address, COUNT(*)::int AS events,
+             SUM(CASE WHEN action = 'borrow' THEN amount_usd ELSE -amount_usd END) AS usd,
+             STRING_AGG(DISTINCT asset_symbol, ', ') AS assets, MAX(block_time) AS last_seen
+      FROM lending_events
+      WHERE chain = 'eth' AND action IN ('borrow', 'repay')
+        AND block_time >= NOW() - make_interval(days => $1::int)
+        AND user_address IS NOT NULL AND amount_usd IS NOT NULL
+      GROUP BY 1
+      HAVING SUM(CASE WHEN action = 'borrow' THEN amount_usd ELSE -amount_usd END) ${dir === 'up' ? '> 0' : '< 0'}
+      ORDER BY 3 ${dir === 'up' ? 'DESC' : 'ASC'} LIMIT $2`
+
+    const [borrowers, netUp, netDown, suppliers, withdrawers, liquidated, liquidators, flashloaners] =
+      await Promise.all([
+        run(byAction('borrow')),
+        run(netBorrow('up')),
+        run(netBorrow('down')),
+        run(byAction('supply')),
+        run(byAction('withdraw')),
+        run(byAction('liquidation')),
+        run(byAction('liquidation', 'liquidator')),
+        run(byAction('flashloan'))
+      ])
+    return jsonResponse(res, {
+      days,
+      dimensions: {
+        borrowers, net_up: netUp, net_down: netDown, suppliers, withdrawers,
+        liquidated, liquidators, flashloaners
+      }
+    })
+  }
+
+  // Cross-domain profile of one address: who it is (labels), what it does in
+  // lending, whether it's a scored smart trader, its DEX swaps and staking.
+  if (pathname === '/api/address/profile') {
+    const raw = (searchParams.get('address') || '').trim()
+    if (!raw) return jsonResponse(res, { error: 'address required' }, 400)
+    const isEvm = /^0x[0-9a-fA-F]{40}$/.test(raw)
+    const addr = isEvm ? raw.toLowerCase() : raw
+    // stake indexes are (chain, address); constraining chain lets the three
+    // OR'd address lookups bitmap-OR the indexes instead of seq-scanning 9M rows
+    const stakeChain = isEvm ? 'eth' : 'tron'
+
+    const [labels, stakeLabels, lending, lendingAssets, asLiquidator, smart, swaps, stake] =
+      await Promise.all([
+        pgPool.query(`
+          SELECT label, name_tag, deny FROM address_labels
+          WHERE chain_id = 1 AND address = $1 ORDER BY deny DESC, label`, [addr]),
+        pgPool.query(`
+          SELECT DISTINCT chain, entity, label FROM stake_address_labels
+          WHERE address = $1 ORDER BY chain LIMIT 10`, [addr]),
+        pgPool.query(`
+          SELECT protocol, action, COUNT(*)::int AS events, SUM(amount_usd) AS usd,
+                 MIN(block_time) AS first_seen, MAX(block_time) AS last_seen
+          FROM lending_events WHERE user_address = $1 GROUP BY 1, 2 ORDER BY 1, 2`, [addr]),
+        pgPool.query(`
+          SELECT action, asset_symbol, COUNT(*)::int AS events, SUM(amount_usd) AS usd
+          FROM lending_events WHERE user_address = $1
+          GROUP BY 1, 2 ORDER BY SUM(amount_usd) DESC NULLS LAST LIMIT 24`, [addr]),
+        pgPool.query(`
+          SELECT COUNT(*)::int AS events, SUM(amount_usd) AS usd
+          FROM lending_events WHERE action = 'liquidation' AND liquidator = $1`, [addr]),
+        pgPool.query(`
+          SELECT window_days, horizon_hours, trade_count, scored_count, win_count,
+                 win_rate, avg_return, total_pnl_usd, volume_usd, score, computed_at
+          FROM smart_addresses WHERE address = $1 ORDER BY window_days`, [addr]),
+        pgPool.query(`
+          SELECT COUNT(*)::int AS swaps, SUM(amount_usd) AS usd,
+                 MIN(block_time) AS first_seen, MAX(block_time) AS last_seen,
+                 COUNT(DISTINCT token_out)::int AS tokens_bought
+          FROM swap_details WHERE tx_from = $1`, [addr]),
+        pgPool.query(`
+          SELECT chain, action, COUNT(*)::int AS events, SUM(amount) AS amount, MAX(unit) AS unit,
+                 MIN(created_at) AS first_seen, MAX(created_at) AS last_seen
+          FROM stake_transactions
+          WHERE chain = $2
+            AND (participant_address = $1 OR withdrawal_address = $1 OR deposit_address = $1)
+          GROUP BY 1, 2 ORDER BY 1, 2`, [addr, stakeChain])
+      ])
+
+    return jsonResponse(res, {
+      address: addr,
+      labels: labels.rows,
+      stakeLabels: stakeLabels.rows,
+      lending: { byAction: lending.rows, byAsset: lendingAssets.rows, asLiquidator: asLiquidator.rows[0] },
+      smart: smart.rows,
+      swaps: swaps.rows[0],
+      stake: stake.rows
+    })
+  }
+
+  // Full lending history of one address (as borrower/supplier or liquidator).
+  if (pathname === '/api/address/lending-events') {
+    const raw = (searchParams.get('address') || '').trim()
+    if (!raw) return jsonResponse(res, { error: 'address required' }, 400)
+    const addr = /^0x[0-9a-fA-F]{40}$/.test(raw) ? raw.toLowerCase() : raw
+    const limit = Math.min(Math.max(Number(searchParams.get('limit') || '300'), 1), 2000)
+    // UNION of two indexed lookups (user idx + protocol/action idx) instead of
+    // an OR that would force a sequential scan over the whole table.
+    const r = await pgPool.query(`
+      SELECT * FROM (
+        SELECT chain, protocol, action, tx_hash, block_time, asset, asset_symbol,
+               amount_raw, amount_usd, user_address, liquidator
+        FROM lending_events WHERE user_address = $1
+        UNION
+        SELECT chain, protocol, action, tx_hash, block_time, asset, asset_symbol,
+               amount_raw, amount_usd, user_address, liquidator
+        FROM lending_events WHERE action = 'liquidation' AND liquidator = $1
+      ) e ORDER BY block_time DESC LIMIT $2`, [addr, limit])
+    return jsonResponse(res, { address: addr, count: r.rows.length, events: r.rows })
+  }
+
+  // All recorded DEX swaps of one address (swap_details keeps every swap above
+  // the collector's USD floor since 2024) with token symbols for display.
+  if (pathname === '/api/address/swaps') {
+    const raw = (searchParams.get('address') || '').trim()
+    if (!/^0x[0-9a-fA-F]{40}$/.test(raw)) return jsonResponse(res, { error: 'valid 0x address required' }, 400)
+    const addr = raw.toLowerCase()
+    const limit = Math.min(Math.max(Number(searchParams.get('limit') || '200'), 1), 2000)
+    const r = await pgPool.query(`
+      SELECT sd.tx_hash, sd.block_time, sd.dex, sd.amount_usd, sd.gas_cost_usd,
+             sd.token_in, ti.symbol AS token_in_symbol,
+             sd.token_out, to_.symbol AS token_out_symbol
+      FROM swap_details sd
+      LEFT JOIN tokens ti  ON ti.token_address = sd.token_in  AND ti.chain_id = sd.chain_id
+      LEFT JOIN tokens to_ ON to_.token_address = sd.token_out AND to_.chain_id = sd.chain_id
+      WHERE sd.tx_from = $1 ORDER BY sd.block_time DESC LIMIT $2`, [addr, limit])
+    return jsonResponse(res, { address: addr, count: r.rows.length, swaps: r.rows })
+  }
+
+  // Per-token buy/sell aggregation of one address's swaps — the behavioral
+  // fingerprint: what it accumulates, what it distributes, at what size.
+  if (pathname === '/api/address/token-breakdown') {
+    const raw = (searchParams.get('address') || '').trim()
+    if (!/^0x[0-9a-fA-F]{40}$/.test(raw)) return jsonResponse(res, { error: 'valid 0x address required' }, 400)
+    const addr = raw.toLowerCase()
+    const r = await pgPool.query(`
+      WITH buys AS (
+        SELECT token_out AS token, COUNT(*)::int AS n, SUM(amount_usd) AS usd,
+               MAX(block_time) AS last_ts
+        FROM swap_details WHERE tx_from = $1 GROUP BY 1),
+      sells AS (
+        SELECT token_in AS token, COUNT(*)::int AS n, SUM(amount_usd) AS usd,
+               MAX(block_time) AS last_ts
+        FROM swap_details WHERE tx_from = $1 GROUP BY 1)
+      SELECT COALESCE(b.token, s.token) AS token, t.symbol,
+             COALESCE(b.n, 0) AS buys, COALESCE(b.usd, 0) AS buy_usd,
+             COALESCE(s.n, 0) AS sells, COALESCE(s.usd, 0) AS sell_usd,
+             GREATEST(COALESCE(b.last_ts, '-infinity'), COALESCE(s.last_ts, '-infinity')) AS last_seen
+      FROM buys b FULL OUTER JOIN sells s ON s.token = b.token
+      LEFT JOIN tokens t ON t.token_address = COALESCE(b.token, s.token) AND t.chain_id = 1
+      ORDER BY COALESCE(b.usd, 0) + COALESCE(s.usd, 0) DESC LIMIT 50`, [addr])
+    return jsonResponse(res, { address: addr, count: r.rows.length, tokens: r.rows })
+  }
+
+  // ── stake entities: labeled-entity behavior over a window ───────────────
+  // Groups stake transactions by the entity label of any involved address
+  // (withdrawal > deposit > participant, same priority as the stake page), so
+  // one row answers "what did Coinbase/Lido/Kraken do in the last N days".
+  if (pathname === '/api/stake/entities') {
+    const chain = searchParams.get('chain') === 'tron' ? 'tron' : 'eth'
+    const days = Math.min(Math.max(Number(searchParams.get('days') || '30'), 1), 365)
+    const limit = Math.min(Math.max(Number(searchParams.get('limit') || '30'), 1), 200)
+    const r = await pgPool.query(`
+      WITH lbl AS (
+        SELECT DISTINCT ON (address) address, entity
+        FROM stake_address_labels
+        WHERE chain = $1 AND entity IS NOT NULL AND entity <> ''
+        ORDER BY address, label_display_level DESC),
+      tx AS (
+        SELECT COALESCE(lw.entity, ld.entity, lp.entity) AS entity,
+               st.action, st.amount, st.unit,
+               COALESCE(st.withdrawal_address, st.deposit_address, st.participant_address) AS addr
+        FROM stake_transactions st
+        LEFT JOIN lbl lw ON lw.address = st.withdrawal_address
+        LEFT JOIN lbl ld ON ld.address = st.deposit_address
+        LEFT JOIN lbl lp ON lp.address = st.participant_address
+        WHERE st.chain = $1 AND st.day_start >= NOW() - make_interval(days => $2::int))
+      SELECT entity, MAX(unit) AS unit, COUNT(DISTINCT addr)::int AS addresses,
+             COUNT(*) FILTER (WHERE action = 'stake')::int AS stake_txs,
+             COALESCE(SUM(amount) FILTER (WHERE action = 'stake'), 0) AS stake_amount,
+             COUNT(*) FILTER (WHERE action = 'unstake')::int AS unstake_txs,
+             COALESCE(SUM(amount) FILTER (WHERE action = 'unstake'), 0) AS unstake_amount,
+             COUNT(*) FILTER (WHERE action = 'withdrawal')::int AS withdrawal_txs,
+             COALESCE(SUM(amount) FILTER (WHERE action = 'withdrawal'), 0) AS withdrawal_amount
+      FROM tx WHERE entity IS NOT NULL
+      GROUP BY entity
+      ORDER BY COALESCE(SUM(amount) FILTER (WHERE action = 'stake'), 0)
+             + COALESCE(SUM(amount) FILTER (WHERE action = 'unstake'), 0)
+             + COALESCE(SUM(amount) FILTER (WHERE action = 'withdrawal'), 0) DESC
+      LIMIT $3`, [chain, days, limit])
+    return jsonResponse(res, { chain, days, count: r.rows.length, entities: r.rows })
+  }
+
+  // One entity's member addresses (by activity) and recent transactions.
+  if (pathname === '/api/stake/entity') {
+    const chain = searchParams.get('chain') === 'tron' ? 'tron' : 'eth'
+    const entity = (searchParams.get('entity') || '').trim()
+    if (!entity) return jsonResponse(res, { error: 'entity required' }, 400)
+    const days = Math.min(Math.max(Number(searchParams.get('days') || '30'), 1), 365)
+    const limit = Math.min(Math.max(Number(searchParams.get('limit') || '100'), 1), 500)
+
+    const lblCte = `
+      lbl AS (
+        SELECT DISTINCT ON (address) address, label
+        FROM stake_address_labels
+        WHERE chain = $1 AND entity = $2
+        ORDER BY address, label_display_level DESC)`
+    const [members, txs] = await Promise.all([
+      pgPool.query(`
+        WITH ${lblCte},
+        tx AS (
+          SELECT COALESCE(lw.address, ld.address, lp.address) AS address,
+                 COALESCE(lw.label, ld.label, lp.label) AS label,
+                 st.action, st.amount, st.unit, st.created_at
+          FROM stake_transactions st
+          LEFT JOIN lbl lw ON lw.address = st.withdrawal_address
+          LEFT JOIN lbl ld ON ld.address = st.deposit_address
+          LEFT JOIN lbl lp ON lp.address = st.participant_address
+          WHERE st.chain = $1 AND st.day_start >= NOW() - make_interval(days => $3::int))
+        SELECT address, MAX(label) AS label, MAX(unit) AS unit, COUNT(*)::int AS txs,
+               COALESCE(SUM(amount) FILTER (WHERE action = 'stake'), 0) AS stake_amount,
+               COALESCE(SUM(amount) FILTER (WHERE action = 'unstake'), 0) AS unstake_amount,
+               COALESCE(SUM(amount) FILTER (WHERE action = 'withdrawal'), 0) AS withdrawal_amount,
+               MAX(created_at) AS last_seen
+        FROM tx WHERE address IS NOT NULL
+        GROUP BY address ORDER BY COUNT(*) DESC LIMIT 30`, [chain, entity, days]),
+      pgPool.query(`
+        WITH ${lblCte}
+        SELECT st.action, st.created_at, st.tx_hash, st.amount, st.unit,
+               st.participant_address, st.withdrawal_address, st.deposit_address
+        FROM stake_transactions st
+        WHERE st.chain = $1 AND st.day_start >= NOW() - make_interval(days => $3::int)
+          AND (st.withdrawal_address IN (SELECT address FROM lbl)
+            OR st.deposit_address IN (SELECT address FROM lbl)
+            OR st.participant_address IN (SELECT address FROM lbl))
+        ORDER BY st.created_at DESC LIMIT $4`, [chain, entity, days, limit])
+    ])
+    return jsonResponse(res, {
+      chain, entity, days,
+      members: members.rows, transactions: txs.rows
+    })
+  }
+
   // ── strategy simulation (backtest + paper trading) ──────────────────────
   // Per-strategy Chinese docs straight from the registry, so the dashboard
   // always shows the doc matching the code that actually ran.
@@ -766,10 +1043,16 @@ async function handleApiRequest(pathname, searchParams, pgPool, res) {
     const runId = searchParams.get('run') || ''
     if (!runId) return jsonResponse(res, { error: 'run required' }, 400)
     const limit = Math.min(Math.max(Number(searchParams.get('limit') || '200'), 1), 2000)
+    // price is USD per raw base unit; scale by token decimals so the UI can
+    // show a human price/qty (price_usd * qty = notional_usd for reconciliation)
     const r = await pgPool.query(`
-      SELECT token_address, symbol, side, hour_start, price, qty_raw,
-             notional_usd, fee_usd, pnl_usd, reason
-      FROM sim_trades WHERE run_id = $1 ORDER BY hour_start DESC, id DESC LIMIT $2
+      SELECT t.token_address, t.symbol, t.side, t.hour_start, t.price, t.qty_raw,
+             t.notional_usd, t.fee_usd, t.pnl_usd, t.reason, tk.decimals,
+             CASE WHEN tk.decimals IS NOT NULL THEN t.price * POWER(10::numeric, tk.decimals) END AS price_usd,
+             CASE WHEN tk.decimals IS NOT NULL THEN t.qty_raw / POWER(10::numeric, tk.decimals) END AS qty
+      FROM sim_trades t
+      LEFT JOIN tokens tk ON tk.token_address = t.token_address AND tk.chain_id = 1
+      WHERE t.run_id = $1 ORDER BY t.hour_start DESC, t.id DESC LIMIT $2
     `, [runId, limit])
     return jsonResponse(res, { run: runId, count: r.rows.length, trades: r.rows })
   }
@@ -778,8 +1061,24 @@ async function handleApiRequest(pathname, searchParams, pgPool, res) {
     const runId = searchParams.get('run') || ''
     if (!runId) return jsonResponse(res, { error: 'run required' }, 400)
     const r = await pgPool.query(`
-      SELECT token_address, symbol, opened_hour, entry_price, qty_raw, cost_usd, close_after
-      FROM sim_positions WHERE run_id = $1 ORDER BY opened_hour DESC
+      SELECT p.token_address, p.symbol, p.opened_hour, p.entry_price, p.qty_raw,
+             p.cost_usd, p.close_after, tk.decimals,
+             CASE WHEN tk.decimals IS NOT NULL THEN p.entry_price * POWER(10::numeric, tk.decimals) END AS entry_price_usd,
+             CASE WHEN tk.decimals IS NOT NULL THEN p.qty_raw / POWER(10::numeric, tk.decimals) END AS qty,
+             lp.px AS last_price,
+             CASE WHEN tk.decimals IS NOT NULL AND lp.px IS NOT NULL
+                  THEN lp.px * POWER(10::numeric, tk.decimals) END AS last_price_usd,
+             CASE WHEN lp.px IS NOT NULL THEN lp.px * p.qty_raw END AS market_value_usd
+      FROM sim_positions p
+      LEFT JOIN tokens tk ON tk.token_address = p.token_address AND tk.chain_id = 1
+      LEFT JOIN LATERAL (
+        SELECT (fh.inflow_usd + fh.outflow_usd) / NULLIF(fh.inflow_raw + fh.outflow_raw, 0) AS px
+        FROM token_flow_hourly fh
+        WHERE fh.token_address = p.token_address AND fh.chain_id = 1
+          AND fh.inflow_raw + fh.outflow_raw > 0 AND fh.inflow_usd + fh.outflow_usd > 0
+        ORDER BY fh.hour_start DESC LIMIT 1
+      ) lp ON TRUE
+      WHERE p.run_id = $1 ORDER BY p.opened_hour DESC
     `, [runId])
     return jsonResponse(res, { run: runId, count: r.rows.length, positions: r.rows })
   }

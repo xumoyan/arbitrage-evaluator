@@ -45,7 +45,9 @@ services:
 
   # Every 15 min: refresh the recent CEX price tail (REST fills the newest
   # hours the archive zips can't cover — the ref-price line on the pools page
-  # and trade-majors live pricing both read token_prices_hourly).
+  # and trade-majors live pricing both read token_prices_hourly). Only the
+  # last 8h — analytics-collector re-covers a 3-day window hourly, so the
+  # deeper refresh is already handled there.
   price-collector:
     image: node:20-bookworm-slim
     working_dir: /workspace/arbitrage-evaluator
@@ -58,9 +60,9 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
-        echo "Price collector starting — refreshes last 2 days every 15 min"
+        echo "Price collector starting — refreshes last 8 hours every 15 min"
         while true; do
-          RECENT=$$(date -u -d '2 days ago' '+%Y-%m-%dT00:00:00Z' 2>/dev/null || date -u -v-2d '+%Y-%m-%dT00:00:00Z')
+          RECENT=$$(date -u -d '8 hours ago' '+%Y-%m-%dT%H:00:00Z' 2>/dev/null || date -u -v-8H '+%Y-%m-%dT%H:00:00Z')
           node quant/collectors/load-binance-prices.js --start-iso "$$RECENT" || true
           sleep 900
         done
@@ -143,7 +145,9 @@ services:
         node quant/collectors/collect-lending-events.js --loop
 
   # Re-scores trader addresses from swap_details, then mirrors new activity
-  # from the top scorers into smart_address_events. Alternates every 10 min.
+  # from the top scorers into smart_address_events. Hourly — swap_details
+  # itself only advances by one hour bucket per hour, so a 30d-window rescore
+  # every 10 min recomputed the same result 6x.
   smart-address-tracker:
     image: node:20-bookworm-slim
     working_dir: /workspace/arbitrage-evaluator
@@ -156,11 +160,11 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
-        echo "Smart-address tracker starting — score + watch every 10 min"
+        echo "Smart-address tracker starting — score + watch hourly"
         while true; do
           node quant/collectors/track-smart-addresses.js || true
           node quant/collectors/track-smart-addresses.js --watch || true
-          sleep 600
+          sleep 3600
         done
 
   # Daily refresh of address labels from two sources: the internal chain_cloud
