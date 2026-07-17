@@ -38,6 +38,8 @@ test('pivotEdges attributes USD to both tokens and splits buy/sell', () => {
   assert.equal(pepe.buy_count, 3)
   assert.equal(pepe.sell_count, 2)
   assert.equal(pepe.swap_count, 5)
+  assert.equal(pepe.priced_inflow_raw, 5e23)
+  assert.equal(pepe.priced_outflow_raw, 5e23)
   assert.equal(weth.symbol, 'WETH')
   assert.equal(pepe.unpriced_swap_count, 0)
 })
@@ -50,4 +52,19 @@ test('pivotEdges counts unpriced swaps for non-anchor pairs', () => {
   assert.equal(m.get(b).unpriced_swap_count, 4)
   assert.equal(m.get(a).inflow_usd, 0)
   assert.equal(m.get(b).outflow_usd, 0)
+  assert.equal(m.get(a).priced_outflow_raw, 0)
+  assert.equal(m.get(b).priced_inflow_raw, 0)
+})
+
+test('unpriced raw amounts never enter the priced VWAP denominator', () => {
+  const other = '0x1111111111111111111111111111111111111111'
+  const edges = [
+    { token_in: WETH, token_out: PEPE, amount_in: 1e18, amount_out: 5e23, swaps: 1 },
+    { token_in: other, token_out: PEPE, amount_in: 1e18, amount_out: 20e23, swaps: 1 }
+  ]
+  const pepe = pivotEdges(edges, priceWeth2000).get(PEPE)
+  assert.ok(Math.abs(pepe.inflow_raw / 25e23 - 1) < 1e-12)
+  assert.ok(Math.abs(pepe.priced_inflow_raw / 5e23 - 1) < 1e-12)
+  assert.equal(pepe.inflow_usd, 2000)
+  assert.equal(pepe.unpriced_swap_count, 1)
 })

@@ -24,6 +24,27 @@ CREATE TABLE IF NOT EXISTS smart_addresses (
 );
 CREATE INDEX IF NOT EXISTS idx_smart_addr_score ON smart_addresses (score DESC);
 
+-- Realized/behavioral verification: FIFO round-trips over the same window
+-- (quant/lib/realized-pnl.js), written by the tracker's enrich pass. Marked
+-- columns above answer "did their picks go up"; these answer "did they
+-- actually bank money, how concentrated, and does the flow look like a bot".
+ALTER TABLE smart_addresses ADD COLUMN IF NOT EXISTS realized_pnl_usd    NUMERIC;  -- Σ closed-trip pnl, gas-adjusted
+ALTER TABLE smart_addresses ADD COLUMN IF NOT EXISTS unrealized_pnl_usd  NUMERIC;  -- open lots at latest VWAP (informational only)
+ALTER TABLE smart_addresses ADD COLUMN IF NOT EXISTS closed_trips        INT;
+ALTER TABLE smart_addresses ADD COLUMN IF NOT EXISTS realized_win_rate   NUMERIC;  -- wins/trips, null below 5 trips
+ALTER TABLE smart_addresses ADD COLUMN IF NOT EXISTS median_hold_hours   NUMERIC;
+ALTER TABLE smart_addresses ADD COLUMN IF NOT EXISTS top1_pnl_share      NUMERIC;  -- best trip / all positive trip pnl
+ALTER TABLE smart_addresses ADD COLUMN IF NOT EXISTS top_token_pnl_share NUMERIC;
+ALTER TABLE smart_addresses ADD COLUMN IF NOT EXISTS profitable_tokens   INT;
+ALTER TABLE smart_addresses ADD COLUMN IF NOT EXISTS tokens_traded       INT;
+ALTER TABLE smart_addresses ADD COLUMN IF NOT EXISTS trades_per_day      NUMERIC;
+ALTER TABLE smart_addresses ADD COLUMN IF NOT EXISTS active_days         INT;
+ALTER TABLE smart_addresses ADD COLUMN IF NOT EXISTS coverage_ratio      NUMERIC;  -- matched / all sell USD; <1 = invisible legs
+ALTER TABLE smart_addresses ADD COLUMN IF NOT EXISTS gas_spent_usd       NUMERIC;
+ALTER TABLE smart_addresses ADD COLUMN IF NOT EXISTS classification      TEXT;     -- human | bot | mixed
+ALTER TABLE smart_addresses ADD COLUMN IF NOT EXISTS flags               TEXT;     -- comma list, see realized-pnl.js classify()
+ALTER TABLE smart_addresses ADD COLUMN IF NOT EXISTS realized_at         TIMESTAMPTZ;
+
 -- ── smart_address_events: new activity from watchlisted addresses ────────
 CREATE TABLE IF NOT EXISTS smart_address_events (
   id            BIGSERIAL PRIMARY KEY,

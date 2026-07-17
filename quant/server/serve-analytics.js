@@ -6,6 +6,7 @@ const fs = require('fs')
 const path = require('path')
 const { query: chQuery, buildTokenTxQuery, toChDateTime } = require('../lib/clickhouse')
 const { WETH: WETH_ADDR } = require('../lib/flow-anchors')
+const { computeAddressPnl, classify, markOpen, SWAP_FETCH_SQL, LATEST_PX_SQL } = require('../lib/realized-pnl')
 const {
   queryStakeChart,
   queryStakeGroups,
@@ -616,9 +617,20 @@ async function handleApiRequest(pathname, searchParams, pgPool, res) {
   // ── smart addresses ──────────────────────────────────────────────────────
   if (pathname === '/api/smart/list') {
     const limit = Math.min(Math.max(Number(searchParams.get('limit') || '50'), 1), 500)
+    // curated=1: the isCurated() gate from quant/lib/realized-pnl.js in SQL —
+    // actually-banked, diversified, non-bot addresses only.
+    const curated = searchParams.get('curated') === '1'
+      ? `AND s.classification IS DISTINCT FROM 'bot'
+         AND s.win_rate >= 0.55 AND s.avg_return > 0
+         AND s.realized_pnl_usd > 0 AND s.closed_trips >= 5 AND s.realized_win_rate >= 0.5
+         AND s.top1_pnl_share < 0.5 AND s.coverage_ratio >= 0.5`
+      : ''
     const r = await pgPool.query(`
       SELECT s.address, s.window_days, s.horizon_hours, s.trade_count, s.scored_count,
              s.win_count, s.win_rate, s.avg_return, s.total_pnl_usd, s.volume_usd, s.score, s.computed_at,
+             s.realized_pnl_usd, s.unrealized_pnl_usd, s.closed_trips, s.realized_win_rate,
+             s.median_hold_hours, s.top1_pnl_share, s.top_token_pnl_share, s.profitable_tokens,
+             s.tokens_traded, s.trades_per_day, s.coverage_ratio, s.classification, s.flags,
              lbl.name_tag, lbl.labels
       FROM smart_addresses s
       LEFT JOIN LATERAL (
@@ -626,9 +638,58 @@ async function handleApiRequest(pathname, searchParams, pgPool, res) {
         FROM address_labels al
         WHERE al.chain_id = s.chain_id AND al.address = s.address
       ) lbl ON TRUE
-      ORDER BY s.score DESC LIMIT $1
+      WHERE 1=1 ${curated}
+      ORDER BY ${searchParams.get('curated') === '1' ? 's.realized_pnl_usd' : 's.score'} DESC LIMIT $1
     `, [limit])
     return jsonResponse(res, { count: r.rows.length, addresses: r.rows })
+  }
+
+  // On-demand FIFO realized-PnL breakdown for any address (not only scored
+  // ones): aggregate verification metrics + per-token realized table + the
+  // most recent closed round-trips. Powers the profile page drill-down.
+  if (pathname === '/api/address/realized') {
+    const address = (searchParams.get('address') || '').toLowerCase()
+    if (!/^0x[0-9a-f]{40}$/.test(address)) return jsonResponse(res, { error: 'bad address' }, 400)
+    const days = Math.min(Math.max(Number(searchParams.get('days') || '180'), 1), 730)
+    const chainId = Number(searchParams.get('chain_id') || '1')
+    const { rows: swaps } = await pgPool.query(SWAP_FETCH_SQL, [chainId, [address], days])
+    const { perToken, trips, open, agg } = computeAddressPnl(swaps)
+    const cls = classify(agg)
+    const pxMap = new Map()
+    if (open.length) {
+      const { rows: pxRows } = await pgPool.query(LATEST_PX_SQL, [chainId, open.map(o => o.token)])
+      for (const p of pxRows) pxMap.set(p.token, Number(p.px))
+    }
+    agg.unrealizedPnlUsd = markOpen(open, t => pxMap.get(t) ?? null)
+    const tokens = [...perToken.keys()]
+    const symbols = new Map()
+    if (tokens.length) {
+      const { rows: symRows } = await pgPool.query(
+        `SELECT token_address, symbol FROM tokens WHERE chain_id = $1 AND token_address = ANY($2::text[])`,
+        [chainId, tokens])
+      for (const s of symRows) symbols.set(s.token_address, s.symbol)
+    }
+    const openCost = new Map(open.map(o => [o.token, o.costUsd]))
+    const perTokenOut = [...perToken.entries()]
+      .map(([token, s]) => ({
+        token, symbol: symbols.get(token) || null,
+        buys: s.buys, sells: s.sells, buy_usd: s.buyUsd,
+        sell_usd_matched: s.sellUsdMatched, sell_usd_unmatched: s.sellUsdUnmatched,
+        realized_pnl_usd: s.realizedPnlUsd, trips: s.trips,
+        open_cost_usd: openCost.get(token) || 0
+      }))
+      .sort((a, b) => Math.abs(b.realized_pnl_usd) - Math.abs(a.realized_pnl_usd))
+      .slice(0, 50)
+    const tripsOut = trips.slice(-100).reverse().map(t => ({
+      token: t.token, symbol: symbols.get(t.token) || null,
+      sell_time: t.sellTime, hold_hours: t.holdHours,
+      cost_usd: t.matchedCostUsd, proceeds_usd: t.proceedsUsd,
+      gas_usd: t.gasUsd, pnl_usd: t.pnlUsd
+    }))
+    return jsonResponse(res, {
+      address, days, agg, classification: cls.classification, flags: cls.flags,
+      per_token: perTokenOut, trips: tripsOut
+    })
   }
 
   if (pathname === '/api/smart/events') {
@@ -1072,11 +1133,12 @@ async function handleApiRequest(pathname, searchParams, pgPool, res) {
       FROM sim_positions p
       LEFT JOIN tokens tk ON tk.token_address = p.token_address AND tk.chain_id = 1
       LEFT JOIN LATERAL (
-        SELECT (fh.inflow_usd + fh.outflow_usd) / NULLIF(fh.inflow_raw + fh.outflow_raw, 0) AS px
-        FROM token_flow_hourly fh
-        WHERE fh.token_address = p.token_address AND fh.chain_id = 1
-          AND fh.inflow_raw + fh.outflow_raw > 0 AND fh.inflow_usd + fh.outflow_usd > 0
-        ORDER BY fh.hour_start DESC LIMIT 1
+        SELECT ph.usd_price / POWER(10::numeric, tk.decimals) AS px
+        FROM token_prices_hourly ph
+        WHERE ph.token_address = p.token_address
+          AND ph.source = 'binance'
+          AND tk.decimals IS NOT NULL
+        ORDER BY ph.hour_start DESC LIMIT 1
       ) lp ON TRUE
       WHERE p.run_id = $1 ORDER BY p.opened_hour DESC
     `, [runId])

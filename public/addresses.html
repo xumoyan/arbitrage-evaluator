@@ -122,6 +122,24 @@
         </div>
       </div>
 
+      <div class="card-head" style="margin-top:16px"><h3>落袋盈亏 <span class="muted">— FIFO 买卖闭环：验证真金白银、盈利结构、交易类型</span></h3></div>
+      <div id="profile-realized-summary" class="muted" style="margin:4px 0 8px"></div>
+      <section class="kpi-row" id="profile-realized-kpis"></section>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <div class="table-scroll" style="flex:1;min-width:340px;max-height:320px">
+          <table id="profile-realized-tokens">
+            <thead><tr><th>Token</th><th class="num">闭环</th><th class="num">落袋 PnL</th><th class="num">买入 USD</th><th class="num">未匹配卖出</th><th class="num">在手成本</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="table-scroll" style="flex:2;min-width:380px;max-height:320px">
+          <table id="profile-trips">
+            <thead><tr><th>卖出时间</th><th>Token</th><th class="num">持仓时长</th><th class="num">成本</th><th class="num">卖得</th><th class="num">PnL</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="card-head" style="margin-top:16px"><h3>质押行为</h3></div>
       <div class="table-scroll" style="max-height:220px">
         <table id="profile-stake">

@@ -17,6 +17,8 @@ CREATE TABLE IF NOT EXISTS token_flow_hourly (
   net_flow_usd         NUMERIC NOT NULL DEFAULT 0,   -- inflow_usd - outflow_usd
   inflow_raw           NUMERIC NOT NULL DEFAULT 0,   -- raw base-unit sum (approx)
   outflow_raw          NUMERIC NOT NULL DEFAULT 0,
+  priced_inflow_raw    NUMERIC NOT NULL DEFAULT 0,   -- raw amount from USD-priced swaps only
+  priced_outflow_raw   NUMERIC NOT NULL DEFAULT 0,
   buy_count            INT NOT NULL DEFAULT 0,        -- swaps buying this token
   sell_count           INT NOT NULL DEFAULT 0,        -- swaps selling this token
   swap_count           INT NOT NULL DEFAULT 0,        -- swaps touching this token
@@ -25,6 +27,12 @@ CREATE TABLE IF NOT EXISTS token_flow_hourly (
   updated_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   UNIQUE (token_address, chain_id, hour_start)
 );
+ALTER TABLE token_flow_hourly ADD COLUMN IF NOT EXISTS priced_inflow_raw NUMERIC NOT NULL DEFAULT 0;
+ALTER TABLE token_flow_hourly ADD COLUMN IF NOT EXISTS priced_outflow_raw NUMERIC NOT NULL DEFAULT 0;
+-- Existing rows intentionally remain zero until collect-token-flows.js
+-- --rebuild rewrites them from ClickHouse. Keeping the DDL migration free of a
+-- multi-million-row UPDATE avoids holding an ACCESS EXCLUSIVE lock while the
+-- historical rewrite runs.
 CREATE INDEX IF NOT EXISTS idx_flow_hourly_hour  ON token_flow_hourly (hour_start);
 CREATE INDEX IF NOT EXISTS idx_flow_hourly_token ON token_flow_hourly (token_address, hour_start);
 
@@ -39,6 +47,8 @@ CREATE TABLE IF NOT EXISTS token_flow_daily (
   net_flow_usd         NUMERIC NOT NULL DEFAULT 0,
   inflow_raw           NUMERIC NOT NULL DEFAULT 0,
   outflow_raw          NUMERIC NOT NULL DEFAULT 0,
+  priced_inflow_raw    NUMERIC NOT NULL DEFAULT 0,
+  priced_outflow_raw   NUMERIC NOT NULL DEFAULT 0,
   buy_count            INT NOT NULL DEFAULT 0,
   sell_count           INT NOT NULL DEFAULT 0,
   swap_count           INT NOT NULL DEFAULT 0,
@@ -47,6 +57,8 @@ CREATE TABLE IF NOT EXISTS token_flow_daily (
   updated_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   UNIQUE (token_address, chain_id, day_start)
 );
+ALTER TABLE token_flow_daily ADD COLUMN IF NOT EXISTS priced_inflow_raw NUMERIC NOT NULL DEFAULT 0;
+ALTER TABLE token_flow_daily ADD COLUMN IF NOT EXISTS priced_outflow_raw NUMERIC NOT NULL DEFAULT 0;
 CREATE INDEX IF NOT EXISTS idx_flow_daily_day   ON token_flow_daily (day_start);
 CREATE INDEX IF NOT EXISTS idx_flow_daily_token ON token_flow_daily (token_address, day_start);
 

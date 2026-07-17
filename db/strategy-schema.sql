@@ -7,8 +7,8 @@ SET search_path TO pool_analytics;
 
 -- ── strategy_runs: one row per backtest or live simulation run ───────────
 CREATE TABLE IF NOT EXISTS strategy_runs (
-  run_id         TEXT PRIMARY KEY,          -- e.g. flowmom_20260702_101500
-  strategy       TEXT NOT NULL,             -- flow-momentum, ...
+  run_id         TEXT PRIMARY KEY,          -- e.g. tsmomentum_20260702
+  strategy       TEXT NOT NULL,             -- registered mainstream strategy
   mode           TEXT NOT NULL,             -- replay | live
   params         JSONB NOT NULL,            -- full CLI/param snapshot
   from_hour      TIMESTAMPTZ,
@@ -18,12 +18,20 @@ CREATE TABLE IF NOT EXISTS strategy_runs (
   final_equity   NUMERIC,
   total_return   NUMERIC,                   -- final/initial - 1
   max_drawdown   NUMERIC,                   -- peak-to-trough fraction (0.25 = -25%)
+  sharpe         NUMERIC,                   -- annualized hourly Sharpe, rf=0
+  exposure       NUMERIC,                   -- average invested fraction
+  turnover       NUMERIC,                   -- total buy notional / initial capital
+  largest_win_share NUMERIC,                -- largest positive sell pnl / total positive pnl
   trade_count    INT,
   win_rate       NUMERIC,                   -- closed round-trips with pnl > 0
   error_message  TEXT,
   started_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+ALTER TABLE strategy_runs ADD COLUMN IF NOT EXISTS sharpe NUMERIC;
+ALTER TABLE strategy_runs ADD COLUMN IF NOT EXISTS exposure NUMERIC;
+ALTER TABLE strategy_runs ADD COLUMN IF NOT EXISTS turnover NUMERIC;
+ALTER TABLE strategy_runs ADD COLUMN IF NOT EXISTS largest_win_share NUMERIC;
 
 -- ── sim_trades: every simulated fill ─────────────────────────────────────
 CREATE TABLE IF NOT EXISTS sim_trades (
@@ -32,13 +40,13 @@ CREATE TABLE IF NOT EXISTS sim_trades (
   token_address VARCHAR(42) NOT NULL,
   symbol        VARCHAR(32),
   side          TEXT NOT NULL,              -- buy | sell
-  hour_start    TIMESTAMPTZ NOT NULL,       -- fill hour (VWAP of this hour)
-  price         NUMERIC NOT NULL,           -- USD per raw base unit (hour VWAP)
+  hour_start    TIMESTAMPTZ NOT NULL,       -- next-hour fill timestamp
+  price         NUMERIC NOT NULL,           -- Binance close USD per raw base unit
   qty_raw       NUMERIC NOT NULL,           -- raw base units
   notional_usd  NUMERIC NOT NULL,
   fee_usd       NUMERIC NOT NULL DEFAULT 0,
   pnl_usd       NUMERIC,                    -- filled on sells (net of both fees)
-  reason        TEXT                        -- entry | hold_expiry | stale_price | take_profit | stop_loss | final
+  reason        TEXT                        -- entry | hold_expiry | take_profit | stop_loss | final
 );
 CREATE INDEX IF NOT EXISTS idx_sim_trades_run  ON sim_trades (run_id, hour_start);
 
@@ -53,6 +61,20 @@ CREATE TABLE IF NOT EXISTS sim_positions (
   cost_usd      NUMERIC NOT NULL,           -- notional + entry fee
   close_after   TIMESTAMPTZ NOT NULL,       -- earliest hour the position may exit
   PRIMARY KEY (run_id, token_address, opened_hour)
+);
+
+-- Orders are always queued from completed hour H and filled at H+1. Persisting
+-- them makes live restart semantics match uninterrupted execution.
+CREATE TABLE IF NOT EXISTS sim_pending_orders (
+  run_id        TEXT NOT NULL REFERENCES strategy_runs(run_id) ON DELETE CASCADE,
+  token_address VARCHAR(42) NOT NULL,
+  symbol        VARCHAR(32),
+  side          TEXT NOT NULL,              -- buy | sell
+  queued_hour   TIMESTAMPTZ NOT NULL,
+  notional_usd  NUMERIC,                    -- buy only
+  reason        TEXT,
+  retries       INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (run_id, token_address, side)
 );
 
 -- ── sim_equity_hourly: net-asset-value curve ─────────────────────────────

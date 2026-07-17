@@ -45,7 +45,7 @@ services:
 
   # Every 15 min: refresh the recent CEX price tail (REST fills the newest
   # hours the archive zips can't cover — the ref-price line on the pools page
-  # and trade-majors live pricing both read token_prices_hourly). Only the
+  # and mainstream strategy live pricing both read token_prices_hourly). Only the
   # last 8h — analytics-collector re-covers a 3-day window hourly, so the
   # deeper refresh is already handled there.
   price-collector:
@@ -234,11 +234,8 @@ services:
           sleep 3600
         done
 
-  # Paper-trading run of the Step1-recommended config (volume-surge signals,
-  # majors-only execution, real cost model). With a stable --run-id the run
-  # resumes cash/positions from PG on restart, so laptop reboots and overnight
-  # WireGuard drops pause it rather than reset it; missed hours are replayed
-  # once the flow collector catches up.
+  # Mainstream-only paper trading. Stable run ids resume cash, positions and
+  # queued next-hour orders after restart.
   strategy-live:
     image: node:20-bookworm-slim
     working_dir: /workspace/arbitrage-evaluator
@@ -251,79 +248,41 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
-        echo "volume-surge majors paper trading starting"
-        node quant/strategy/run-strategy.js --strategy volume-surge --live \
-          --run-id volsurge_majors_live_v1 --trade-majors --cost-model
-
-  # Parallel live paper-trading of the other top Step1 strategies plus the
-  # pure-price-momentum benchmark, so forward data ranks them side by side on
-  # the dashboard. Same resume semantics as strategy-live (stable run ids).
-  strategy-live-composite:
-    image: node:20-bookworm-slim
-    working_dir: /workspace/arbitrage-evaluator
-    restart: unless-stopped
-    extra_hosts: *host-gateway
-    environment: *pg-host
-    volumes:
-      - ..:/workspace
-    env_file: .env
-    entrypoint: ["/bin/sh", "-c"]
-    command:
-      - |
-        echo "composite-score majors paper trading starting"
-        node quant/strategy/run-strategy.js --strategy composite-score --live \
-          --run-id composite_majors_live_v1 --trade-majors --cost-model
-
-  strategy-live-buypressure:
-    image: node:20-bookworm-slim
-    working_dir: /workspace/arbitrage-evaluator
-    restart: unless-stopped
-    extra_hosts: *host-gateway
-    environment: *pg-host
-    volumes:
-      - ..:/workspace
-    env_file: .env
-    entrypoint: ["/bin/sh", "-c"]
-    command:
-      - |
-        echo "buy-pressure majors paper trading starting"
-        node quant/strategy/run-strategy.js --strategy buy-pressure --live \
-          --run-id buypressure_majors_live_v1 --trade-majors --cost-model
-
-  strategy-live-flowmom:
-    image: node:20-bookworm-slim
-    working_dir: /workspace/arbitrage-evaluator
-    restart: unless-stopped
-    extra_hosts: *host-gateway
-    environment: *pg-host
-    volumes:
-      - ..:/workspace
-    env_file: .env
-    entrypoint: ["/bin/sh", "-c"]
-    command:
-      - |
-        echo "flow-momentum majors paper trading starting"
-        node quant/strategy/run-strategy.js --strategy flow-momentum --live \
-          --run-id flowmom_majors_live_v2 --trade-majors --cost-model
-
-  # Pure price momentum, no on-chain gate — the live control group: the gap
-  # between this and the flow-gated runs is the live measure of the flow
-  # signal's value.
-  strategy-live-tsmom:
-    image: node:20-bookworm-slim
-    working_dir: /workspace/arbitrage-evaluator
-    restart: unless-stopped
-    extra_hosts: *host-gateway
-    environment: *pg-host
-    volumes:
-      - ..:/workspace
-    env_file: .env
-    entrypoint: ["/bin/sh", "-c"]
-    command:
-      - |
-        echo "ts-momentum benchmark paper trading starting"
+        echo "ts-momentum paper trading starting"
         node quant/strategy/run-strategy.js --strategy ts-momentum --live \
-          --run-id tsmom_live_v1 --cost-model
+          --run-id tsmom_live_v2
+
+  strategy-live-taker:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "taker-pressure paper trading starting"
+        node quant/strategy/run-strategy.js --strategy taker-pressure --live \
+          --run-id taker_live_v1
+
+  strategy-live-funding:
+    image: node:20-bookworm-slim
+    working_dir: /workspace/arbitrage-evaluator
+    restart: unless-stopped
+    extra_hosts: *host-gateway
+    environment: *pg-host
+    volumes:
+      - ..:/workspace
+    env_file: .env
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "funding-reversal paper trading starting"
+        node quant/strategy/run-strategy.js --strategy funding-reversal --live \
+          --run-id funding_live_v1
 
   # Fills ERC20 symbol/decimals for newly-seen tokens from the EVM node so the
   # dashboard shows real symbols and human amounts. Loops every ~10 min.

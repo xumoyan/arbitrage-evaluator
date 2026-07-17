@@ -12,9 +12,8 @@
 // open positions still exit by TP/SL/hold-expiry exactly as before.
 //
 // Evaluated once per UTC day (cached). Supply is read as of the PREVIOUS day
-// so a backtest never uses a day's closing number intraday. Missing data (e.g.
-// a window before price history starts) counts as risk-on — the gate only
-// acts on evidence.
+// so a backtest never uses a day's closing number intraday. Missing or stale
+// inputs fail closed (risk-off); data outages must not create positions.
 
 const WETH = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
 const MODES = ['either', 'both', 'stables', 'trend']
@@ -26,6 +25,7 @@ function createRegimeGate(pool, opts = {}) {
   }
   const deltaDays = opts.deltaDays ?? 30
   const smaDays = opts.smaDays ?? 30
+  const minTrendObs = Math.floor(smaDays * 24 * 0.8)
   const cache = new Map() // 'YYYY-MM-DD' -> boolean
 
   async function riskOn(hour) {
@@ -36,24 +36,53 @@ function createRegimeGate(pool, opts = {}) {
       SELECT
         (SELECT total_usd FROM stablecoin_supply_daily
           WHERE day < $1::date ORDER BY day DESC LIMIT 1) AS s_now,
+        (SELECT day FROM stablecoin_supply_daily
+          WHERE day < $1::date ORDER BY day DESC LIMIT 1) AS s_now_day,
         (SELECT total_usd FROM stablecoin_supply_daily
-          WHERE day < $1::date - $2::int ORDER BY day DESC LIMIT 1) AS s_prev,
+          WHERE day <= $1::date - $2::int ORDER BY day DESC LIMIT 1) AS s_prev,
+        (SELECT day FROM stablecoin_supply_daily
+          WHERE day <= $1::date - $2::int ORDER BY day DESC LIMIT 1) AS s_prev_day,
         (SELECT usd_price FROM token_prices_hourly
-          WHERE token_address = $3 AND hour_start <= $4::timestamptz
+          WHERE token_address = $3 AND source = 'binance'
+            AND hour_start <= $4::timestamptz
           ORDER BY hour_start DESC LIMIT 1) AS px,
+        (SELECT hour_start FROM token_prices_hourly
+          WHERE token_address = $3 AND source = 'binance'
+            AND hour_start <= $4::timestamptz
+          ORDER BY hour_start DESC LIMIT 1) AS px_hour,
         (SELECT AVG(usd_price) FROM token_prices_hourly
-          WHERE token_address = $3
+          WHERE token_address = $3 AND source = 'binance'
             AND hour_start > $4::timestamptz - ($5::int * interval '1 day')
-            AND hour_start <= $4::timestamptz) AS sma
+            AND hour_start <= $4::timestamptz) AS sma,
+        (SELECT COUNT(*) FROM token_prices_hourly
+          WHERE token_address = $3 AND source = 'binance'
+            AND hour_start > $4::timestamptz - ($5::int * interval '1 day')
+            AND hour_start <= $4::timestamptz) AS trend_obs
     `, [day, deltaDays, WETH, hIso, smaDays])
-    const { s_now, s_prev, px, sma } = r.rows[0]
-    const stables = s_now != null && s_prev != null ? Number(s_now) > Number(s_prev) : null
-    const trend = px != null && sma != null ? Number(px) > Number(sma) : null
+    const { s_now, s_now_day, s_prev, s_prev_day, px, px_hour, sma, trend_obs } = r.rows[0]
+    const nowAge = s_now_day == null
+      ? Infinity
+      : (Date.parse(`${day}T00:00:00Z`) - new Date(s_now_day).getTime()) / 86400e3
+    const prevAge = s_prev_day == null
+      ? Infinity
+      : (Date.parse(`${day}T00:00:00Z`) - new Date(s_prev_day).getTime()) / 86400e3
+    const stables = s_now != null && s_prev != null &&
+      nowAge >= 1 && nowAge <= 3 &&
+      prevAge >= deltaDays && prevAge <= deltaDays + 3
+      ? Number(s_now) > Number(s_prev)
+      : false
+    const pxAge = px_hour == null
+      ? Infinity
+      : (new Date(hour).getTime() - new Date(px_hour).getTime()) / 3600e3
+    const trend = px != null && sma != null && pxAge >= 0 && pxAge <= 2 &&
+      Number(trend_obs) >= minTrendObs
+      ? Number(px) > Number(sma)
+      : false
     let on
-    if (mode === 'stables') on = stables !== false
-    else if (mode === 'trend') on = trend !== false
-    else if (mode === 'both') on = stables !== false && trend !== false
-    else on = stables !== false || trend !== false // either
+    if (mode === 'stables') on = stables
+    else if (mode === 'trend') on = trend
+    else if (mode === 'both') on = stables && trend
+    else on = stables || trend
     cache.set(day, on)
     return on
   }

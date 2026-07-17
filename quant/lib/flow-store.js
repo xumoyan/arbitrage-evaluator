@@ -64,20 +64,25 @@ async function upsertHourly(pool, chainId, hourIso, byToken) {
     let idx = 1
     for (const [addr, a] of batch) {
       const net = a.inflow_usd - a.outflow_usd
-      values.push(`($${idx++},$${idx++},$${idx++},$${idx++}::timestamptz,$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++})`)
+      values.push(`($${idx++},$${idx++},$${idx++},$${idx++}::timestamptz,$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++},$${idx++})`)
       params.push(addr, a.symbol, chainId, hourIso, a.inflow_usd, a.outflow_usd, net,
-        a.inflow_raw, a.outflow_raw, a.buy_count, a.sell_count, a.swap_count, a.unpriced_swap_count)
+        a.inflow_raw, a.outflow_raw, a.priced_inflow_raw, a.priced_outflow_raw,
+        a.buy_count, a.sell_count, a.swap_count, a.unpriced_swap_count)
     }
     await pool.query(`
       INSERT INTO token_flow_hourly
         (token_address, symbol, chain_id, hour_start, inflow_usd, outflow_usd, net_flow_usd,
-         inflow_raw, outflow_raw, buy_count, sell_count, swap_count, unpriced_swap_count)
+         inflow_raw, outflow_raw, priced_inflow_raw, priced_outflow_raw,
+         buy_count, sell_count, swap_count, unpriced_swap_count)
       VALUES ${values.join(',')}
       ON CONFLICT (token_address, chain_id, hour_start) DO UPDATE SET
         symbol = COALESCE(EXCLUDED.symbol, token_flow_hourly.symbol),
         inflow_usd = EXCLUDED.inflow_usd, outflow_usd = EXCLUDED.outflow_usd,
         net_flow_usd = EXCLUDED.net_flow_usd, inflow_raw = EXCLUDED.inflow_raw,
-        outflow_raw = EXCLUDED.outflow_raw, buy_count = EXCLUDED.buy_count,
+        outflow_raw = EXCLUDED.outflow_raw,
+        priced_inflow_raw = EXCLUDED.priced_inflow_raw,
+        priced_outflow_raw = EXCLUDED.priced_outflow_raw,
+        buy_count = EXCLUDED.buy_count,
         sell_count = EXCLUDED.sell_count, swap_count = EXCLUDED.swap_count,
         unpriced_swap_count = EXCLUDED.unpriced_swap_count, updated_at = NOW()
     `, params)
@@ -88,7 +93,7 @@ async function upsertHourly(pool, chainId, hourIso, byToken) {
 // Upsert the tokens directory. Two-step for idempotency: insert minimal rows for
 // new tokens (with anchor metadata from Node), then recompute aggregates from
 // token_flow_hourly so re-running the same hour does not double-count.
-async function upsertTokens(pool, chainId, byToken, hourIso) {
+async function upsertTokens(pool, chainId, byToken, hourIso, opts = {}) {
   const addrs = [...byToken.keys()]
   if (addrs.length === 0) return
 
@@ -111,7 +116,17 @@ async function upsertTokens(pool, chainId, byToken, hourIso) {
       updated_at = NOW()
   `, params)
 
-  // Recompute first/last seen + total swaps from the authoritative hourly table.
+  if (opts.recompute !== false) await recomputeTokens(pool, chainId, addrs)
+}
+
+// Recompute first/last seen + total swaps from the authoritative hourly table.
+// A full rebuild calls this once at the end instead of rescanning all history
+// for every rebuilt hour.
+async function recomputeTokens(pool, chainId, addrs = null) {
+  const addressFilter = addrs && addrs.length
+    ? 'AND token_address = ANY($2::text[])'
+    : ''
+  const params = addrs && addrs.length ? [chainId, addrs] : [chainId]
   await pool.query(`
     UPDATE tokens t SET
       first_seen_hour = s.first_seen,
@@ -121,34 +136,64 @@ async function upsertTokens(pool, chainId, byToken, hourIso) {
     FROM (
       SELECT token_address, MIN(hour_start) AS first_seen, MAX(hour_start) AS last_seen, SUM(swap_count) AS total
       FROM token_flow_hourly
-      WHERE chain_id = $1 AND token_address = ANY($2::text[])
+      WHERE chain_id = $1 ${addressFilter}
       GROUP BY token_address
     ) s
     WHERE t.chain_id = $1 AND t.token_address = s.token_address
-  `, [chainId, addrs])
+  `, params)
+
+  if (!addrs) {
+    await pool.query(`
+      UPDATE tokens t SET
+        first_seen_hour = NULL,
+        last_seen_hour = NULL,
+        total_swap_count = 0,
+        updated_at = NOW()
+      WHERE t.chain_id = $1
+        AND NOT EXISTS (
+          SELECT 1 FROM token_flow_hourly h
+          WHERE h.chain_id = t.chain_id AND h.token_address = t.token_address
+        )
+    `, [chainId])
+  }
 }
 
 // Recompute one day in token_flow_daily from token_flow_hourly.
 async function rollupDaily(pool, chainId, dayIso) {
-  await pool.query(`
+  const client = await pool.connect()
+  try {
+    await client.query('BEGIN')
+    await client.query(
+      'DELETE FROM token_flow_daily WHERE chain_id = $1 AND day_start = $2::timestamptz',
+      [chainId, dayIso])
+    await client.query(`
     INSERT INTO token_flow_daily
       (token_address, symbol, chain_id, day_start, inflow_usd, outflow_usd, net_flow_usd,
-       inflow_raw, outflow_raw, buy_count, sell_count, swap_count, unpriced_swap_count, updated_at)
+       inflow_raw, outflow_raw, priced_inflow_raw, priced_outflow_raw,
+       buy_count, sell_count, swap_count, unpriced_swap_count, updated_at)
     SELECT token_address, MAX(symbol), chain_id, $2::timestamptz,
            SUM(inflow_usd), SUM(outflow_usd), SUM(inflow_usd) - SUM(outflow_usd),
-           SUM(inflow_raw), SUM(outflow_raw), SUM(buy_count), SUM(sell_count),
+           SUM(inflow_raw), SUM(outflow_raw),
+           SUM(priced_inflow_raw), SUM(priced_outflow_raw),
+           SUM(buy_count), SUM(sell_count),
            SUM(swap_count), SUM(unpriced_swap_count), NOW()
     FROM token_flow_hourly
     WHERE chain_id = $1 AND hour_start >= $2::timestamptz AND hour_start < $2::timestamptz + interval '1 day'
     GROUP BY token_address, chain_id
-    ON CONFLICT (token_address, chain_id, day_start) DO UPDATE SET
-      symbol = COALESCE(EXCLUDED.symbol, token_flow_daily.symbol),
-      inflow_usd = EXCLUDED.inflow_usd, outflow_usd = EXCLUDED.outflow_usd,
-      net_flow_usd = EXCLUDED.net_flow_usd, inflow_raw = EXCLUDED.inflow_raw,
-      outflow_raw = EXCLUDED.outflow_raw, buy_count = EXCLUDED.buy_count,
-      sell_count = EXCLUDED.sell_count, swap_count = EXCLUDED.swap_count,
-      unpriced_swap_count = EXCLUDED.unpriced_swap_count, updated_at = NOW()
   `, [chainId, dayIso])
+    await client.query('COMMIT')
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
+async function deleteHourly(pool, chainId, hourIso) {
+  await pool.query(
+    'DELETE FROM token_flow_hourly WHERE chain_id = $1 AND hour_start = $2::timestamptz',
+    [chainId, hourIso])
 }
 
 async function advanceState(pool, chainId, lastHourIso, startFloorIso, totals = {}) {
@@ -178,5 +223,5 @@ async function lowerStartFloor(pool, chainId, floorIso) {
 
 module.exports = {
   connect, getState, loadAnchorPrices, upsertHourly, upsertTokens, rollupDaily, advanceState, buildPgUrl,
-  lowerStartFloor
+  lowerStartFloor, deleteHourly, recomputeTokens
 }

@@ -35,7 +35,11 @@
     <section data-progress-domain="smart"></section>
     <section class="card table-card">
       <div class="card-head">
-        <h3>Leaderboard <span class="muted">— marked performance of large swaps; click a row for its recent activity</span></h3>
+        <h3>Leaderboard <span class="muted">— marked = 买入后 +24h 标记；落袋 = FIFO 买卖闭环。点击行看最近交易</span></h3>
+        <label class="switch" title="只看验证通过的地址：真实落袋为正、闭环≥5、落袋胜率≥50%、非一笔撑全场、覆盖率≥50%、非 bot">
+          <input type="checkbox" id="curated-toggle">
+          <span>严选</span>
+        </label>
       </div>
       <div class="table-scroll">
         <table id="leader-table">
@@ -46,8 +50,14 @@
               <th class="num">Score</th>
               <th class="num">Avg return</th>
               <th class="num">Win rate</th>
-              <th class="num">Trades (scored)</th>
               <th class="num">Marked PnL</th>
+              <th class="num">落袋 PnL</th>
+              <th class="num">落袋胜率 (闭环)</th>
+              <th class="num">持仓中位</th>
+              <th class="num">Top1 占比</th>
+              <th class="num">笔/天</th>
+              <th class="num">覆盖率</th>
+              <th>类型</th>
               <th class="num">Volume</th>
             </tr>
           </thead>

@@ -9,17 +9,28 @@
 // (entry VWAP vs +horizon VWAP, per-trade return clamped to [-1, +3]),
 // plus its entity labels (CEX/bot/bridge = not a copyable trader).
 //
+// On top of the marked screen, each candidate's buys/sells are FIFO-matched
+// (quant/lib/realized-pnl.js) to verify the money was actually banked, how
+// concentrated the profits are, and whether the flow looks like a bot.
+//
 //   node quant/collectors/evaluate-addresses.js 0xabc... 0xdef...
 //   node quant/collectors/evaluate-addresses.js --file candidates.txt --window-days 365
 //
-// Verdicts:  SMART      scored>=5, win>=55%, avg>0        (follow-worthy)
-//            MIXED      scored>=5 but weak edge           (watch, don't follow)
-//            DENY       deny label (exchange/bot/bridge)  (not a trader)
-//            NO_DATA    no scoreable DEX buys in window   (inactive or CEX-only)
+// Verdicts (first match wins):
+//   DENY     deny label (exchange/bot/bridge)   not a trader
+//   NO_DATA  no DEX activity in window          inactive or CEX-only
+//   BOT      behavioral bot classification      arb/MEV flow, not copyable
+//   THIN     <5 scored buys or <5 closed trips  sample too small
+//   PAPER    marked-smart but realized<=0 or    gains never banked /
+//            coverage<0.5                       unverifiable
+//   LUCKY    passes SMART except top1>=50%      one trade carries the book
+//   SMART    marked + realized + structure ok   follow-worthy ("+" = 20+ trips)
+//   MIXED    everything else                    watch, don't follow
 
 const fs = require('fs')
 const path = require('path')
 const store = require('../lib/flow-store')
+const { computeAddressPnl, classify, isCurated, SWAP_FETCH_SQL } = require('../lib/realized-pnl')
 
 function parseArgs(argv) {
   const a = {
@@ -65,20 +76,22 @@ async function evaluate(pool, a) {
       SELECT b.tx_from, b.amount_usd, p0.px AS entry_px, p1.px AS exit_px
       FROM buys b
       LEFT JOIN LATERAL (
-        SELECT (inflow_usd + outflow_usd) / NULLIF(inflow_raw + outflow_raw, 0) AS px
+        SELECT (inflow_usd + outflow_usd) / NULLIF(priced_inflow_raw + priced_outflow_raw, 0) AS px
         FROM token_flow_hourly f
         WHERE f.chain_id = $1 AND f.token_address = b.token
           AND f.hour_start <= b.h0 AND f.hour_start > b.h0 - interval '6 hours'
-          AND (f.inflow_raw + f.outflow_raw) > 0 AND (f.inflow_usd + f.outflow_usd) > 0
+          AND (f.priced_inflow_raw + f.priced_outflow_raw) > 0
+          AND (f.inflow_usd + f.outflow_usd) > 0
         ORDER BY f.hour_start DESC LIMIT 1
       ) p0 ON TRUE
       LEFT JOIN LATERAL (
-        SELECT (inflow_usd + outflow_usd) / NULLIF(inflow_raw + outflow_raw, 0) AS px
+        SELECT (inflow_usd + outflow_usd) / NULLIF(priced_inflow_raw + priced_outflow_raw, 0) AS px
         FROM token_flow_hourly f
         WHERE f.chain_id = $1 AND f.token_address = b.token
           AND f.hour_start <= b.h0 + make_interval(hours => $3::int)
           AND f.hour_start >  b.h0 + make_interval(hours => $3::int) - interval '6 hours'
-          AND (f.inflow_raw + f.outflow_raw) > 0 AND (f.inflow_usd + f.outflow_usd) > 0
+          AND (f.priced_inflow_raw + f.priced_outflow_raw) > 0
+          AND (f.inflow_usd + f.outflow_usd) > 0
         ORDER BY f.hour_start DESC LIMIT 1
       ) p1 ON TRUE
     ),
@@ -105,13 +118,46 @@ async function evaluate(pool, a) {
   return r.rows
 }
 
+// Realized/behavioral verification per candidate (same FIFO lib as the tracker).
+async function enrichRealized(pool, a, rows) {
+  const { rows: swaps } = await pool.query(SWAP_FETCH_SQL, [a.chainId, a.addresses, a.windowDays])
+  const byAddr = new Map()
+  for (const s of swaps) {
+    let arr = byAddr.get(s.tx_from)
+    if (!arr) byAddr.set(s.tx_from, arr = [])
+    arr.push(s)
+  }
+  for (const r of rows) {
+    const mine = byAddr.get(r.address) || []
+    const { agg } = computeAddressPnl(mine)
+    const cls = classify(agg)
+    r.swap_count = mine.length
+    // isCurated expects the smart_addresses column name
+    r.win_rate = Number(r.scored_count) ? Number(r.win_count) / Number(r.scored_count) : null
+    r.realized_pnl_usd = agg.realizedPnlUsd
+    r.closed_trips = agg.closedTrips
+    r.realized_win_rate = agg.realizedWinRate
+    r.median_hold_hours = agg.medianHoldHours
+    r.top1_pnl_share = agg.top1PnlShare
+    r.coverage_ratio = agg.coverageRatio
+    r.trades_per_day = agg.tradesPerDay
+    r.classification = cls.classification
+    r.flags = cls.flags.join(',')
+  }
+}
+
 function verdict(row) {
   if (row.deny) return 'DENY'
-  if (!Number(row.scored_count)) return 'NO_DATA'
-  if (Number(row.scored_count) < 5) return 'THIN'
-  const win = Number(row.win_count) / Number(row.scored_count)
-  const ret = Number(row.avg_return)
-  if (win >= 0.55 && ret > 0) return 'SMART'
+  if (!Number(row.trade_count) && !Number(row.swap_count)) return 'NO_DATA'
+  if (row.classification === 'bot') return 'BOT'
+  if (Number(row.scored_count) < 5 || Number(row.closed_trips) < 5) return 'THIN'
+  const markedSmart = Number(row.win_count) / Number(row.scored_count) >= 0.55 && Number(row.avg_return) > 0
+  if (markedSmart && (Number(row.realized_pnl_usd) <= 0 ||
+      row.coverage_ratio == null || Number(row.coverage_ratio) < 0.5)) return 'PAPER'
+  // isCurated = the full SMART gate; distinguish LUCKY (fails only on top1 share)
+  if (isCurated(row)) return Number(row.closed_trips) >= 20 ? 'SMART+' : 'SMART'
+  if (markedSmart && Number(row.realized_pnl_usd) > 0 && Number(row.realized_win_rate) >= 0.5 &&
+      Number(row.coverage_ratio) >= 0.5 && Number(row.top1_pnl_share) >= 0.5) return 'LUCKY'
   return 'MIXED'
 }
 
@@ -121,14 +167,19 @@ async function main() {
   const { pool } = store.connect()
   try {
     const rows = await evaluate(pool, a)
+    await enrichRealized(pool, a, rows)
     console.log(`window ${a.windowDays}d, horizon ${a.horizonHours}h, chain ${a.chainId} — ${rows.length} addresses\n`)
-    console.log('verdict  address                                     scored  win%   avgRet   volumeUSD  identity')
+    console.log('verdict  address                                     scored  win%   avgRet   realized$ trips rWin%  medHold  top1   tpd  class/identity')
     for (const r of rows) {
       const v = verdict(r)
-      const win = Number(r.scored_count) ? (100 * r.win_count / r.scored_count).toFixed(0) + '%' : '—'
-      const ret = r.avg_return == null ? '—' : (100 * Number(r.avg_return)).toFixed(1) + '%'
-      const vol = r.volume_usd == null ? '—' : Number(r.volume_usd).toFixed(0)
-      console.log(`${v.padEnd(8)} ${r.address}  ${String(r.scored_count).padStart(5)}  ${win.padStart(5)}  ${ret.padStart(7)}  ${vol.padStart(10)}  ${r.name_tag || r.labels || ''}`)
+      const pct = (x, d = 0) => x == null ? '—' : (100 * Number(x)).toFixed(d) + '%'
+      const win = Number(r.scored_count) ? pct(r.win_count / r.scored_count) : '—'
+      const ret = pct(r.avg_return, 1)
+      const rlz = r.closed_trips ? Number(r.realized_pnl_usd).toFixed(0) : '—'
+      const hold = r.median_hold_hours == null ? '—' : Number(r.median_hold_hours).toFixed(1) + 'h'
+      const tpd = r.trades_per_day == null ? '—' : Number(r.trades_per_day).toFixed(1)
+      const id = [r.classification, r.flags, r.name_tag || r.labels].filter(Boolean).join(' | ')
+      console.log(`${v.padEnd(8)} ${r.address}  ${String(r.scored_count).padStart(5)}  ${win.padStart(5)}  ${ret.padStart(7)}  ${rlz.padStart(9)} ${String(r.closed_trips).padStart(5)} ${pct(r.realized_win_rate).padStart(5)}  ${hold.padStart(7)}  ${pct(r.top1_pnl_share).padStart(4)}  ${tpd.padStart(4)}  ${id}`)
     }
   } finally {
     await pool.end().catch(() => { })

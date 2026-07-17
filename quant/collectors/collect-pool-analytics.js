@@ -524,8 +524,11 @@ function aggregateHourlyBucket(swaps, liqEvents, poolState, poolInfo, bucketStar
   const largeThreshold = BigInt(poolInfo.largeTradeThreshold || '0')
   const prices = []
 
-  for (const swap of swaps) {
+  const orderedSwaps = [...swaps].sort((a, b) =>
+    (a.blockNumber - b.blockNumber) || ((a.logIndex || 0) - (b.logIndex || 0)))
+  for (const swap of orderedSwaps) {
     swapCount++
+    let token0WeightRaw = 0n
 
     if (swap.protocol === 'v2') {
       const a0In = BigInt(swap.amount0In || '0')
@@ -536,6 +539,7 @@ function aggregateHourlyBucket(swaps, liqEvents, poolState, poolInfo, bucketStar
       token0Out += a0Out
       token1In += a1In
       token1Out += a1Out
+      token0WeightRaw = a0In > 0n ? a0In : a0Out
       const tradeSize = a0In > 0n ? a0In : a1In
       if (largeThreshold > 0n && tradeSize >= largeThreshold) largeTradeCount++
     } else {
@@ -545,13 +549,15 @@ function aggregateHourlyBucket(swaps, liqEvents, poolState, poolInfo, bucketStar
       else if (a0 < 0n) token0Out += -a0
       if (a1 > 0n) token1In += a1
       else if (a1 < 0n) token1Out += -a1
+      token0WeightRaw = a0 >= 0n ? a0 : -a0
       const tradeSize = a0 > 0n ? a0 : -a0
       if (largeThreshold > 0n && tradeSize >= largeThreshold) largeTradeCount++
     }
 
     const price = derivePrice(swap, poolInfo)
     if (price !== null && Number.isFinite(price) && price > 0) {
-      prices.push(price)
+      const weight = Number(token0WeightRaw) / Math.pow(10, d0)
+      prices.push({ price, weight: Number.isFinite(weight) && weight > 0 ? weight : 0 })
     }
   }
 
@@ -569,17 +575,24 @@ function aggregateHourlyBucket(swaps, liqEvents, poolState, poolInfo, bucketStar
     }
   }
 
-  const fee0 = token0Total * BigInt(feePpm) / 1000000n
-  const fee1 = token1Total * BigInt(feePpm) / 1000000n
+  // Swap fees are charged on the input leg only. Charging both input and output
+  // volume approximately doubles LP revenue.
+  const fee0 = token0In * BigInt(feePpm) / 1000000n
+  const fee1 = token1In * BigInt(feePpm) / 1000000n
 
   let priceObj = { open: null, high: null, low: null, close: null, vwap: null }
   if (prices.length > 0) {
+    const values = prices.map(x => x.price)
+    const weightTotal = prices.reduce((sum, x) => sum + x.weight, 0)
+    const weighted = weightTotal > 0
+      ? prices.reduce((sum, x) => sum + x.price * x.weight, 0) / weightTotal
+      : values.reduce((sum, value) => sum + value, 0) / values.length
     priceObj = {
-      open: prices[0].toFixed(12),
-      high: Math.max(...prices).toFixed(12),
-      low: Math.min(...prices).toFixed(12),
-      close: prices[prices.length - 1].toFixed(12),
-      vwap: (prices.reduce((s, p) => s + p, 0) / prices.length).toFixed(12)
+      open: values[0].toFixed(12),
+      high: Math.max(...values).toFixed(12),
+      low: Math.min(...values).toFixed(12),
+      close: values[values.length - 1].toFixed(12),
+      vwap: weighted.toFixed(12)
     }
   }
 

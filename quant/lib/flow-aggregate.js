@@ -29,6 +29,7 @@ function edgeUsd(edge, priceAt) {
 function blankAgg() {
   return {
     inflow_usd: 0, outflow_usd: 0, inflow_raw: 0, outflow_raw: 0,
+    priced_inflow_raw: 0, priced_outflow_raw: 0,
     buy_count: 0, sell_count: 0, swap_count: 0, unpriced_swap_count: 0, symbol: null
   }
 }
@@ -64,6 +65,8 @@ function pivotEdges(edges, priceAt) {
     } else {
       outT.outflow_usd += usd
       inT.inflow_usd += usd
+      outT.priced_outflow_raw += e.amount_in
+      inT.priced_inflow_raw += e.amount_out
     }
 
     const ia = getAnchor(e.token_in); if (ia) outT.symbol = ia.symbol

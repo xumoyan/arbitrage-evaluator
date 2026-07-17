@@ -246,19 +246,70 @@ function renderProfile(p, events, swaps, tokens) {
   }
 }
 
+// FIFO realized-PnL block: banked money vs paper marks, structure, class.
+function renderRealized(rz) {
+  const sumEl = document.getElementById('profile-realized-summary')
+  const kpiEl = document.getElementById('profile-realized-kpis')
+  const tokBody = document.querySelector('#profile-realized-tokens tbody')
+  const tripBody = document.querySelector('#profile-trips tbody')
+  tokBody.innerHTML = ''
+  tripBody.innerHTML = ''
+  if (!rz || !rz.agg || (!rz.agg.closedTrips && !rz.per_token?.length)) {
+    sumEl.textContent = '窗口内无可匹配的买卖闭环（无卖出、或非 EVM 地址）'
+    kpiEl.innerHTML = ''
+    return
+  }
+  const g = rz.agg
+  const pct0 = (x) => x == null ? '—' : (Number(x) * 100).toFixed(0) + '%'
+  const clsColor = { human: 'var(--success)', mixed: 'var(--warning, #d9a441)', bot: 'var(--danger)' }[rz.classification] || 'inherit'
+  sumEl.innerHTML = `类型 <b style="color:${clsColor}">${rz.classification}</b>${rz.flags?.length ? ` · flags: ${rz.flags.join(', ')}` : ''} · 覆盖率 ${pct0(g.coverageRatio)}（未匹配卖出 ${formatUsd(g.unmatchedSellUsd)} 来自窗口外/低于采集下限/其他场所的持仓）`
+  const kpis = []
+  kpis.push(kpi('落袋 PnL', `<span style="color:${g.realizedPnlUsd >= 0 ? 'var(--success)' : 'var(--danger)'}">${formatUsd(g.realizedPnlUsd, true)}</span>`,
+    `未实现 ${g.unrealizedPnlUsd == null ? '—' : formatUsd(g.unrealizedPnlUsd, true)} · gas ${formatUsd(g.gasSpentUsd)}`))
+  kpis.push(kpi('闭环 / 落袋胜率', `${g.closedTrips} / ${pct0(g.realizedWinRate)}`,
+    `持仓中位 ${g.medianHoldHours == null ? '—' : Number(g.medianHoldHours).toFixed(1) + 'h'}`))
+  kpis.push(kpi('盈利集中度', `Top1 ${pct0(g.top1PnlShare)}`,
+    `盈利币种 ${g.profitableTokens}/${g.tokensTraded} · Top 币 ${pct0(g.topTokenPnlShare)}`))
+  kpis.push(kpi('交易频率', g.tradesPerDay == null ? '—' : `${Number(g.tradesPerDay).toFixed(1)} 笔/天`,
+    `活跃 ${g.activeDays} 天`))
+  kpiEl.innerHTML = kpis.join('')
+  for (const t of rz.per_token || []) {
+    const tr = document.createElement('tr')
+    tr.innerHTML = `<td>${t.symbol ? escAttr(t.symbol) : addrCell(t.token)}</td>
+      <td class="num">${t.trips}</td>
+      <td class="num" style="color:${t.realized_pnl_usd >= 0 ? 'var(--success)' : 'var(--danger)'}">${formatUsd(t.realized_pnl_usd, true)}</td>
+      <td class="num">${formatUsd(t.buy_usd)}</td>
+      <td class="num">${formatUsd(t.sell_usd_unmatched)}</td>
+      <td class="num">${formatUsd(t.open_cost_usd)}</td>`
+    tokBody.appendChild(tr)
+  }
+  for (const t of rz.trips || []) {
+    const tr = document.createElement('tr')
+    tr.innerHTML = `<td>${fmtTime(t.sell_time)}</td>
+      <td>${t.symbol ? escAttr(t.symbol) : addrCell(t.token)}</td>
+      <td class="num">${Number(t.hold_hours).toFixed(1)}h</td>
+      <td class="num">${formatUsd(t.cost_usd)}</td>
+      <td class="num">${formatUsd(t.proceeds_usd)}</td>
+      <td class="num" style="color:${t.pnl_usd >= 0 ? 'var(--success)' : 'var(--danger)'}">${formatUsd(t.pnl_usd, true)}</td>`
+    tripBody.appendChild(tr)
+  }
+}
+
 async function loadProfile(address) {
   const addr = String(address || '').trim()
   if (!addr) return
   state.address = addr
   const isEvm = /^0x[0-9a-fA-F]{40}$/.test(addr)
   try {
-    const [profile, ev, sw, tk] = await Promise.all([
+    const [profile, ev, sw, tk, rz] = await Promise.all([
       api(`address/profile?address=${encodeURIComponent(addr)}`),
       api(`address/lending-events?address=${encodeURIComponent(addr)}&limit=500`),
       isEvm ? api(`address/swaps?address=${encodeURIComponent(addr)}&limit=200`) : Promise.resolve({ swaps: [] }),
-      isEvm ? api(`address/token-breakdown?address=${encodeURIComponent(addr)}`) : Promise.resolve({ tokens: [] })
+      isEvm ? api(`address/token-breakdown?address=${encodeURIComponent(addr)}`) : Promise.resolve({ tokens: [] }),
+      isEvm ? api(`address/realized?address=${encodeURIComponent(addr)}`).catch(() => null) : Promise.resolve(null)
     ])
     renderProfile(profile, ev.events, sw.swaps, tk.tokens)
+    renderRealized(rz)
     document.getElementById('profile-card').scrollIntoView({ behavior: 'smooth', block: 'start' })
   } catch (err) {
     console.error(err)

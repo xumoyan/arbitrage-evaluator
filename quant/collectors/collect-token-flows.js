@@ -11,6 +11,8 @@
 const { query, buildEdgeQuery, toChDateTime } = require('../lib/clickhouse')
 const { pivotEdges } = require('../lib/flow-aggregate')
 const store = require('../lib/flow-store')
+const fs = require('fs')
+const path = require('path')
 
 const HOUR_MS = 3600 * 1000
 const DAY_MS = 24 * HOUR_MS
@@ -22,11 +24,14 @@ function parseArgs(argv) {
     endIso: '',
     batchHours: 24,
     maxHours: 0,     // 0 = unlimited
-    loop: false
+    loop: false,
+    rebuild: false,
+    backfill: false,
+    startExplicit: false
   }
   for (let i = 0; i < argv.length; i++) {
     const v = argv[i]
-    if (v === '--start-iso') a.startIso = argv[++i]
+    if (v === '--start-iso') { a.startIso = argv[++i]; a.startExplicit = true }
     else if (v === '--end-iso') a.endIso = argv[++i]
     else if (v === '--batch-hours') a.batchHours = Number(argv[++i])
     else if (v === '--max-hours') a.maxHours = Number(argv[++i])
@@ -34,8 +39,35 @@ function parseArgs(argv) {
     else if (v === '--loop') a.loop = true
     else if (v === '--once') a.loop = false
     else if (v === '--backfill') a.backfill = true
+    else if (v === '--rebuild') a.rebuild = true
+    else throw new Error(`unknown option: ${v}`)
   }
   return a
+}
+
+function validateArgs(args) {
+  if (!Number.isInteger(args.chainId) || args.chainId <= 0) {
+    throw new Error('--chain-id must be a positive integer')
+  }
+  if (!Number.isInteger(args.batchHours) || args.batchHours <= 0) {
+    throw new Error('--batch-hours must be a positive integer')
+  }
+  if (!Number.isInteger(args.maxHours) || args.maxHours < 0) {
+    throw new Error('--max-hours must be a non-negative integer')
+  }
+  if (!Number.isFinite(new Date(args.startIso).getTime())) {
+    throw new Error(`invalid --start-iso: ${args.startIso}`)
+  }
+  if (args.endIso && !Number.isFinite(new Date(args.endIso).getTime())) {
+    throw new Error(`invalid --end-iso: ${args.endIso}`)
+  }
+  if (args.rebuild && args.backfill) {
+    throw new Error('--rebuild and --backfill are mutually exclusive')
+  }
+  if (args.rebuild && args.loop) {
+    throw new Error('--rebuild cannot be combined with --loop')
+  }
+  return args
 }
 
 function floorToHour(ms) { return ms - (ms % HOUR_MS) }
@@ -79,11 +111,17 @@ async function processBatch(pool, args, batchStartMs, batchEndMs) {
   for (let h = batchStartMs; h < batchEndMs; h += HOUR_MS) {
     const hourIso = new Date(h).toISOString()
     const edges = byHour.get(h) || []
+    if (args.rebuild) {
+      await store.deleteHourly(pool, args.chainId, hourIso)
+      touchedDays.add(floorToDayIso(h))
+    }
     if (edges.length > 0) {
       const priceAt = await store.loadAnchorPrices(pool, hourIso)
       const byToken = pivotEdges(edges, priceAt)
       tokenTotal += await store.upsertHourly(pool, args.chainId, hourIso, byToken)
-      await store.upsertTokens(pool, args.chainId, byToken, hourIso)
+      await store.upsertTokens(pool, args.chainId, byToken, hourIso, {
+        recompute: !args.rebuild
+      })
       touchedDays.add(floorToDayIso(h))
     }
     lastHourMs = h
@@ -94,6 +132,46 @@ async function processBatch(pool, args, batchStartMs, batchEndMs) {
 async function runOnce(pool, args) {
   const state = await store.getState(pool, args.chainId)
   const startFloorMs = floorToHour(new Date(args.startIso).getTime())
+
+  // Full source replay for the priced-raw schema migration. This does not move
+  // either normal watermark; it replaces every hourly row in the requested
+  // range and rebuilds touched daily rows from the authoritative hourly table.
+  if (args.rebuild) {
+    const rebuildStart = args.startExplicit
+      ? startFloorMs
+      : (state && state.start_floor
+          ? floorToHour(new Date(state.start_floor).getTime())
+          : startFloorMs)
+    const rebuildEnd = args.endIso
+      ? floorToHour(new Date(args.endIso).getTime())
+      : floorToHour(Date.now())
+    if (rebuildStart >= rebuildEnd) {
+      console.log('Rebuild window is empty — nothing to process.')
+      return 0
+    }
+    let cursor = rebuildStart
+    let hoursDone = 0
+    while (cursor < rebuildEnd) {
+      let batchEnd = Math.min(cursor + args.batchHours * HOUR_MS, rebuildEnd)
+      if (args.maxHours && hoursDone + (batchEnd - cursor) / HOUR_MS > args.maxHours) {
+        batchEnd = cursor + (args.maxHours - hoursDone) * HOUR_MS
+      }
+      const start = cursor
+      const { touchedDays, tokenTotal } = await withRetry(
+        () => processBatch(pool, args, start, batchEnd),
+        `rebuild ${toChDateTime(new Date(start))}`)
+      for (const dayIso of touchedDays) {
+        await store.rollupDaily(pool, args.chainId, dayIso)
+      }
+      hoursDone += (batchEnd - cursor) / HOUR_MS
+      console.log(`Rebuilt ${toChDateTime(new Date(cursor))} → ${toChDateTime(new Date(batchEnd))} ` +
+        `(${tokenTotal} token-rows, ${touchedDays.size} days)`)
+      cursor = batchEnd
+      if (args.maxHours && hoursDone >= args.maxHours) break
+    }
+    await store.recomputeTokens(pool, args.chainId)
+    return hoursDone
+  }
 
   // --backfill: extend history BEFORE the existing start_floor. Processes
   // [--start-iso, --end-iso || current start_floor) without touching the
@@ -157,12 +235,11 @@ async function runOnce(pool, args) {
 }
 
 async function main() {
-  const args = parseArgs(process.argv.slice(2))
-  if (!Number.isFinite(new Date(args.startIso).getTime())) {
-    console.error(`Invalid --start-iso: ${args.startIso}`); process.exit(1)
-  }
+  const args = validateArgs(parseArgs(process.argv.slice(2)))
   const { pool } = store.connect()
   try {
+    await pool.query(fs.readFileSync(
+      path.resolve(__dirname, '..', '..', 'db', 'flow-schema.sql'), 'utf8'))
     do {
       await runOnce(pool, args)
       if (args.loop) { console.log('Sleeping 3600s...'); await sleep(3600 * 1000) }
@@ -175,4 +252,8 @@ async function main() {
   }
 }
 
-main()
+if (require.main === module) {
+  main()
+}
+
+module.exports = { parseArgs, validateArgs, processBatch, runOnce }

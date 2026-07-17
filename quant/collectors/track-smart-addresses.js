@@ -15,6 +15,7 @@
 const fs = require('fs')
 const path = require('path')
 const store = require('../lib/flow-store')
+const { computeAddressPnl, classify, markOpen, SWAP_FETCH_SQL, LATEST_PX_SQL } = require('../lib/realized-pnl')
 
 function parseArgs(argv) {
   const a = {
@@ -25,6 +26,7 @@ function parseArgs(argv) {
     minScore: Number(process.env.SMART_MIN_SCORE || 0),
     topN: Number(process.env.SMART_TOP_N || 50),
     sinceDays: Number(process.env.SMART_WATCH_SINCE_DAYS || 2),
+    skipRealized: process.env.SMART_REALIZED === '0',
     watch: false,
     loop: false
   }
@@ -38,6 +40,7 @@ function parseArgs(argv) {
     else if (v === '--since-days') a.sinceDays = Number(argv[++i])
     else if (v === '--chain-id') a.chainId = Number(argv[++i])
     else if (v === '--watch') a.watch = true
+    else if (v === '--skip-realized') a.skipRealized = true
     else if (v === '--loop') a.loop = true
     else if (v === '--help' || v === '-h') { printHelp(); process.exit(0) }
   }
@@ -59,6 +62,7 @@ Options:
   --min-score <x>       Watchlist score floor (default: 0)
   --top-n <n>           Watchlist size (default: 50)
   --watch               Feed smart_address_events from the current watchlist
+  --skip-realized       Skip the FIFO realized-PnL enrich pass (env: SMART_REALIZED=0)
   --since-days <n>      How far back --watch mirrors swap_details (default: 2).
                         Use a large value once after a swap_details backfill to
                         seed historical events. Caveat: score_at_time is the
@@ -106,20 +110,22 @@ async function scoreAddresses(pool, a) {
              p0.px AS entry_px, p1.px AS exit_px
       FROM buys b
       LEFT JOIN LATERAL (
-        SELECT (inflow_usd + outflow_usd) / NULLIF(inflow_raw + outflow_raw, 0) AS px
+        SELECT (inflow_usd + outflow_usd) / NULLIF(priced_inflow_raw + priced_outflow_raw, 0) AS px
         FROM token_flow_hourly f
         WHERE f.chain_id = $1 AND f.token_address = b.token
           AND f.hour_start <= b.h0 AND f.hour_start > b.h0 - interval '6 hours'
-          AND (f.inflow_raw + f.outflow_raw) > 0 AND (f.inflow_usd + f.outflow_usd) > 0
+          AND (f.priced_inflow_raw + f.priced_outflow_raw) > 0
+          AND (f.inflow_usd + f.outflow_usd) > 0
         ORDER BY f.hour_start DESC LIMIT 1
       ) p0 ON TRUE
       LEFT JOIN LATERAL (
-        SELECT (inflow_usd + outflow_usd) / NULLIF(inflow_raw + outflow_raw, 0) AS px
+        SELECT (inflow_usd + outflow_usd) / NULLIF(priced_inflow_raw + priced_outflow_raw, 0) AS px
         FROM token_flow_hourly f
         WHERE f.chain_id = $1 AND f.token_address = b.token
           AND f.hour_start <= b.h0 + make_interval(hours => $3::int)
           AND f.hour_start >  b.h0 + make_interval(hours => $3::int) - interval '6 hours'
-          AND (f.inflow_raw + f.outflow_raw) > 0 AND (f.inflow_usd + f.outflow_usd) > 0
+          AND (f.priced_inflow_raw + f.priced_outflow_raw) > 0
+          AND (f.inflow_usd + f.outflow_usd) > 0
         ORDER BY f.hour_start DESC LIMIT 1
       ) p1 ON TRUE
     ),
@@ -161,6 +167,78 @@ async function scoreAddresses(pool, a) {
   return res.rowCount
 }
 
+// FIFO realized-PnL enrich: for every qualified address of this window,
+// replay its buys/sells (quant/lib/realized-pnl.js), mark leftover inventory
+// at the latest VWAP, and write the realized/behavioral columns. Full
+// recompute each pass — the qualified set's swaps are small (~150k rows).
+async function enrichRealized(pool, a) {
+  const t0 = Date.now()
+  const { rows: addrRows } = await pool.query(
+    `SELECT address FROM smart_addresses
+     WHERE chain_id = $1 AND window_days = $2 AND horizon_hours = $3`,
+    [a.chainId, a.windowDays, a.horizonHours])
+  let done = 0, tripsTotal = 0
+  for (let i = 0; i < addrRows.length; i += 500) {
+    const chunk = addrRows.slice(i, i + 500).map(r => r.address)
+    const { rows } = await pool.query(SWAP_FETCH_SQL, [a.chainId, chunk, a.windowDays])
+    const byAddr = new Map()
+    for (const r of rows) {
+      let arr = byAddr.get(r.tx_from)
+      if (!arr) byAddr.set(r.tx_from, arr = [])
+      arr.push(r)
+    }
+    const results = []
+    const openTokens = new Set()
+    for (const addr of chunk) {
+      const res = computeAddressPnl(byAddr.get(addr) || [])
+      const cls = classify(res.agg)
+      results.push({ addr, agg: res.agg, open: res.open, cls })
+      for (const o of res.open) openTokens.add(o.token)
+    }
+    const pxMap = new Map()
+    if (openTokens.size) {
+      const { rows: pxRows } = await pool.query(LATEST_PX_SQL, [a.chainId, [...openTokens]])
+      for (const p of pxRows) pxMap.set(p.token, Number(p.px))
+    }
+    const u = { addr: [], rp: [], up: [], ct: [], rw: [], mh: [], t1: [], tt: [], pt: [], tk: [], tpd: [], ad: [], cov: [], gas: [], cls: [], flg: [] }
+    for (const { addr, agg, open, cls } of results) {
+      u.addr.push(addr)
+      u.rp.push(agg.realizedPnlUsd)
+      u.up.push(markOpen(open, t => pxMap.get(t) ?? null))
+      u.ct.push(agg.closedTrips)
+      u.rw.push(agg.realizedWinRate)
+      u.mh.push(agg.medianHoldHours)
+      u.t1.push(agg.top1PnlShare)
+      u.tt.push(agg.topTokenPnlShare)
+      u.pt.push(agg.profitableTokens)
+      u.tk.push(agg.tokensTraded)
+      u.tpd.push(agg.tradesPerDay)
+      u.ad.push(agg.activeDays)
+      u.cov.push(agg.coverageRatio)
+      u.gas.push(agg.gasSpentUsd)
+      u.cls.push(cls.classification)
+      u.flg.push(cls.flags.join(',') || null)
+      tripsTotal += agg.closedTrips
+    }
+    await pool.query(`
+      UPDATE smart_addresses s SET
+        realized_pnl_usd = v.rp, unrealized_pnl_usd = v.up, closed_trips = v.ct,
+        realized_win_rate = v.rw, median_hold_hours = v.mh, top1_pnl_share = v.t1,
+        top_token_pnl_share = v.tt, profitable_tokens = v.pt, tokens_traded = v.tk,
+        trades_per_day = v.tpd, active_days = v.ad, coverage_ratio = v.cov,
+        gas_spent_usd = v.gas, classification = v.cls, flags = v.flg, realized_at = NOW()
+      FROM unnest($4::text[], $5::numeric[], $6::numeric[], $7::int[], $8::numeric[],
+                  $9::numeric[], $10::numeric[], $11::numeric[], $12::int[], $13::int[],
+                  $14::numeric[], $15::int[], $16::numeric[], $17::numeric[], $18::text[], $19::text[])
+        AS v(addr, rp, up, ct, rw, mh, t1, tt, pt, tk, tpd, ad, cov, gas, cls, flg)
+      WHERE s.chain_id = $1 AND s.window_days = $2 AND s.horizon_hours = $3 AND s.address = v.addr
+    `, [a.chainId, a.windowDays, a.horizonHours,
+      u.addr, u.rp, u.up, u.ct, u.rw, u.mh, u.t1, u.tt, u.pt, u.tk, u.tpd, u.ad, u.cov, u.gas, u.cls, u.flg])
+    done += results.length
+  }
+  console.log(`${new Date().toISOString()} realized: ${done} addresses, ${tripsTotal} trips, ${Date.now() - t0} ms`)
+}
+
 // Mirror new swap_details rows from the current top-N scored addresses.
 async function watchOnce(pool, a) {
   const res = await pool.query(`
@@ -193,6 +271,7 @@ async function main() {
       } else {
         const n = await scoreAddresses(pool, a)
         console.log(`${new Date().toISOString()} scored: ${n} addresses (window ${a.windowDays}d, horizon ${a.horizonHours}h)`)
+        if (!a.skipRealized) await enrichRealized(pool, a)
       }
       if (!a.loop) break
       await sleep(10 * 60 * 1000)
